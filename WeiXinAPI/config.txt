@@ -1,0 +1,56 @@
+一、总配置
+
+1、AndroidManifest.xml添加内容：
+权限
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.GET_TASKS" />
+  其他 Main Activity插入
+   <activity
+          android:name="包名.MainActivity"
+          android:label="@string/app_name" >
+          <intent-filter>
+              <action android:name="android.intent.action.MAIN" />
+              <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+          <!-- 微信接入配置 START -->
+          <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <data android:scheme="设置一个唯一标识比如APP包名" />
+          </intent-filter>
+          <!-- 微信接入配置 END -->
+      </activity>
+	  
+二、以下分功能单独配置：
+
+1、微信登陆
+<!-- 微信接入配置 START -->
+<activity
+    android:name="APP包名.wxapi.WXEntryActivity"
+    android:launchMode="singleTask"  
+    android:exported="true"  
+    android:windowSoftInputMode="adjustPan|adjustUnspecified|stateHidden"  
+    android:screenOrientation="portrait">
+</activity>
+<!-- 微信接入配置 END -->
+
+2、微信支付
+<!-- 微信接入配置 START -->
+<activity
+     android:name="com.moonar.jiangjiumeng.wxapi.WXPayEntryActivity"
+     android:exported="true"
+     android:launchMode="singleTop">
+     <intent-filter>
+          <action android:name="android.intent.action.VIEW"/>
+          <category android:name="android.intent.category.DEFAULT"/>
+          <data android:scheme="wxe89a11667c882904"/>
+     </intent-filter>
+</activity>
+<!-- 微信接入配置 END -->

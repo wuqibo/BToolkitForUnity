@@ -1,0 +1,329 @@
+fileFormatVersion: 2
+guid: 4e0ec478d8df4cc419a626c970c8ffc3
+timeCreated: 1513001527
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: BText_Black_0
+    21300002: BText_Black_1
+    21300004: BText_Black_2
+    21300006: BText_Black_3
+    21300008: BText_Black_4
+    21300010: BText_Black_5
+    21300012: BText_Black_6
+    21300014: BText_Black_7
+    21300016: BText_Black_8
+    21300018: BText_Black_9
+    21300020: BText_Black_10
+    21300022: BText_Black_11
+    21300024: BText_Black_12
+    21300026: BText_Black_13
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: BText_Black_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 0
+        width: 83
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13.5, y: 43}
+        - {x: -27.5, y: 27}
+        - {x: -27.5, y: -41}
+        - {x: -17.5, y: -43}
+        - {x: 22.5, y: -43}
+        - {x: 30.5, y: -29}
+        - {x: 30.5, y: 27}
+        - {x: 16.5, y: 43}
+    - name: BText_Black_1
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 0
+        width: 72
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 42}
+        - {x: -22, y: 37}
+        - {x: -22, y: -33}
+        - {x: -11, y: -42}
+        - {x: 22, y: -42}
+        - {x: 22, y: 42}
+    - name: BText_Black_2
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 0
+        width: 80
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18, y: 42}
+        - {x: -30, y: 36}
+        - {x: -30, y: -42}
+        - {x: 29, y: -42}
+        - {x: 29, y: 42}
+    - name: BText_Black_3
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 0
+        width: 78
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 43}
+        - {x: -24, y: 42}
+        - {x: -29, y: 24}
+        - {x: -29, y: -24}
+        - {x: -28, y: -34}
+        - {x: -22, y: -43}
+        - {x: 18, y: -43}
+        - {x: 29, y: -35}
+        - {x: 29, y: 29}
+        - {x: 17, y: 43}
+    - name: BText_Black_4
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 0
+        width: 79
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30.5, y: -36}
+        - {x: -23.5, y: -42}
+        - {x: 25.5, y: -42}
+        - {x: 30.5, y: -39}
+        - {x: 30.5, y: 31}
+        - {x: 26.5, y: 42}
+        - {x: -12.5, y: 42}
+        - {x: -30.5, y: 0}
+    - name: BText_Black_5
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 0
+        width: 77
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22.5, y: 42}
+        - {x: -26.5, y: 38}
+        - {x: -27.5, y: 33}
+        - {x: -27.5, y: -36}
+        - {x: -16.5, y: -42}
+        - {x: 27.5, y: -42}
+        - {x: 30.5, y: -40}
+        - {x: 30.5, y: 41}
+        - {x: 25.5, y: 42}
+    - name: BText_Black_6
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 0
+        width: 82
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28, y: -27}
+        - {x: -25, y: -38}
+        - {x: -20, y: -43}
+        - {x: 31, y: -43}
+        - {x: 31, y: 43}
+        - {x: -16, y: 43}
+        - {x: -28, y: 24}
+    - name: BText_Black_7
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 0
+        width: 77
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23.5, y: 42}
+        - {x: -23.5, y: -39}
+        - {x: -20.5, y: -42}
+        - {x: 12.5, y: -42}
+        - {x: 18.5, y: -41}
+        - {x: 31.5, y: 11}
+        - {x: 31.5, y: 42}
+    - name: BText_Black_8
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 0
+        width: 81
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5, y: 43}
+        - {x: -26.5, y: 33}
+        - {x: -26.5, y: -28}
+        - {x: -18.5, y: -43}
+        - {x: 32.5, y: -43}
+        - {x: 32.5, y: 43}
+    - name: BText_Black_9
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 0
+        width: 84
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17, y: 43}
+        - {x: -28, y: 27}
+        - {x: -28, y: -39}
+        - {x: -18, y: -43}
+        - {x: 25, y: -43}
+        - {x: 31, y: -39}
+        - {x: 31, y: 39}
+        - {x: 30, y: 43}
+    - name: BText_Black_10
+      rect:
+        serializedVersion: 2
+        x: 1009
+        y: 0
+        width: 78
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 12, y: 32}
+        - {x: -11, y: 32}
+        - {x: -27, y: 23}
+        - {x: -27, y: -17}
+        - {x: -20, y: -32}
+        - {x: 16, y: -32}
+        - {x: 17, y: -31}
+        - {x: 31, y: -16}
+        - {x: 31, y: 10}
+        - {x: 30, y: 17}
+    - name: BText_Black_11
+      rect:
+        serializedVersion: 2
+        x: 1109
+        y: 0
+        width: 81
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28.5, y: 15}
+        - {x: -28.5, y: -15}
+        - {x: 29.5, y: -15}
+        - {x: 29.5, y: 12}
+        - {x: 24.5, y: 15}
+    - name: BText_Black_12
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 0
+        width: 84
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30, y: 39}
+        - {x: -32, y: 38}
+        - {x: -32, y: -39}
+        - {x: 36, y: -39}
+        - {x: 36, y: 39}
+    - name: BText_Black_13
+      rect:
+        serializedVersion: 2
+        x: 1316
+        y: 0
+        width: 67
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 20.5, y: 43}
+        - {x: 0.5, y: 43}
+        - {x: -5.5, y: 41}
+        - {x: -21.5, y: -15}
+        - {x: -21.5, y: -42}
+        - {x: -19.5, y: -43}
+        - {x: 3.5, y: -43}
+        - {x: 11.5, y: -20}
+        - {x: 22.5, y: 28}
+        - {x: 22.5, y: 41}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

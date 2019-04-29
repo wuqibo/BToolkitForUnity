@@ -1,0 +1,109 @@
+﻿using System;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+namespace BToolkit
+{
+    [AddComponentMenu("BToolkit/BButton")]
+    [RequireComponent(typeof(Image))]
+    public class BButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
+    {
+        public enum TriggerMethod
+        {
+            Up, Down, Double
+        }
+        public int index;
+        public TriggerMethod triggerMethod = TriggerMethod.Up;
+        public float canTriggerInterval = 1;
+        public UnityEvent onTrigger;
+        public UnityAction<int> OnTouchDown, OnTouchClick, OnTouchUp;
+        public RectTransform rectTransform { get { return transform as RectTransform; } }
+        float doubleTimer;
+        float canTouchTimer;
+
+        void OnDisable()
+        {
+            if (OnTouchUp != null)
+            {
+                OnTouchUp(index);
+            }
+        }
+
+        void Start() { }
+
+        void Update()
+        {
+            if (canTouchTimer > 0f)
+            {
+                canTouchTimer -= Time.deltaTime;
+            }
+            if (doubleTimer > 0f)
+            {
+                doubleTimer -= Time.deltaTime;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                if (OnTouchUp != null)
+                {
+                    OnTouchUp(index);
+                }
+            }
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (enabled)
+            {
+                if (triggerMethod == TriggerMethod.Down)
+                {
+                    if (canTouchTimer <= 0f)
+                    {
+                        onTrigger.Invoke();
+                        canTouchTimer = canTriggerInterval;
+                    }
+                }
+                else if (triggerMethod == TriggerMethod.Double)
+                {
+                    if (doubleTimer <= 0f)
+                    {
+                        doubleTimer = 0.5f;
+                    }
+                    else
+                    {
+                        if (canTouchTimer <= 0f)
+                        {
+                            onTrigger.Invoke();
+                            doubleTimer = 0f;
+                            canTouchTimer = canTriggerInterval;
+                        }
+                    }
+                }
+                if (OnTouchDown != null)
+                {
+                    OnTouchDown(index);
+                }
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (enabled)
+            {
+                if (triggerMethod == TriggerMethod.Up)
+                {
+                    if (canTouchTimer <= 0f)
+                    {
+                        onTrigger.Invoke();
+                        canTouchTimer = canTriggerInterval;
+                    }
+                }
+                if (OnTouchClick != null)
+                {
+                    OnTouchClick(index);
+                }
+            }
+        }
+    }
+}
