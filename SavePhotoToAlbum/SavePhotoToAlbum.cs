@@ -23,7 +23,7 @@ namespace BToolkit
 
 
         /// <summary>
-        /// Andriod新保存到相册的照片需要刷新相册后才能显示（SaveToAlbum()方法会自动刷新）
+        /// Andriod新保存到相册的照片需要刷新相册后才能显示（Save()方法会自动刷新）
         /// </summary>
         public static void AndroidRefreshAlbum(string fileFullPath)
         {
