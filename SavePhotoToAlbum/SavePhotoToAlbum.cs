@@ -7,13 +7,15 @@ namespace BToolkit
     {
 
         /// <summary>
-        /// 保存到相册，Android需指定路径并会自动刷新相册，iOS将不会使用该路径
+        /// 保存到相册，Android需指定路径并会自动刷新相册，iOS无需指定文件名
         /// </summary>
-        public static void Save(byte[] bytes, string androidSaveFullPath = null)
+        public static void Save(byte[] bytes, string androidFileName = null)
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.savephoto.SavePhotoToAlbum", "save", bytes, androidSaveFullPath);
+                //手机自带存储卡（非SD卡）根目录
+                string saveFullPath = "/storage/emulated/0/DCIM/" + androidFileName;
+                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.savephoto.SavePhotoToAlbum", "save", bytes, saveFullPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
