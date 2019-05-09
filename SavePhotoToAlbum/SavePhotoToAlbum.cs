@@ -11,7 +11,11 @@ namespace BToolkit
         /// </summary>
         public static void Save(byte[] bytes, string androidFileName = null)
         {
-            if (Application.platform == RuntimePlatform.Android)
+            if (Application.isEditor)
+            {
+                TextureUtils.SaveBytesToFile(bytes, Application.persistentDataPath + "/" + androidFileName);
+            }
+            else if (Application.platform == RuntimePlatform.Android)
             {
                 //手机自带存储卡（非SD卡）根目录
                 string saveFullPath = "/storage/emulated/0/DCIM/" + androidFileName;

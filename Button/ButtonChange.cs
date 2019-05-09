@@ -9,7 +9,7 @@ namespace BToolkit
     {
         public Image target;
         public bool scale = true, texture;
-        public float changeScale = 0.95f;
+        public float changeScale = 0.97f;
         public Sprite changeSprite;
         public AudioClip sound;
         public bool listenKeyBack;
