@@ -20,16 +20,15 @@ namespace BToolkit
             buttonChange.scale = EditorGUILayout.Toggle("Scale", buttonChange.scale);
             if (buttonChange.scale)
             {
-                buttonChange.changeScale = EditorGUILayout.FloatField("    ChangeScale", buttonChange.changeScale);
+                buttonChange.pressScale = EditorGUILayout.FloatField("    ChangeScale", buttonChange.pressScale);
             }
             buttonChange.texture = EditorGUILayout.Toggle("Texture", buttonChange.texture);
             if (buttonChange.texture)
             {
                 buttonChange.changeSprite = (Sprite)EditorGUILayout.ObjectField("    SpriteChange", buttonChange.changeSprite, typeof(Sprite), true);
             }
-            buttonChange.listenKeyBack = EditorGUILayout.Toggle("ListenKeyBack", buttonChange.listenKeyBack);
             buttonChange.sound = (AudioClip)EditorGUILayout.ObjectField("Sound", buttonChange.sound, typeof(AudioClip), true);
-            buttonChange.canPlayGlobalSound = EditorGUILayout.Toggle("CanPlayGlobalSound", buttonChange.canPlayGlobalSound);
+            buttonChange.canPlayDefaultSound = EditorGUILayout.Toggle("Can Play Default Sound", buttonChange.canPlayDefaultSound);
         }
     }
 }

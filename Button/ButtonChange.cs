@@ -4,16 +4,14 @@ using UnityEngine.EventSystems;
 
 namespace BToolkit
 {
-    [AddComponentMenu("BToolkit/ButtonChange")]
     public class ButtonChange : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public Image target;
         public bool scale = true, texture;
-        public float changeScale = 0.97f;
+        public float pressScale = 0.97f;
         public Sprite changeSprite;
         public AudioClip sound;
-        public bool listenKeyBack;
-        public bool canPlayGlobalSound = true;
+        public bool canPlayDefaultSound = true;
         Sprite spriteDefault;
         Vector3 defaultScale;
         Button button;
@@ -25,36 +23,14 @@ namespace BToolkit
             if (!target)
             {
                 target = GetComponent<Image>();
+                if (target)
+                {
+                    spriteDefault = target.sprite;
+                }
             }
-            spriteDefault = target.sprite;
             button = GetComponent<Button>();
             bButton = GetComponent<BButton>();
             stateButton = GetComponent<StateButton>();
-        }
-
-        void Update()
-        {
-            if (listenKeyBack)
-            {
-                if (IsEnable())
-                {
-                    if (Input.GetKeyDown(KeyCode.Escape))
-                    {
-                        if (button)
-                        {
-                            button.onClick.Invoke();
-                        }
-                        else if (bButton)
-                        {
-                            bButton.onTrigger.Invoke();
-                        }
-                        else if (stateButton)
-                        {
-                            stateButton.IsOn = !stateButton.IsOn;
-                        }
-                    }
-                }
-            }
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -67,7 +43,7 @@ namespace BToolkit
                     {
                         defaultScale = transform.localScale;
                     }
-                    transform.localScale = defaultScale * changeScale;
+                    transform.localScale = defaultScale * pressScale;
                 }
                 if (texture && target)
                 {
@@ -79,12 +55,12 @@ namespace BToolkit
                 }
                 else
                 {
-                    if (canPlayGlobalSound)
+                    if (canPlayDefaultSound)
                     {
-                        //if (Lobby.UI.ResSounds.instance)
-                        //{
-                        //    SoundPlayer.Play(0, Lobby.UI.ResSounds.instance.btnUp);
-                        //}
+                        if (Lobby.UI.ResSounds.instance)
+                        {
+                            SoundPlayer.Play(0, Lobby.UI.ResSounds.instance.btnUp);
+                        }
                     }
                 }
             }

@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace BToolkit
 {
@@ -16,6 +14,7 @@ namespace BToolkit
         public int index;
         public TriggerMethod triggerMethod = TriggerMethod.Up;
         public float canTriggerInterval = 1;
+        public bool listenKeyBack;
         public UnityEvent onTrigger;
         public UnityAction<int> OnTouchDown, OnTouchClick, OnTouchUp;
         public RectTransform rectTransform { get { return transform as RectTransform; } }
@@ -47,6 +46,13 @@ namespace BToolkit
                 if (OnTouchUp != null)
                 {
                     OnTouchUp(index);
+                }
+            }
+            if (listenKeyBack)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    onTrigger.Invoke();
                 }
             }
         }
