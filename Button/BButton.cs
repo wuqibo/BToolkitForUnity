@@ -7,7 +7,6 @@ using UnityEngine.UI;
 namespace BToolkit
 {
     [AddComponentMenu("BToolkit/BButton")]
-    [RequireComponent(typeof(Image))]
     public class BButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     {
         public enum TriggerMethod

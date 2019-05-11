@@ -36,27 +36,7 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// 当前是前摄像头还是后摄像头
-        /// </summary>
-        public static CameraDevice.CameraDirection CameraDirection
-        {
-            get { return CameraDevice.Instance.GetCameraDirection(); }
-        }
-
-        /// <summary>
-        /// 切换前后摄像头
-        /// </summary>
-        public static void SwitchToBackCamera(bool toBack)
-        {
-            CameraDevice.CameraDirection direction = toBack ? CameraDevice.CameraDirection.CAMERA_DEFAULT : CameraDevice.CameraDirection.CAMERA_FRONT;
-            CameraDevice.Instance.Stop();
-            CameraDevice.Instance.Deinit();
-            CameraDevice.Instance.Init(direction);
-            CameraDevice.Instance.Start();
-        }
-
-        /// <summary>
-        /// 开启AR识别并跟踪
+        /// 开启AR识别
         /// </summary>
         public static void StartTracker()
         {
@@ -68,7 +48,7 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// 关闭AR识别并跟踪
+        /// 关闭AR识别
         /// </summary>
         public static void StopTracker()
         {
