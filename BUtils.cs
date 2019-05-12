@@ -234,7 +234,7 @@ namespace BToolkit
         /// Application.streamingAssets方法分平台处理，否则移动平台上可能无法下载数据(不带file:///)
         /// </summary>
         /// <returns></returns>
-        public static string streamingAssetsCustomPath
+        public static string streamingAssetsPath
         {
             get
             {
@@ -252,49 +252,18 @@ namespace BToolkit
         /// Application.streamingAssets方法分平台处理，否则移动平台上可能无法下载数据(自带file:///)
         /// </summary>
         /// <returns></returns>
-        public static string streamingAssetsCustomPathForWebRequest
+        public static string streamingAssetsPathForWebRequest
         {
             get
             {
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
-                return "file:///" + streamingAssetsCustomPath;
+                return "file:///" + streamingAssetsPath;
 #elif UNITY_ANDROID && !UNITY_EDITOR
-                return "jar:file:///"+streamingAssetsCustomPath;
+                return "jar:file:///"+streamingAssetsPath;
 #elif UNITY_IOS && !UNITY_EDITOR
-                return "file:///"+streamingAssetsCustomPath;
+                return "file:///"+streamingAssetsPath;
 #endif
             }
-        }
-
-        /// <summary>
-        /// 清除file:///头
-        /// </summary>
-        /// <returns></returns>
-        public static string FileUrlToPath(string url)
-        {
-            if (!string.IsNullOrEmpty(url))
-            {
-                url = url.Replace("jar:file:///", "");
-                url = url.Replace("file:///", "");
-            }
-            return url;
-        }
-
-        public static byte[] ReadFileBytes(string fullPath)
-        {
-            try
-            {
-                FileStream file_ = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
-                byte[] data = new byte[file_.Length];
-                file_.Read(data, 0, (int)file_.Length);
-                file_.Close();
-                return data;
-            }
-            catch (Exception e)
-            {
-                Debuger.LogError(">>>>>>>>>>>>>>ReadFileBytes:" + e);
-            }
-            return null;
         }
 
     }
