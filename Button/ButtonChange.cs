@@ -7,10 +7,11 @@ namespace BToolkit
     public class ButtonChange : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public Image target;
-        public bool scale = true, texture;
+        public bool scale = true, color, texture;
         public float pressScale = 0.97f;
         public Sprite changeSprite;
-        
+
+        Color colorDefault;
         Sprite spriteDefault;
         Vector3 defaultScale;
         Button button;
@@ -25,6 +26,7 @@ namespace BToolkit
                 if (target)
                 {
                     spriteDefault = target.sprite;
+                    colorDefault = target.color;
                 }
             }
             button = GetComponent<Button>();
@@ -48,6 +50,10 @@ namespace BToolkit
                 {
                     target.sprite = changeSprite;
                 }
+                if (color && target)
+                {
+                    target.color = new Color(colorDefault.r - 0.02f, colorDefault.g - 0.02f, colorDefault.b - 0.02f);
+                }
             }
         }
 
@@ -62,6 +68,10 @@ namespace BToolkit
                 if (texture && target)
                 {
                     target.sprite = spriteDefault;
+                }
+                if (color && target)
+                {
+                    target.color = colorDefault;
                 }
             }
         }
