@@ -22,12 +22,12 @@ namespace BToolkit
             {
                 buttonChange.pressScale = EditorGUILayout.FloatField("    ChangeScale", buttonChange.pressScale);
             }
+            buttonChange.color = EditorGUILayout.Toggle("Color", buttonChange.color);
             buttonChange.texture = EditorGUILayout.Toggle("Texture", buttonChange.texture);
             if (buttonChange.texture)
             {
                 buttonChange.changeSprite = (Sprite)EditorGUILayout.ObjectField("    SpriteChange", buttonChange.changeSprite, typeof(Sprite), true);
             }
-            buttonChange.color = EditorGUILayout.Toggle("Color", buttonChange.color);
         }
     }
 }
