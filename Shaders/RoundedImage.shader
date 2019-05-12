@@ -17,7 +17,7 @@ Shader "BToolkit/RoundedImage"
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip("Use Alpha Clip", Float) = 0
 
-        _RoundedRadius("Rounded Radius", Range(0, 256)) = 5
+        _RoundedRadius("Rounded Radius", Range(0, 256)) = 10
     }
 
     SubShader

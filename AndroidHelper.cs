@@ -2,7 +2,7 @@
 
 namespace BToolkit
 {
-    public class AndroidUtils
+    public class AndroidHelper
     {
 
         static AndroidJavaObject jo;

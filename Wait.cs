@@ -33,7 +33,7 @@ namespace BToolkit
                 }
                 dialogWait.currTimeout = timeout;
 				dialogWait.TimeoutEvent = OnTimeoutCallback;
-                dialogWait.transform.SetParent(BUtils.GetTopCanvas(), false);
+                dialogWait.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
                 return dialogWait;
             }
             else

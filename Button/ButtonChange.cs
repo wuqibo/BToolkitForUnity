@@ -17,6 +17,7 @@ namespace BToolkit
         Button button;
         BButton bButton;
         StateButton stateButton;
+        static AudioClip btn_common_sound;
 
         void Awake()
         {
@@ -57,10 +58,11 @@ namespace BToolkit
                 {
                     if (canPlayDefaultSound)
                     {
-                        if (Lobby.UI.ResSounds.instance)
+                        if (!btn_common_sound)
                         {
-                            SoundPlayer.Play(0, Lobby.UI.ResSounds.instance.btnUp);
+                            btn_common_sound = Resources.Load<AudioClip>("Sounds/btn_common");
                         }
+                        SoundPlayer.Play(0, btn_common_sound);
                     }
                 }
             }

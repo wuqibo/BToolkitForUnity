@@ -23,7 +23,7 @@ namespace BToolkit
                 }
                 GameObject go = Instantiate(prefab) as GameObject;
                 QuitTip quitTip = go.GetComponent<QuitTip>();
-                go.transform.SetParent(BUtils.GetTopCanvas(), false);
+                go.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
                 if (!quitTip)
                 {
                     go.AddComponent<QuitTip>();
