@@ -9,6 +9,7 @@ namespace BToolkit
         public Image target;
         public bool scale = true, color, texture;
         public float pressScale = 0.97f;
+        public Color changeColor = new Color(1, 1, 1, 1);
         public Sprite changeSprite;
 
         Color colorDefault;
@@ -52,7 +53,7 @@ namespace BToolkit
                 }
                 if (color && target)
                 {
-                    target.color = new Color(colorDefault.r - 0.02f, colorDefault.g - 0.02f, colorDefault.b - 0.02f);
+                    target.color = changeColor;
                 }
             }
         }
