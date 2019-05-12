@@ -15,11 +15,14 @@ namespace BToolkit
         public TriggerMethod triggerMethod = TriggerMethod.Up;
         public float canTriggerInterval = 1;
         public bool listenKeyBack;
+        public AudioClip sound;
+        public bool useCommonSound = true;
         public UnityEvent onTrigger;
         public UnityAction<int> OnTouchDown, OnTouchClick, OnTouchUp;
         public RectTransform rectTransform { get { return transform as RectTransform; } }
         float doubleTimer;
         float canTouchTimer;
+        static AudioClip btnCommonSound;
 
         void OnDisable()
         {
@@ -67,6 +70,21 @@ namespace BToolkit
                     {
                         onTrigger.Invoke();
                         canTouchTimer = canTriggerInterval;
+                        if (sound)
+                        {
+                            SoundPlayer.Play(0, sound);
+                        }
+                        else
+                        {
+                            if (useCommonSound)
+                            {
+                                if (!btnCommonSound)
+                                {
+                                    btnCommonSound = Resources.Load<AudioClip>("Sounds/btn_common");
+                                }
+                                SoundPlayer.Play(0, btnCommonSound);
+                            }
+                        }
                     }
                 }
                 else if (triggerMethod == TriggerMethod.Double)
@@ -82,6 +100,21 @@ namespace BToolkit
                             onTrigger.Invoke();
                             doubleTimer = 0f;
                             canTouchTimer = canTriggerInterval;
+                            if (sound)
+                            {
+                                SoundPlayer.Play(0, sound);
+                            }
+                            else
+                            {
+                                if (useCommonSound)
+                                {
+                                    if (!btnCommonSound)
+                                    {
+                                        btnCommonSound = Resources.Load<AudioClip>("Sounds/btn_common");
+                                    }
+                                    SoundPlayer.Play(0, btnCommonSound);
+                                }
+                            }
                         }
                     }
                 }

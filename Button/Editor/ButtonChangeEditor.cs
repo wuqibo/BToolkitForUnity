@@ -27,8 +27,6 @@ namespace BToolkit
             {
                 buttonChange.changeSprite = (Sprite)EditorGUILayout.ObjectField("    SpriteChange", buttonChange.changeSprite, typeof(Sprite), true);
             }
-            buttonChange.sound = (AudioClip)EditorGUILayout.ObjectField("Sound", buttonChange.sound, typeof(AudioClip), true);
-            buttonChange.canPlayDefaultSound = EditorGUILayout.Toggle("Can Play Default Sound", buttonChange.canPlayDefaultSound);
         }
     }
 }
