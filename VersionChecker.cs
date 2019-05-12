@@ -28,18 +28,19 @@ namespace BToolkit
             {
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
                 string version = (string)jsonData["versionName"];
-                if (GetAppInfo.GetAppVersionName().Equals(version))
-                {
-                    Callback(null);
-                }
-                else
+                if (!GetAppInfo.GetAppVersionName().Equals(version))
                 {
                     string url = (string)jsonData["url"];
                     Callback(url);
                 }
+                else
+                {
+                    Callback(null);
+                }
             }
             catch (Exception err)
             {
+                Callback(null);
                 Debuger.LogError("CheckVersion Error:" + err);
             }
         }
