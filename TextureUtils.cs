@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 
 namespace BToolkit
@@ -138,9 +139,17 @@ namespace BToolkit
         {
             if (texture2d != null)
             {
-                return System.Convert.ToBase64String(texture2d.EncodeToJPG());
+                return System.Convert.ToBase64String(TextureToBytes(texture2d));
             }
             return null;
+        }
+
+        /// <summary>
+        /// Texture转byte[]
+        /// </summary>
+        public static byte[] TextureToBytes(Texture texture)
+        {
+            return ((Texture2D)texture).EncodeToJPG();
         }
 
         /// <summary>
@@ -184,10 +193,10 @@ namespace BToolkit
             {
                 int texW = texture.width;
                 int texH = texture.height;
-                int offsetX = Random.Range(0, texW);
-                int offsetY = Random.Range(0, texW);
+                int offsetX = UnityEngine.Random.Range(0, texW);
+                int offsetY = UnityEngine.Random.Range(0, texW);
                 Color oldColor = texture.GetPixelBilinear(offsetX / (float)texW, offsetY / (float)texH);
-                Color newColor = new Color(oldColor.r*0.9f, oldColor.g * 0.9f, oldColor.b * 0.9f, oldColor.a * 0.9f);//改变一点点颜色
+                Color newColor = new Color(oldColor.r * 0.9f, oldColor.g * 0.9f, oldColor.b * 0.9f, oldColor.a * 0.9f);//改变一点点颜色
                 texture.SetPixel(offsetX, offsetY, newColor);
                 texture.Apply();
                 return texture;
