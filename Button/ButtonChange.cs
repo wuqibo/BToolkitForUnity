@@ -24,11 +24,11 @@ namespace BToolkit
             if (!target)
             {
                 target = GetComponent<Image>();
-                if (target)
-                {
-                    spriteDefault = target.sprite;
-                    colorDefault = target.color;
-                }
+            }
+			if (target)
+            {
+                spriteDefault = target.sprite;
+                colorDefault = target.color;
             }
             button = GetComponent<Button>();
             bButton = GetComponent<BButton>();
