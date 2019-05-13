@@ -81,13 +81,16 @@ namespace BToolkit
 
         void OnGUI()
         {
-            if (firstPoint != Vector3.zero)
+            if (Application.isEditor)
             {
-                GUI.Box(new Rect(firstPoint.x - 25, Screen.height - firstPoint.y - 25, 50, 50), "");
-            }
-            if (secondPoint != Vector3.zero)
-            {
-                GUI.Box(new Rect(secondPoint.x - 25, Screen.height - secondPoint.y - 25, 50, 50), "");
+                if (firstPoint != Vector3.zero)
+                {
+                    GUI.Box(new Rect(firstPoint.x - 25, Screen.height - firstPoint.y - 25, 50, 50), "");
+                }
+                if (secondPoint != Vector3.zero)
+                {
+                    GUI.Box(new Rect(secondPoint.x - 25, Screen.height - secondPoint.y - 25, 50, 50), "");
+                }
             }
         }
 
