@@ -6,72 +6,118 @@ namespace BToolkit
 {
     public class AESUtils
     {
-        const string KEY = "12wsdfcvbghjnm,kjuyhgfde456789iu";
-
-        /// <summary>
-        /// 加密(key为32位字符串)
-        /// </summary>
-        public static string Encrypt(string toEncrypt, string key = null)
+        private static string Key
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                key = KEY;
-            }
-            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(toEncrypt);
-            byte[] resultArray = Encrypt(toEncryptArray, key);
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+            get { return @"fANqOtuGLXmeKRz0dVctf25fI7wo4o40"; }
+        }
+
+        private static string IV
+        {
+            get { return @"7MAIlToRV5uGDB40"; }
         }
 
         /// <summary>
-        /// 解密(key为32位加密时使用的字符串)
+        /// AES加密
         /// </summary>
-        public static string Decrypt(string toDecrypt, string key = null)
+        public static string Encrypt(string plainStr, string key, string iv)
         {
-            if (string.IsNullOrEmpty(key))
+            if (plainStr == null) return null;
+
+            byte[] bKey = Encoding.UTF8.GetBytes(key);
+            byte[] bIV = Encoding.UTF8.GetBytes(iv);
+            byte[] byteArray = Encoding.UTF8.GetBytes(plainStr);
+
+            string encrypt = null;
+            Rijndael aes = Rijndael.Create();
+            try
             {
-                key = KEY;
+                // 开辟一块内存流 
+                using (MemoryStream mStream = new MemoryStream())
+                {
+                    // 把内存流对象包装成加密流对象  
+                    using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateEncryptor(bKey, bIV), CryptoStreamMode.Write))
+                    {
+                        // 明文数据写入加密流  
+                        cStream.Write(byteArray, 0, byteArray.Length);
+                        cStream.FlushFinalBlock();
+                        encrypt = Convert.ToBase64String(mStream.ToArray());
+                    }
+                }
             }
-            byte[] toEncryptArray = Convert.FromBase64String(toDecrypt);
-            byte[] resultArray = Decrypt(toEncryptArray, key);
-            return UTF8Encoding.UTF8.GetString(resultArray);
+            catch { }
+            aes.Clear();
+
+            return encrypt;
         }
 
         /// <summary>
-        /// 加密(key为32位字符串)
+        /// AES加密
         /// </summary>
-        public static byte[] Encrypt(byte[] toEncrypt, string key = null)
+        /// <param name="returnNull">加密失败时是否返回 null，false 返回 String.Empty</param>
+        public static string Encrypt(string plainStr, bool returnNull = true)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                key = KEY;
-            }
-            byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
-            RijndaelManaged rDel = new RijndaelManaged();
-            rDel.Key = keyArray;
-            rDel.Mode = CipherMode.ECB;
-            rDel.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = rDel.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncrypt, 0, toEncrypt.Length);
-            return resultArray;
+            string encrypt = Encrypt(plainStr, Key, IV);
+            return returnNull ? encrypt : (encrypt == null ? String.Empty : encrypt);
         }
 
         /// <summary>
-        /// 解密(key为32位加密时使用的字符串)
+        /// AES加密（默认key）
         /// </summary>
-        public static byte[] Decrypt(byte[] toDecrypt, string key = null)
+        public static string AESEncrypt(string plainStr)
         {
-            if (string.IsNullOrEmpty(key))
+            return Encrypt(plainStr, Key, IV);
+        }
+
+        /// <summary>
+        /// AES解密
+        /// </summary>
+        public static string Decrypt(string encryptStr, string key, string iv)
+        {
+            if (encryptStr == null) return null;
+
+            byte[] bKey = Encoding.UTF8.GetBytes(key);
+            byte[] bIV = Encoding.UTF8.GetBytes(iv);
+            byte[] byteArray = Convert.FromBase64String(encryptStr);
+
+            string decrypt = null;
+            Rijndael aes = Rijndael.Create();
+            try
             {
-                key = KEY;
+                // 开辟一块内存流，存储密文  
+                using (MemoryStream mStream = new MemoryStream())
+                {
+                    // 把内存流对象包装成加密流对象  
+                    using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateDecryptor(bKey, bIV), CryptoStreamMode.Write))
+                    {
+                        // 明文存储区
+                        cStream.Write(byteArray, 0, byteArray.Length);
+                        cStream.FlushFinalBlock();
+                        decrypt = Encoding.UTF8.GetString(mStream.ToArray());
+                    }
+                }
             }
-            byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
-            RijndaelManaged rDel = new RijndaelManaged();
-            rDel.Key = keyArray;
-            rDel.Mode = CipherMode.ECB;
-            rDel.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = rDel.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toDecrypt, 0, toDecrypt.Length);
-            return resultArray;
+            catch { }
+            aes.Clear();
+
+            return decrypt;
+        }
+
+        /// <summary>
+        /// AES解密
+        /// </summary>
+        /// <param name="returnNull">解密失败时是否返回 null，false 返回 String.Empty</param>
+        public static string Decrypt(string encryptStr, bool returnNull = true)
+        {
+            string decrypt = Decrypt(encryptStr, Key, IV);
+            return returnNull ? decrypt : (decrypt == null ? String.Empty : decrypt);
+        }
+
+        /// <summary>
+        /// AES解密（默认key）
+        /// </summary>
+        public static string Decrypt(string plainStr)
+        {
+            return Decrypt(plainStr, Key, IV);
         }
     }
 }
