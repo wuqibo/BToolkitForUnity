@@ -75,22 +75,7 @@ namespace BToolkit
                 FinishCallbackEvent(cutImage);
             }
         }
-
-        /// <summary>
-        /// 当前网络是否可用
-        /// </summary>
-        public static bool IsNetWorkOK
-        {
-            get
-            {
-                if (Application.internetReachability == NetworkReachability.NotReachable)
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
-
+        
         /// <summary>
         /// 判断字符串是否可以转为整型
         /// </summary>
