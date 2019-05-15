@@ -250,6 +250,17 @@ namespace BToolkit
 #endif
             }
         }
+		
+		/// <summary>
+        /// 检测当前网络可用性
+        /// </summary>
+        public static bool IsNetWorkOK
+        {
+            get
+            {
+                return Application.internetReachability != NetworkReachability.NotReachable;
+            }
+        }
 
     }
 }
