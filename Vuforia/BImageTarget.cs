@@ -5,14 +5,17 @@ namespace BToolkit
 {
     public abstract class BImageTarget : MonoBehaviour, ITrackableEventHandler
     {
-        private TrackableBehaviour mTrackableBehaviour;
+        public ImageTargetBehaviour imageTargetBehaviour;
 
         protected virtual void Start()
         {
-            mTrackableBehaviour = GetComponent<TrackableBehaviour>();
-            if (mTrackableBehaviour)
+            if (!imageTargetBehaviour)
             {
-                mTrackableBehaviour.RegisterTrackableEventHandler(this);
+                imageTargetBehaviour = GetComponent<ImageTargetBehaviour>();
+            }
+            if (imageTargetBehaviour)
+            {
+                imageTargetBehaviour.RegisterTrackableEventHandler(this);
             }
         }
 
