@@ -10,16 +10,8 @@ namespace BToolkit
             Before,
             Pass
         }
-        public enum Action
-        {
-            Hide,
-            Show,
-            Destroy
-        }
-
-        public Time time;
-        public Action action;
-        static DateTime targetDateTime = new DateTime(2018, 5, 19);
+        public Time destroyTime;
+        private static DateTime targetDateTime = new DateTime(2019, 5, 25);
 
         public static bool HasPassedTime
         {
@@ -37,37 +29,20 @@ namespace BToolkit
 
         void Awake()
         {
-            if(time == Time.Before)
+            if (destroyTime == Time.Before)
             {
                 if (!HasPassedTime)
                 {
-                    ExecuteAction();
+                    Destroy(gameObject);
                 }
             }
             else
             {
                 if (HasPassedTime)
                 {
-                    ExecuteAction();
+                    Destroy(gameObject);
                 }
             }
         }
-
-        void ExecuteAction()
-        {
-            switch (action)
-            {
-                case Action.Show:
-                    gameObject.SetActive(true);
-                    break;
-                case Action.Hide:
-                    gameObject.SetActive(false);
-                    break;
-                case Action.Destroy:
-                    Destroy(gameObject);
-                    break;
-            }
-        }
-
     }
 }
