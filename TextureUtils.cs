@@ -98,6 +98,37 @@ namespace BToolkit
         }
 
         /// <summary>
+        /// 添加水印
+        /// </summary>
+        public static Texture2D AddWaterMarking(Texture2D texture, Texture2D marking)
+        {
+            int markW = (int)(texture.width * 0.5f);
+            int markH = (int)(markW * marking.height / (float)marking.width);
+            int offset = (int)(markH * 0.5f);
+            int left = texture.width - markW - offset;
+            int markXIndex = 0;
+            int markYIndex = 0;
+            for (int i = offset; i < offset + markH; i++)
+            {
+                markXIndex = 0;
+                for (int j = left; j < left + markW; j++)
+                {
+                    Color bgColor = texture.GetPixel(j, i);
+                    Color markColor = marking.GetPixelBilinear(markXIndex/(float)markW, markYIndex / (float)markH);
+                    if (markColor.a > 0)
+                    {
+                        Color blendColor = Color.Lerp(bgColor, markColor, 0.5f);
+                        texture.SetPixel(j, i, blendColor);
+                    }
+                    markXIndex++;
+                }
+                markYIndex++;
+            }
+            texture.Apply();
+            return texture;
+        }
+
+        /// <summary>
         /// Base64 to Texture2D
         /// </summary>
         public static Texture2D BytesToTexture(byte[] bytes, int width, int height)

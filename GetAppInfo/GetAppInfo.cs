@@ -17,7 +17,7 @@ namespace BToolkit
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.getappinfo.GetAppInfo", "getAppPackageName");
+                return AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.getappinfo.GetAppInfo", "getAppPackageName");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -36,7 +36,7 @@ namespace BToolkit
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.getappinfo.GetAppInfo", "getAppVersionName");
+                return AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.getappinfo.GetAppInfo", "getAppVersionName");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -64,7 +64,7 @@ namespace BToolkit
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidUtils.CallAndroidStaticFunction<int>("cn.btoolkit.getappinfo.GetAppInfo", "getAppVersionCode");
+                return AndroidHelper.CallAndroidStaticFunction<int>("cn.btoolkit.getappinfo.GetAppInfo", "getAppVersionCode");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

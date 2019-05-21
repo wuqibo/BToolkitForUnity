@@ -3,33 +3,32 @@ using UnityEngine;
 
 public class ScanUI : MonoBehaviour
 {
-
+    public static ScanUI instance;
     public RectTransform scanLine;
-    public float maxY = 450;
-    public float minY = -450;
+    public float minY, maxY;
     public float speed = 200f;
-    public AudioClip sound;
-    AudioSource audioSource;
+    public AudioClip recognizedSound;
     bool moveDown;
     GameObject previousTarget;
+    float screenUI;
 
     void Awake()
     {
-        if (sound)
+        instance = this;
+        screenUI = 1080 * Screen.height / (float)Screen.width;
+        if (minY == 0)
         {
-            audioSource = GetComponent<AudioSource>();
-            if (!audioSource)
-            {
-                audioSource = gameObject.AddComponent<AudioSource>();
-                audioSource.loop = false;
-                audioSource.playOnAwake = false;
-            }
+            minY = -screenUI * 0.5f;
+        }
+        if (maxY == 0)
+        {
+            maxY = screenUI * 0.5f;
         }
     }
 
     void Start()
     {
-        Init();
+        Show();
     }
 
     void Update()
@@ -60,17 +59,8 @@ public class ScanUI : MonoBehaviour
         }
     }
 
-    public void In()
-    {
-        gameObject.SetActive(true);
-    }
-
-    public void Out()
-    {
-        gameObject.SetActive(false);
-    }
-
-    internal void Init()
+    //重新开始
+    public void Show()
     {
         moveDown = true;
         if (scanLine)
@@ -80,23 +70,19 @@ public class ScanUI : MonoBehaviour
         }
     }
 
-    internal void OnScaned(GameObject target)
+    /// <summary>
+    /// 识别到的触发
+    /// </summary>
+    public void OnRecognized(GameObject target)
     {
-        if (scanLine)
+        if (scanLine && scanLine.gameObject.activeInHierarchy)
         {
-            if (scanLine.gameObject.activeInHierarchy)
-            {
-                scanLine.gameObject.SetActive(false);
-                if (previousTarget != target)
-                {
-                    previousTarget = target;
-                    if (sound)
-                    {
-                        audioSource.clip = sound;
-                        audioSource.Play();
-                    }
-                }
-            }
+            scanLine.gameObject.SetActive(false);
+        }
+        if (previousTarget != target)
+        {
+            previousTarget = target;
+            SoundPlayer.Play(0, recognizedSound);
         }
     }
 }
