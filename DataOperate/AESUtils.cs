@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System;
+using System.IO;
 
 namespace BToolkit
 {

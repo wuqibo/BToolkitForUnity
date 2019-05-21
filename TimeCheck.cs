@@ -5,11 +5,7 @@ namespace BToolkit
 {
     public class TimeCheck : MonoBehaviour
     {
-        public enum Time
-        {
-            Before,
-            Pass
-        }
+        public enum Time { Before, Pass }
         public Time destroyTime;
         private static DateTime targetDateTime = new DateTime(2019, 5, 25);
 
@@ -17,7 +13,7 @@ namespace BToolkit
         {
             get
             {
-                if (Application.platform == RuntimePlatform.IPhonePlayer)
+                if (Application.isEditor || Application.platform == RuntimePlatform.IPhonePlayer)
                 {
                     DateTime timeNow = DateTime.Now;
                     DateTime timeTarget = targetDateTime;

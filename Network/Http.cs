@@ -80,7 +80,7 @@ namespace BToolkit
                     }
                 }
                 UnityWebRequest request = UnityWebRequest.Post(url, form);
-				request.chunkedTransfer = false;
+                request.chunkedTransfer = false;
                 if (headers != null)
                 {
                     foreach (KeyValuePair<string, string> data in headers)
@@ -89,7 +89,7 @@ namespace BToolkit
                     }
                 }
                 yield return request.Send();
-                if (request.isError)
+                if (request.isNetworkError)
                 {
                     if (CurrHttpCallback != null)
                     {
@@ -140,7 +140,7 @@ namespace BToolkit
                     url += "?random=" + UnityEngine.Random.Range(0, 100) + Time.time;
                 }
                 UnityWebRequest request = UnityWebRequest.Get(url);
-				request.chunkedTransfer = false;
+                request.chunkedTransfer = false;
                 if (headers != null)
                 {
                     foreach (KeyValuePair<string, string> data in headers)
@@ -149,7 +149,7 @@ namespace BToolkit
                     }
                 }
                 yield return request.Send();
-                if (request.isError)
+                if (request.isNetworkError)
                 {
                     if (CurrHttpCallback != null)
                     {
@@ -182,25 +182,18 @@ namespace BToolkit
         /// </summary>
         public static string GetInternalIP()
         {
-            try
+            IPHostEntry host;
+            string localIP = "?";
+            host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
             {
-                return Network.player.ipAddress;
-            }
-            catch
-            {
-                IPHostEntry host;
-                string localIP = "?";
-                host = Dns.GetHostEntry(Dns.GetHostName());
-                foreach (IPAddress ip in host.AddressList)
+                if (ip.AddressFamily.ToString() == "InterNetwork")
                 {
-                    if (ip.AddressFamily.ToString() == "InterNetwork")
-                    {
-                        localIP = ip.ToString();
-                        break;
-                    }
+                    localIP = ip.ToString();
+                    break;
                 }
-                return localIP;
             }
+            return localIP;
         }
 
         /// <summary>
