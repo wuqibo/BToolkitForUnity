@@ -1,61 +1,30 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 //拖到摄影机
 namespace BToolkit
 {
     public class CameraLookAround : MonoBehaviour
     {
-
         public Transform target;
-        public float distane = 30;
-        public bool canCtrlHeightAngle = true;
-        public float currHeightAngle = 15;
-        public bool heightAngleLimit;
-        public float heightAngleMin = 0;
-        public float heightAngleMax = 90;
-        public bool autoRotate;
-        public float autoRotateSpeed = 0.2f;
-        Vector3 previousPos;
-        float r, speedXScale = 0.01f, speedYScale;
-        bool isDraging;
+        public float angle;
+        public float distance = 5;
+        public float cameraHeight = 2;
+        public float cameraHeightMin = 0.1f;
+        public float cameraHeightMax = 7f;
+        public float viewPointHeight = 0.6f;
 
-        void Awake()
-        {
-            r = -Mathf.PI * 0.5f;
-            CanvasScaler canvasScaler = GameObject.FindObjectOfType<CanvasScaler>();
-            if (canvasScaler)
-            {
-                speedXScale = 0.006f * canvasScaler.referenceResolution.y / (float)Screen.height;
-            }
-            speedYScale = speedXScale * 50f;
-        }
+        Vector3 previousPos, dragDelta;
 
         void Update()
         {
             if (target)
             {
-                if (autoRotate)
-                {
-                    r += autoRotateSpeed * Time.deltaTime;
-                }
-                Vector3 pos = new Vector3(target.position.x + Mathf.Cos(r) * distane, 10f, target.position.z + Mathf.Sin(r) * distane);
+                Vector3 pos = target.position + new Vector3(0, cameraHeight, 0);
+                float radian = angle * Mathf.Deg2Rad;
+                pos.x += Mathf.Sin(radian) * distance;
+                pos.z += Mathf.Cos(radian) * distance;
                 transform.position = pos;
-                Vector3 axis = Vector3.Cross(Vector3.up, target.position - transform.position);
-                if (heightAngleLimit)
-                {
-                    if (currHeightAngle < heightAngleMin)
-                    {
-                        currHeightAngle = heightAngleMin;
-                    }
-                    else if (currHeightAngle > heightAngleMax)
-                    {
-                        currHeightAngle = heightAngleMax;
-                    }
-                }
-                transform.RotateAround(target.position, axis, currHeightAngle);
-                transform.LookAt(target);
+                transform.LookAt(target.position + new Vector3(0, viewPointHeight, 0));
             }
             if (Input.GetMouseButtonDown(0))
             {
@@ -73,31 +42,29 @@ namespace BToolkit
 
         void OnTouchDown(Vector3 pos)
         {
-            if (target)
-            {
-                isDraging = true;
-                previousPos = pos;
-            }
+            previousPos = pos;
+            dragDelta = Vector2.zero;
         }
 
         void OnTouchMove(Vector3 pos)
         {
-            if (target && isDraging)
+            dragDelta = pos - previousPos;
+            previousPos = pos;
+            angle += dragDelta.x * 100;
+            cameraHeight -= dragDelta.y * 10;
+            if (cameraHeight < cameraHeightMin)
             {
-                float deltaX = (pos.x - previousPos.x) * speedXScale;
-                r -= deltaX;
-                if (canCtrlHeightAngle)
-                {
-                    float deltaY = (pos.y - previousPos.y) * speedYScale;
-                    currHeightAngle -= deltaY;
-                }
-                previousPos = pos;
+                cameraHeight = cameraHeightMin;
+            }
+            else if (cameraHeight > cameraHeightMax)
+            {
+                cameraHeight = cameraHeightMax;
             }
         }
 
         void OnTouchUp()
         {
-            isDraging = false;
+
         }
     }
 }
