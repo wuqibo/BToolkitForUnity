@@ -25,5 +25,15 @@ namespace BToolkit
             return dt.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
+        /// <summary>
+        /// 获取当前时间做文件名（格式：20000101010101）
+        /// </summary>
+        public static string GetCurrTimeAsName()
+        {
+            //使用本地时间
+            DateTime dt = DateTime.Now;
+            return dt.ToString("yyyyMMddHHmmss");
+        }
+
     }
 }
