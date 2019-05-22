@@ -57,42 +57,57 @@ namespace BToolkit
             }
         }
 
-        /// <summary>
-        /// 连续调用该方法时，如果playerId一样，则isCover表示之前声音未播放完成时是否覆盖播放
-        /// </summary>
-        public static SoundPlayer Play(float delay, AudioClip clip, Action OnStopCallback = null)
+        public static SoundPlayer PlayAndDestroy(float delay, AudioClip clip, Action OnStopCallback = null)
         {
-            return Play(delay, clip, 1f, OnStopCallback);
+            return PlayAndDestroy(delay, clip, 1f, OnStopCallback);
         }
 
-        /// <summary>
-        /// 连续调用该方法时，如果playerId一样，则isCover表示之前声音未播放完成时是否覆盖播放
-        /// </summary>
-        public static SoundPlayer Play(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
+        public static SoundPlayer PlayAndDestroy(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
         {
             if (!IsSoundOn || !clip)
             {
                 return null;
             }
-            GameObject go = new GameObject("SoundPlayer");
-            DontDestroyOnLoad(go);
-            SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
-            soundPlayer.Play2(delay, clip, volume, OnStopCallback);
+            SoundPlayer soundPlayer = CreatePlayer();
+            soundPlayer.destroyTimer = delay + clip.length;
+            soundPlayer.Play(delay, clip, volume, OnStopCallback);
             return soundPlayer;
         }
 
-        public void Play2(float delay, AudioClip clip, Action OnStopCallback = null)
+        /// <summary>
+        /// 创建一个声音播放器，播完不会自动销毁，需调用Destroy()方法销毁
+        /// </summary>
+        /// <returns></returns>
+        public static SoundPlayer CreatePlayer()
         {
-            Play2(delay, clip, 1f, OnStopCallback);
+            GameObject go = new GameObject("SoundPlayer");
+            DontDestroyOnLoad(go);
+            SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
+            soundPlayer.audioSource = go.AddComponent<AudioSource>();
+            return soundPlayer;
         }
 
-        public void Play2(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
+        void OnDestroy()
+        {
+            canReFindAllPlayers = true;
+        }
+
+        void Awake()
+        {
+            canReFindAllPlayers = true;
+        }
+
+        public void Play(float delay, AudioClip clip, Action OnStopCallback = null)
+        {
+            Play(delay, clip, 1f, OnStopCallback);
+        }
+
+        public void Play(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
         {
             if (!IsSoundOn || !clip)
             {
                 return;
             }
-            destroyTimer = delay + clip.length;
             audioSource.clip = clip;
             audioSource.playOnAwake = false;
             audioSource.loop = false;
@@ -102,9 +117,9 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// 停止播放用ID标记过的声音
+        /// 停止播放并销毁
         /// </summary>
-        public void Stop()
+        public void Destroy()
         {
             Destroy(gameObject);
             if (OnStopCallback != null)
@@ -115,18 +130,12 @@ namespace BToolkit
 
         void Update()
         {
-            if (Input.GetMouseButtonUp(0))
-            {
-                allSoundPlayers = new SoundPlayer[0];
-                allSoundPlayersCount = 0;
-                canReFindAllPlayers = true;
-            }
             if (destroyTimer > 0f)
             {
                 destroyTimer -= Time.deltaTime;
                 if (destroyTimer <= 0f)
                 {
-                    Stop();
+                    Destroy();
                 }
             }
         }
