@@ -4,19 +4,19 @@ using System.Collections.Generic;
 
 namespace BToolkit
 {
-    public class BVuforiaTool : MonoBehaviour
+    public class VuforiaHelper : MonoBehaviour
     {
 
-        static BVuforiaTool instance;
-        public static BVuforiaTool Instance
+        static VuforiaHelper instance;
+        public static VuforiaHelper Instance
         {
             get
             {
                 if (!instance)
                 {
-                    GameObject obj = new GameObject("ARTool");
+                    GameObject obj = new GameObject("VuforiaHelper");
                     DontDestroyOnLoad(obj);
-                    instance = obj.AddComponent<BVuforiaTool>();
+                    instance = obj.AddComponent<VuforiaHelper>();
                 }
                 return instance;
             }
@@ -36,7 +36,7 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// 开启AR识别
+        /// 开启AR识别并跟踪
         /// </summary>
         public static void StartTracker()
         {
@@ -48,7 +48,7 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// 关闭AR识别
+        /// 关闭AR识别并跟踪
         /// </summary>
         public static void StopTracker()
         {
