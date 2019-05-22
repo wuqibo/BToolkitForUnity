@@ -5,11 +5,9 @@ namespace BToolkit
 {
     public class SoundPlayer : MonoBehaviour
     {
-
         static bool canReFindAllPlayers = true;
         static SoundPlayer[] allSoundPlayers;
         static int allSoundPlayersCount;
-        const string Prefix = "Sound_";
         const string SAVE_KEY = "SOUND_SAVE_KEY";
         AudioSource audioSource;
         float destroyTimer;
@@ -60,102 +58,56 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// 连续调用该方法将多声音一起播放
+        /// 连续调用该方法时，如果playerId一样，则isCover表示之前声音未播放完成时是否覆盖播放
         /// </summary>
-        public static void Play(float delay, AudioClip clip, Action OnStopCallback = null)
+        public static SoundPlayer Play(float delay, AudioClip clip, Action OnStopCallback = null)
         {
-            Play(delay, clip, 1f, OnStopCallback);
-        }
-
-        /// <summary>
-        /// 连续调用该方法将多声音一起播放
-        /// </summary>
-        public static void Play(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
-        {
-            if (!IsSoundOn)
-            {
-                return;
-            }
-            if (clip)
-            {
-                CreatePlayerAndPlay(delay, Prefix + clip.name, clip, volume, OnStopCallback);
-            }
+            return Play(delay, clip, 1f, OnStopCallback);
         }
 
         /// <summary>
         /// 连续调用该方法时，如果playerId一样，则isCover表示之前声音未播放完成时是否覆盖播放
         /// </summary>
-        public static void Play(float delay, string playerId, AudioClip clip, bool isCover, Action OnStopCallback = null)
-        {
-            Play(delay, playerId, clip, isCover, 1f, OnStopCallback);
-        }
-
-        /// <summary>
-        /// 连续调用该方法时，如果playerId一样，则isCover表示之前声音未播放完成时是否覆盖播放
-        /// </summary>
-        public static void Play(float delay, string playerId, AudioClip clip, bool isCover, float volume, Action OnStopCallback = null)
+        public static SoundPlayer Play(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
         {
             if (!IsSoundOn)
             {
-                return;
+                return null;
             }
-            if (clip)
-            {
-                string playerKey = Prefix + playerId;
-                GameObject player = GameObject.Find(playerKey);
-                if (player)
-                {
-                    SoundPlayer soundPlayer = player.GetComponent<SoundPlayer>();
-                    if (soundPlayer.audioSource.isPlaying && !isCover)
-                    {
-                        return;
-                    }
-                    soundPlayer.destroyTimer = delay + clip.length;
-                    soundPlayer.audioSource.Stop();
-                    soundPlayer.audioSource.clip = clip;
-                    soundPlayer.audioSource.volume = volume;
-                    soundPlayer.OnStopCallback = OnStopCallback;
-                    soundPlayer.audioSource.PlayDelayed(delay);
-                }
-                else
-                {
-                    CreatePlayerAndPlay(delay, playerKey, clip, volume, OnStopCallback);
-                }
-            }
+            return CreatePlayerAndPlay(delay, clip, volume, OnStopCallback);
         }
 
         /// <summary>
         /// 停止播放用ID标记过的声音
         /// </summary>
-        public static void Stop(string playerId)
+        public void Stop()
         {
-            GameObject player = GameObject.Find(Prefix + playerId);
-            if (player)
+            if (OnStopCallback != null)
             {
-                player.name = "ReadyToDestroy";
-                SoundPlayer soundPlayer = player.GetComponent<SoundPlayer>();
-                Destroy(player);
-                if (soundPlayer.OnStopCallback != null)
-                {
-                    soundPlayer.OnStopCallback();
-                }
+                OnStopCallback();
             }
+            Destroy(gameObject);
         }
 
-        static void CreatePlayerAndPlay(float delay, string playerKey, AudioClip clip, float volume, Action OnStopCallback)
+        static SoundPlayer CreatePlayerAndPlay(float delay, AudioClip clip, float volume, Action OnStopCallback)
         {
-            GameObject go = new GameObject(playerKey);
-            DontDestroyOnLoad(go);
-            SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
-            soundPlayer.destroyTimer = delay + clip.length;
-            soundPlayer.audioSource = go.AddComponent<AudioSource>();
-            soundPlayer.audioSource.spatialBlend = 0f;
-            soundPlayer.audioSource.clip = clip;
-            soundPlayer.audioSource.playOnAwake = false;
-            soundPlayer.audioSource.loop = false;
-            soundPlayer.audioSource.volume = volume;
-            soundPlayer.OnStopCallback = OnStopCallback;
-            soundPlayer.audioSource.PlayDelayed(delay);
+            if (clip)
+            {
+                GameObject go = new GameObject("SoundPlayer");
+                DontDestroyOnLoad(go);
+                SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
+                soundPlayer.destroyTimer = delay + clip.length;
+                soundPlayer.audioSource = go.AddComponent<AudioSource>();
+                soundPlayer.audioSource.spatialBlend = 0f;
+                soundPlayer.audioSource.clip = clip;
+                soundPlayer.audioSource.playOnAwake = false;
+                soundPlayer.audioSource.loop = false;
+                soundPlayer.audioSource.volume = volume;
+                soundPlayer.OnStopCallback = OnStopCallback;
+                soundPlayer.audioSource.PlayDelayed(delay);
+                return soundPlayer;
+            }
+            return null;
         }
 
         void Update()
