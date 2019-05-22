@@ -70,11 +70,35 @@ namespace BToolkit
         /// </summary>
         public static SoundPlayer Play(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
         {
-            if (!IsSoundOn)
+            if (!IsSoundOn || !clip)
             {
                 return null;
             }
-            return CreatePlayerAndPlay(delay, clip, volume, OnStopCallback);
+            GameObject go = new GameObject("SoundPlayer");
+            DontDestroyOnLoad(go);
+            SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
+            soundPlayer.Play2(delay, clip, volume, OnStopCallback);
+            return soundPlayer;
+        }
+
+        public void Play2(float delay, AudioClip clip, Action OnStopCallback = null)
+        {
+            Play2(delay, clip, 1f, OnStopCallback);
+        }
+
+        public void Play2(float delay, AudioClip clip, float volume, Action OnStopCallback = null)
+        {
+            if (!IsSoundOn || !clip)
+            {
+                return;
+            }
+            destroyTimer = delay + clip.length;
+            audioSource.clip = clip;
+            audioSource.playOnAwake = false;
+            audioSource.loop = false;
+            audioSource.volume = volume;
+            this.OnStopCallback = OnStopCallback;
+            audioSource.PlayDelayed(delay);
         }
 
         /// <summary>
@@ -82,32 +106,11 @@ namespace BToolkit
         /// </summary>
         public void Stop()
         {
+            Destroy(gameObject);
             if (OnStopCallback != null)
             {
                 OnStopCallback();
             }
-            Destroy(gameObject);
-        }
-
-        static SoundPlayer CreatePlayerAndPlay(float delay, AudioClip clip, float volume, Action OnStopCallback)
-        {
-            if (clip)
-            {
-                GameObject go = new GameObject("SoundPlayer");
-                DontDestroyOnLoad(go);
-                SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
-                soundPlayer.destroyTimer = delay + clip.length;
-                soundPlayer.audioSource = go.AddComponent<AudioSource>();
-                soundPlayer.audioSource.spatialBlend = 0f;
-                soundPlayer.audioSource.clip = clip;
-                soundPlayer.audioSource.playOnAwake = false;
-                soundPlayer.audioSource.loop = false;
-                soundPlayer.audioSource.volume = volume;
-                soundPlayer.OnStopCallback = OnStopCallback;
-                soundPlayer.audioSource.PlayDelayed(delay);
-                return soundPlayer;
-            }
-            return null;
         }
 
         void Update()
@@ -123,12 +126,7 @@ namespace BToolkit
                 destroyTimer -= Time.deltaTime;
                 if (destroyTimer <= 0f)
                 {
-                    gameObject.name = "ReadyToDestroy";
-                    Destroy(gameObject);
-                    if (OnStopCallback != null)
-                    {
-                        OnStopCallback();
-                    }
+                    Stop();
                 }
             }
         }
