@@ -49,7 +49,7 @@ namespace BToolkit
             }
         }
 
-        public void Value(float delay, float startValue, float toValue, float time, Action<float> updateEvent, Tween.EaseType method, Action<float> finishEvent)
+        public void Value(float delay, float startValue, float toValue, float time, Tween.EaseType method, Action<float> updateEvent, Action<float> finishEvent)
         {
             this.delay = delay;
             this.toValue = toValue;
