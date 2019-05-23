@@ -21,7 +21,7 @@ namespace BToolkit
         }
         Action EndEvent;
         TweenEvent EndEventWidthParam;
-        Tween bTween;
+        Tween Tween;
         Vector3 toPos;
         RectTransform rectTrans;
         OneAxis xAxis = new OneAxis();
@@ -35,7 +35,7 @@ namespace BToolkit
             public bool canGo;
         }
         Vector3 pos;
-        bool delayFinsh;
+        bool delayFinished;
         List<Params> paramsQueue = new List<Params>();
 
         void OnDestroy()
@@ -62,11 +62,11 @@ namespace BToolkit
                     paramsQueue.RemoveAt(i);
                 }
             }
-            if (!delayFinsh)
+            if (!delayFinished)
             {
                 return;
             }
-            if (bTween == null)
+            if (Tween == null)
             {
                 return;
             }
@@ -80,15 +80,15 @@ namespace BToolkit
             }
             if (xAxis.canGo)
             {
-                pos.x = (float)bTween.Ease(t, xAxis.b, xAxis.c, d);
+                pos.x = (float)Tween.Ease(t, xAxis.b, xAxis.c, d);
             }
             if (yAxis.canGo)
             {
-                pos.y = (float)bTween.Ease(t, yAxis.b, yAxis.c, d);
+                pos.y = (float)Tween.Ease(t, yAxis.b, yAxis.c, d);
             }
             if (zAxis.canGo)
             {
-                pos.z = (float)bTween.Ease(t, zAxis.b, zAxis.c, d);
+                pos.z = (float)Tween.Ease(t, zAxis.b, zAxis.c, d);
             }
             if (useRectTrans)
             {
@@ -165,7 +165,7 @@ namespace BToolkit
                 if (paramsQueue.Count == 0)
                 {
                     this.enabled = false;
-                    this.delayFinsh = false;
+                    this.delayFinished = false;
                     if (EndEvent != null)
                     {
                         EndEvent();
@@ -210,7 +210,7 @@ namespace BToolkit
         }
         void MoveGo(Params _params)
         {
-            this.delayFinsh = true;
+            this.delayFinished = true;
             this.worldSpace = _params.worldSpace;
             rectTrans = GetComponent<RectTransform>();
             useRectTrans = rectTrans;
@@ -247,7 +247,7 @@ namespace BToolkit
                 if (paramsQueue.Count == 0)
                 {
                     this.enabled = false;
-                    this.delayFinsh = false;
+                    this.delayFinished = false;
                 }
                 return;
             }
@@ -280,55 +280,55 @@ namespace BToolkit
             switch (_params.method)
             {
                 case Tween.EaseType.Linear:
-                    bTween = new LinearEase();
+                    Tween = new LinearEase();
                     break;
                 case Tween.EaseType.ExpoEaseIn:
-                    bTween = new ExpoEaseIn();
+                    Tween = new ExpoEaseIn();
                     break;
                 case Tween.EaseType.ExpoEaseOut:
-                    bTween = new ExpoEaseOut();
+                    Tween = new ExpoEaseOut();
                     break;
                 case Tween.EaseType.ExpoEaseInOut:
-                    bTween = new ExpoEaseInOut();
+                    Tween = new ExpoEaseInOut();
                     break;
                 case Tween.EaseType.SineEaseIn:
-                    bTween = new SineEaseIn();
+                    Tween = new SineEaseIn();
                     break;
                 case Tween.EaseType.SineEaseOut:
-                    bTween = new SineEaseOut();
+                    Tween = new SineEaseOut();
                     break;
                 case Tween.EaseType.SineEaseInOut:
-                    bTween = new SineEaseInOut();
+                    Tween = new SineEaseInOut();
                     break;
                 case Tween.EaseType.ElasticEaseIn:
-                    bTween = new ElasticEaseIn();
+                    Tween = new ElasticEaseIn();
                     break;
                 case Tween.EaseType.ElasticEaseOut:
-                    bTween = new ElasticEaseOut();
+                    Tween = new ElasticEaseOut();
                     break;
                 case Tween.EaseType.ElasticEaseInOut:
-                    bTween = new ElasticEaseInOut();
+                    Tween = new ElasticEaseInOut();
                     break;
                 case Tween.EaseType.BackEaseIn:
-                    bTween = new BackEaseIn();
+                    Tween = new BackEaseIn();
                     break;
                 case Tween.EaseType.BackEaseOut:
-                    bTween = new BackEaseOut();
+                    Tween = new BackEaseOut();
                     break;
                 case Tween.EaseType.BackEaseInOut:
-                    bTween = new BackEaseInOut();
+                    Tween = new BackEaseInOut();
                     break;
                 case Tween.EaseType.BounceEaseIn:
-                    bTween = new BounceEaseIn();
+                    Tween = new BounceEaseIn();
                     break;
                 case Tween.EaseType.BounceEaseOut:
-                    bTween = new BounceEaseOut();
+                    Tween = new BounceEaseOut();
                     break;
                 case Tween.EaseType.BounceEaseInOut:
-                    bTween = new BounceEaseInOut();
+                    Tween = new BounceEaseInOut();
                     break;
                 default:
-                    bTween = new SineEaseOut();
+                    Tween = new SineEaseOut();
                     break;
             }
             this.EndEvent = _params.OnEndEvent;

@@ -416,6 +416,14 @@ namespace BToolkit
             }
         }
 
+        //数值变化Tween
+        public static void Value(float delay, float startValue, float toValue, float time, Action<float> updateEvent, EaseType method, Action<float> finishEvent = null)
+        {
+            GameObject go = new GameObject("ValueTween");
+            ValueUpdate valueUpdate = go.AddComponent<ValueUpdate>();
+            valueUpdate.Value(delay, startValue, toValue, time, updateEvent, method, finishEvent);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public double Linear(double t, double b, double c, double d)

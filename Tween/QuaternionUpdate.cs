@@ -22,7 +22,7 @@ namespace BToolkit
         Quaternion toRotation;
         float maxDegreesDelta, totalTime, currTime;
         bool worldSpace;
-        bool delayFinsh;
+        bool delayFinished;
         List<Params> paramsQueue = new List<Params>();
 
         void OnDestroy()
@@ -43,7 +43,7 @@ namespace BToolkit
                     paramsQueue.RemoveAt(i);
                 }
             }
-            if (!delayFinsh)
+            if (!delayFinished)
             {
                 return;
             }
@@ -77,7 +77,7 @@ namespace BToolkit
                 if (paramsQueue.Count == 0)
                 {
                     this.enabled = false;
-                    this.delayFinsh = false;
+                    this.delayFinished = false;
                     if (EndEvent != null)
                     {
                         EndEvent();
@@ -127,7 +127,7 @@ namespace BToolkit
         }
         void RotateQuaternionGo(Params _params)
         {
-            this.delayFinsh = true;
+            this.delayFinished = true;
             this.worldSpace = _params.worldSpace;
             if (_params.time <= 0f)
             {
@@ -142,7 +142,7 @@ namespace BToolkit
                 if (paramsQueue.Count == 0)
                 {
                     this.enabled = false;
-                    this.delayFinsh = false;
+                    this.delayFinished = false;
                 }
                 return;
             }

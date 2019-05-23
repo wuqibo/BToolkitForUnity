@@ -26,7 +26,7 @@ namespace BToolkit
         float delta, t, elasticity;
         bool worldSpace, useHeight;
         Vector3 previousPos;
-        bool delayFinsh;
+        bool delayFinished;
         List<Params> paramsQueue = new List<Params>();
 
         void OnDestroy()
@@ -49,7 +49,7 @@ namespace BToolkit
                     paramsQueue.RemoveAt(i);
                 }
             }
-            if (!delayFinsh)
+            if (!delayFinished)
             {
                 return;
             }
@@ -113,7 +113,7 @@ namespace BToolkit
                             if (paramsQueue.Count == 0)
                             {
                                 this.enabled = false;
-                                this.delayFinsh = false;
+                                this.delayFinished = false;
                             }
                         }
                     }
@@ -139,7 +139,7 @@ namespace BToolkit
                             if (paramsQueue.Count == 0)
                             {
                                 this.enabled = false;
-                                this.delayFinsh = false;
+                                this.delayFinished = false;
                             }
                         }
                     }
@@ -149,7 +149,7 @@ namespace BToolkit
                     if (paramsQueue.Count == 0)
                     {
                         this.enabled = false;
-                        this.delayFinsh = false;
+                        this.delayFinished = false;
                         if (EndEvent != null)
                         {
                             EndEvent();
@@ -231,7 +231,7 @@ namespace BToolkit
             {
                 if (paramsQueue.Count == 0)
                 {
-                    this.delayFinsh = false;
+                    this.delayFinished = false;
                 }
                 paramsQueue.Add(newParams);
             }
@@ -243,7 +243,7 @@ namespace BToolkit
         }
         void ParabolaGo(Params _params)
         {
-            this.delayFinsh = true;
+            this.delayFinished = true;
             this.worldSpace = _params.worldSpace;
             fromPos = _params.worldSpace ? transform.position : transform.localPosition;
             previousPos = fromPos;

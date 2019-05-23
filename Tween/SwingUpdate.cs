@@ -23,7 +23,7 @@ namespace BToolkit
         float swingTime;
         bool useDamping;
         float offsetAngle;
-        bool delayFinsh;
+        bool delayFinished;
         List<Params> paramsQueue = new List<Params>();
 
         void OnDestroy()
@@ -49,7 +49,7 @@ namespace BToolkit
                     paramsQueue.RemoveAt(i);
                 }
             }
-            if (!delayFinsh)
+            if (!delayFinished)
             {
                 return;
             }
@@ -69,7 +69,7 @@ namespace BToolkit
                     if (paramsQueue.Count == 0)
                     {
                         this.enabled = false;
-                        this.delayFinsh = false;
+                        this.delayFinished = false;
                         if (EndEvent != null)
                         {
                             EndEvent();
@@ -116,7 +116,7 @@ namespace BToolkit
             {
                 return;
             }
-            this.delayFinsh = true;
+            this.delayFinished = true;
             this.r = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
             this.offsetAngle = _params.offsetAngle / _params.time;
             this.speed = _params.speed;

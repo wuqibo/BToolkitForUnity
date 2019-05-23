@@ -21,7 +21,7 @@ namespace BToolkit
         float shakerTimer;
         Vector3 shakerOffset;
         float offset, scale;
-        bool delayFinsh;
+        bool delayFinished;
         List<Params> paramsQueue = new List<Params>();
 
         void OnDestroy()
@@ -47,7 +47,7 @@ namespace BToolkit
                     paramsQueue.RemoveAt(i);
                 }
             }
-            if (!delayFinsh)
+            if (!delayFinished)
             {
                 return;
             }
@@ -62,7 +62,7 @@ namespace BToolkit
                     if (paramsQueue.Count == 0)
                     {
                         this.enabled = false;
-                        this.delayFinsh = false;
+                        this.delayFinished = false;
                         if (EndEvent != null)
                         {
                             EndEvent();
@@ -108,7 +108,7 @@ namespace BToolkit
         }
         void ShakeGo(Params _params)
         {
-            this.delayFinsh = true;
+            this.delayFinished = true;
             this.offset = _params.offset * Screen.height * 0.002f;
             shakerTimer = _params.time;
             this.scale = _params.scale;
