@@ -130,16 +130,15 @@ namespace BToolkit
         {
             hadFadeToScreen = true;
             transform.SetParent(arCamera, true);
+			
             float time = 0.5f;
             if (useAnim)
             {
                 Tween.Move(0, transform, backgroundPlane.localPosition, time, false, Tween.EaseType.ExpoEaseInOut);
-                Tween.RotateQuaternion(0, transform, Quaternion.Euler(0, 0, 0), time, false, Tween.EaseType2.ExpoEaseOut);
             }
             else
             {
                 transform.localPosition = backgroundPlane.localPosition;
-                transform.localEulerAngles = Vector3.zero;
             }
             Vector3 toScale = Vector3.zero;
             if (videoPlayer.texture.width / (float)videoPlayer.texture.height > Screen.width / (float)Screen.height)
