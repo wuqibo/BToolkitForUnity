@@ -11,6 +11,7 @@ namespace BToolkit
         public Text text;
         public Button btnYes, btnNo;
         Action ConfirmEvent, CancelEvent;
+        public static bool isShowing { private set; get; }
         const string prefabPath = "Prefabs/UI/DialogConfirm";
 
         public static DialogConfirm Show(string content,Action OnConfirm,RectTransform prefab = null)
@@ -30,7 +31,7 @@ namespace BToolkit
                 }
             }
             RectTransform trans = Instantiate(prefab);
-            trans.SetParent(BUtils.GetTopCanvas(),false);
+            trans.SetParent(FindObjectOfType<Canvas>().transform, false);
             DialogConfirm dialogConfirm = trans.GetComponent<DialogConfirm>();
             dialogConfirm.text.text = content;
             dialogConfirm.ConfirmEvent = OnConfirm;
@@ -40,6 +41,7 @@ namespace BToolkit
             Vector2 pos = (dialogConfirm.dialog as RectTransform).anchoredPosition;
             Tween.Scale(dialogConfirm.dialog, Vector3.zero);
             Tween.Scale(0, dialogConfirm.dialog, Vector3.one, 0.3f, Tween.EaseType.BackEaseOut);
+            isShowing = true;
             return dialogConfirm;
         }
 
@@ -47,6 +49,7 @@ namespace BToolkit
         {
             ConfirmEvent = null;
             CancelEvent = null;
+            isShowing = false;
         }
 
         protected virtual void Start()

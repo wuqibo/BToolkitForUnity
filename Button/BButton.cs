@@ -23,6 +23,9 @@ namespace BToolkit
         float doubleTimer;
         float canTouchTimer;
         static AudioClip btnCommonSound;
+        //此两个属性用于存储多个监听Back键的按钮同时存在场景中时，按照创建的先后倒序执行
+        BButton previousBButton;
+        static BButton lastSpawnBButton;
 
         void OnDisable()
         {
@@ -32,7 +35,14 @@ namespace BToolkit
             }
         }
 
-        void Start() { }
+        void Start()
+        {
+            if (listenKeyBack)
+            {
+                previousBButton = lastSpawnBButton;
+                lastSpawnBButton = this;
+            }
+        }
 
         void Update()
         {
@@ -55,7 +65,15 @@ namespace BToolkit
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    onTrigger.Invoke();
+                    if (DialogAlert.isShowing || DialogConfirm.isShowing)
+                    {
+                        return;
+                    }
+                    if (lastSpawnBButton == this)
+                    {
+                        onTrigger.Invoke();
+                        lastSpawnBButton = previousBButton;
+                    }
                 }
             }
         }
@@ -72,7 +90,7 @@ namespace BToolkit
                         canTouchTimer = canTriggerInterval;
                         if (sound)
                         {
-                            SoundPlayer.Play(0, sound);
+                            SoundPlayer.PlayAndDestroy(0, sound);
                         }
                         else
                         {
@@ -82,7 +100,7 @@ namespace BToolkit
                                 {
                                     btnCommonSound = Resources.Load<AudioClip>("Sounds/btn_common");
                                 }
-                                SoundPlayer.Play(0, btnCommonSound);
+                                SoundPlayer.PlayAndDestroy(0, btnCommonSound);
                             }
                         }
                     }
@@ -102,7 +120,7 @@ namespace BToolkit
                             canTouchTimer = canTriggerInterval;
                             if (sound)
                             {
-                                SoundPlayer.Play(0, sound);
+                                SoundPlayer.PlayAndDestroy(0, sound);
                             }
                             else
                             {
@@ -112,7 +130,7 @@ namespace BToolkit
                                     {
                                         btnCommonSound = Resources.Load<AudioClip>("Sounds/btn_common");
                                     }
-                                    SoundPlayer.Play(0, btnCommonSound);
+                                    SoundPlayer.PlayAndDestroy(0, btnCommonSound);
                                 }
                             }
                         }
