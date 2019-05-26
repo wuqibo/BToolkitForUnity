@@ -27,6 +27,17 @@ namespace BToolkit
         BButton previousBButton;
         static BButton lastSpawnBButton;
 
+        void OnDestroy()
+        {
+            if (listenKeyBack)
+            {
+                if (lastSpawnBButton == this)
+                {
+                    lastSpawnBButton = previousBButton;
+                }
+            }
+        }
+
         void OnDisable()
         {
             if (OnTouchUp != null)
@@ -35,7 +46,7 @@ namespace BToolkit
             }
         }
 
-        void Start()
+        void Awake()
         {
             if (listenKeyBack)
             {
@@ -43,6 +54,8 @@ namespace BToolkit
                 lastSpawnBButton = this;
             }
         }
+
+        void Start() { }
 
         void Update()
         {
@@ -72,7 +85,6 @@ namespace BToolkit
                     if (lastSpawnBButton == this)
                     {
                         onTrigger.Invoke();
-                        lastSpawnBButton = previousBButton;
                     }
                 }
             }

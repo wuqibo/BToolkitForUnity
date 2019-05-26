@@ -42,7 +42,7 @@ public class StorageManager
                 recordModel = JsonMapper.ToObject<RecordModel>(content);
                 for (int i = 0; i < recordModel.targetName.Length; i++)
                 {
-                    if (recordModel.targetName[i].Equals(recordSaver.targetName))
+                    if (recordModel.targetName[i].Equals(recordSaver.imgName))
                     {
                         recordModel.RemoveAt(i);
                     }
@@ -52,7 +52,7 @@ public class StorageManager
             {
                 recordModel = new RecordModel();
             }
-            recordModel.AddToFirst(recordSaver.targetName, (int)recordSaver.showType, recordSaver.showName);
+            recordModel.AddToIndex0(recordSaver.imgName, (int)recordSaver.showType, recordSaver.showName);
             Storage.SaveStringToFile(FilePath, JsonMapper.ToJson(recordModel));
         }
         catch (Exception err)

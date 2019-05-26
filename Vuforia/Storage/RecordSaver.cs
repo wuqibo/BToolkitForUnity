@@ -6,7 +6,7 @@ public class RecordSaver : BImageTarget {
     public enum ShowType { Video, Model }
 
     public ShowType showType;
-    public string targetName;
+    public string imgName;
     public string showName;
 
     protected override void OnTrackingFound()

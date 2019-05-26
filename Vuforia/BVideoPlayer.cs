@@ -73,17 +73,18 @@ namespace BToolkit
         /// </summary>
         public void ToFullScreen()
         {
+            if (!videoPrepareCompleted)
+            {
+                Debuger.LogError(">>>>>>>>>>>视频初始化失败，无法全屏");
+                return;
+            }
+            VuforiaHelper.StopTracker();
             if (!uICtrl && uICtrlPrefab)
             {
                 uICtrl = Instantiate(uICtrlPrefab);
                 uICtrl.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
             }
             uICtrl.videoPlayer = this;
-            if (!videoPrepareCompleted)
-            {
-                Debuger.LogError(">>>>>>>>>>>视频初始化失败，无法全屏");
-                return;
-            }
             if (!arCamera)
             {
                 arCamera = FindObjectOfType<VuforiaBehaviour>().transform;
@@ -100,6 +101,7 @@ namespace BToolkit
         /// </summary>
         public void ToTrackable()
         {
+            VuforiaHelper.StartTracker();
             if (uICtrl)
             {
                 Destroy(uICtrl.gameObject);
@@ -130,7 +132,7 @@ namespace BToolkit
         {
             hadFadeToScreen = true;
             transform.SetParent(arCamera, true);
-			
+            transform.localEulerAngles = Vector3.zero;
             float time = 0.5f;
             if (useAnim)
             {
@@ -144,15 +146,17 @@ namespace BToolkit
             if (videoPlayer.texture.width / (float)videoPlayer.texture.height > Screen.width / (float)Screen.height)
             {
                 //Debuger.LogError("左右贴紧");
-                //左右贴紧（分横屏和竖屏处理）
+                //左右贴紧
                 if (Screen.width < Screen.height)
                 {
+                    //竖屏
                     float scaleX = 2 * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
                     float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
                 else
                 {
+                    //横屏
                     float scaleX = 2 * backgroundPlane.localScale.x;
                     float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                     toScale = new Vector3(scaleX, scaleY, 1);
@@ -161,15 +165,17 @@ namespace BToolkit
             else
             {
                 //Debuger.LogError("上下贴紧");
-                //上下贴紧（分横屏和竖屏处理）
+                //上下贴紧
                 if (Screen.width < Screen.height)
                 {
+                    //竖屏
                     float scaleY = 2 * backgroundPlane.localScale.z;
                     float scaleX = scaleY * videoPlayer.texture.width / (float)videoPlayer.texture.height;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
                 else
                 {
+                    //横屏
                     float screenH = backgroundPlane.localScale.x * Screen.height / (float)Screen.width;
                     float scaleY = 2 * screenH;
                     float scaleX = scaleY * videoPlayer.texture.width / (float)videoPlayer.texture.height;

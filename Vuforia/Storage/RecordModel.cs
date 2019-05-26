@@ -10,7 +10,7 @@ public class RecordModel
     public RecordSaver ToRecordSaver(int index)
     {
         RecordSaver recordSaver = new RecordSaver();
-        recordSaver.targetName = targetName[index];
+        recordSaver.imgName = targetName[index];
         recordSaver.showType = (RecordSaver.ShowType)showType[index];
         recordSaver.showName = showName[index];
         return recordSaver;
