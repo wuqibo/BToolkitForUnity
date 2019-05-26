@@ -11,7 +11,7 @@ namespace BToolkit {
             if (Application.platform == RuntimePlatform.Android)
             {
                 try {
-                    byte[] bytes = AndroidUtils.CallAndroidStaticFunction<byte[]>("cn.btoolkit.readstreamassetspathsyn.ReadStreamAssetsPathSyn", "getBytes", filePath);
+                    byte[] bytes = AndroidHelper.CallAndroidStaticFunction<byte[]>("cn.btoolkit.readstreamassetspathsyn.ReadStreamAssetsPathSyn", "getBytes", filePath);
                     if (bytes!=null && bytes.Length > 0)
                     {
                         return bytes;

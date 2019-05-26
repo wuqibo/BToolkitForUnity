@@ -13,7 +13,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.qqapi.QQ", "init", appId);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.qqapi.QQ", "init", appId);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -30,7 +30,7 @@ namespace BToolkit
             bool isAppInstalled = false;
             if (Application.platform == RuntimePlatform.Android)
             {
-                isAppInstalled = AndroidUtils.CallAndroidStaticFunction<bool>("cn.btoolkit.qqapi.QQ", "isQQInstalled");
+                isAppInstalled = AndroidHelper.CallAndroidStaticFunction<bool>("cn.btoolkit.qqapi.QQ", "isQQInstalled");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -50,7 +50,7 @@ namespace BToolkit
             this.LoginCallbackEvent = OnLoginCallback;
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.qqapi.QQLogin", "login", gameObject.name, "QQLoginCallback");
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.qqapi.QQLogin", "login", gameObject.name, "QQLoginCallback");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

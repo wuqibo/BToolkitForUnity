@@ -118,7 +118,7 @@ namespace BToolkit
                 {
                     if (Application.platform == RuntimePlatform.Android)
                     {
-                        AndroidUtils.CallAndroidStaticFunction("cn.wuqibo.tools.alipayopen.AliPay", "pay", result, gameObject.name, "AliPayCallback");
+                        AndroidHelper.CallAndroidStaticFunction("cn.wuqibo.tools.alipayopen.AliPay", "pay", result, gameObject.name, "AliPayCallback");
                     }
                     else if (Application.platform == RuntimePlatform.IPhonePlayer)
                     {

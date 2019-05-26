@@ -12,7 +12,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 0, 0, "", title, content, "");
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 0, 0, "", title, content, "");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -27,7 +27,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 0, 1, "", title, content, "");
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 0, 1, "", title, content, "");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -42,7 +42,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 0, 2, "", title, content, "");
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 0, 2, "", title, content, "");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -58,7 +58,7 @@ namespace BToolkit
             Debuger.Log(imgLocalPath);
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 1, 0, "", title, content, imgLocalPath);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 1, 0, "", title, content, imgLocalPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -73,7 +73,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 1, 1, "", title, content, imgLocalPath);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 1, 1, "", title, content, imgLocalPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -88,7 +88,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 1, 2, "", title, content, imgLocalPath);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 1, 2, "", title, content, imgLocalPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -104,7 +104,7 @@ namespace BToolkit
             Debuger.Log("ShareWebToFriend:" + url + "|" + title + "|" + content + "|" + imgLocalPath);
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 2, 0, url, title, content, imgLocalPath);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 2, 0, url, title, content, imgLocalPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -120,7 +120,7 @@ namespace BToolkit
             Debuger.Log("ShareWebToMoments:" + url + "|" + title + "|" + content + "|" + imgLocalPath);
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 2, 1, url, title, content, imgLocalPath);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 2, 1, url, title, content, imgLocalPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -136,7 +136,7 @@ namespace BToolkit
             Debuger.Log("AddWebToFavorite:" + url + "|" + title + "|" + content + "|" + imgLocalPath);
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 2, 2, url, title, content, imgLocalPath);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinShare", "share", 2, 2, url, title, content, imgLocalPath);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

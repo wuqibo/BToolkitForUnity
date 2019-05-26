@@ -14,7 +14,7 @@ namespace BToolkit
             AppSecret = appSecret;
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXin", "init", appId, appSecret);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXin", "init", appId, appSecret);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -31,7 +31,7 @@ namespace BToolkit
             bool isAppInstalled = false;
             if (Application.platform == RuntimePlatform.Android)
             {
-                isAppInstalled = AndroidUtils.CallAndroidStaticFunction<bool>("cn.btoolkit.weixinapi.WeiXin", "isWeiXinInstalled");
+                isAppInstalled = AndroidHelper.CallAndroidStaticFunction<bool>("cn.btoolkit.weixinapi.WeiXin", "isWeiXinInstalled");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

@@ -12,7 +12,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.getphoto.GetPhoto", "getPhotoFromCamera", callbackGo, callbackFun);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.getphoto.GetPhoto", "getPhotoFromCamera", callbackGo, callbackFun);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -38,7 +38,7 @@ namespace BToolkit
                 string tempSavePath = Application.persistentDataPath + "/temp.jpg";
                 if (Application.platform == RuntimePlatform.Android)
                 {
-                    AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.getphoto.GetPhoto", "getPhotoFromAlbum", tempSavePath, callbackGo, callbackFun);
+                    AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.getphoto.GetPhoto", "getPhotoFromAlbum", tempSavePath, callbackGo, callbackFun);
                 }
                 else if (Application.platform == RuntimePlatform.IPhonePlayer)
                 {

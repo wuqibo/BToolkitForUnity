@@ -62,7 +62,7 @@ namespace BToolkit
                 }
             }
             RectTransform trans = Instantiate(prefab);
-            trans.SetParent(BUtils.GetTopCanvas(), false);
+            trans.SetParent(FindObjectOfType<Canvas>().transform, false);
             DialogAlert dialogAlert = trans.GetComponent<DialogAlert>();
             dialogAlert.CloseEvent = OnClose;
             if (!dialogAlert.dialog)

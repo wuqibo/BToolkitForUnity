@@ -74,9 +74,9 @@ namespace BToolkit
             this.image = image;
             string url = "file://" + Application.persistentDataPath + "/" + PhotoFolderName + "/" + fileName + Suffix;
             //Debug.Log("<<<<<<<<<<<<<<<<<<<<<<" + url);
-            requestLocal = UnityWebRequest.GetTexture(url);
+            requestLocal = UnityWebRequestTexture.GetTexture(url);
             yield return requestLocal.Send();
-            if (requestLocal.isError)
+            if (requestLocal.isNetworkError)
             {
                 Debug.LogError(string.IsNullOrEmpty(url) ? "url为空" : requestLocal.error + ": " + url);
                 if (OnFinishCallback != null)
@@ -101,7 +101,7 @@ namespace BToolkit
             {
                 url = url.Replace("file:////", "file:///");
             }
-            requestServer = UnityWebRequest.GetTexture(url);
+            requestServer = UnityWebRequestTexture.GetTexture(url);
             yield return requestServer.Send();
             if (requestServer.error != null)
             {

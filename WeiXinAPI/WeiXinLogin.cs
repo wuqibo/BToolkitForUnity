@@ -20,7 +20,7 @@ namespace BToolkit
             this.LoginCallbackEvent = OnLoginCallback;
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinLogin", "login", gameObject.name, "WeiXinLoginCallback");
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinLogin", "login", gameObject.name, "WeiXinLoginCallback");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

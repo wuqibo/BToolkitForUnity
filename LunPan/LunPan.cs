@@ -179,7 +179,7 @@ namespace BToolkit
             {
                 if (!hasPlaySound)
                 {
-                    SoundPlayer.Play(0, sound);
+                    SoundPlayer.PlayAndDestroy(0, sound);
                     hasPlaySound = true;
                 }
             }

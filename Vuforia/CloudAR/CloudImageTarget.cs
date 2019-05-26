@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Vuforia;
 
@@ -5,29 +6,26 @@ namespace BToolkit
 {
     public class CloudImageTarget : MonoBehaviour, ITrackableEventHandler
     {
-        protected TrackableBehaviour mTrackableBehaviour;
+        public CloudVideoPlayerManager videoPlayerManager;
+        public GameObject loading;
 
-        public static CloudImageTarget instance;
-        public delegate void TrackingFoundLostAction(bool isFound);
-        public static TrackingFoundLostAction OnTrackingFoundLost = null;
-        public static bool isFound;
-
-        void OnDestroy()
-        {
-            instance = null;
-            if (mTrackableBehaviour)
-            {
-                mTrackableBehaviour.UnregisterTrackableEventHandler(this);
-            }
-        }
+        CloudRecognition cloudRecognition;
+        TrackableBehaviour mTrackableBehaviour;
+        bool isFirstLost = true;
 
         void Awake()
         {
-            instance = this;
+            loading.SetActive(false);
         }
 
         void Start()
         {
+            cloudRecognition = FindObjectOfType<CloudRecognition>();
+            if (!cloudRecognition)
+            {
+                Debug.LogError("未将CloudRecognition对象拖入场景");
+            }
+            cloudRecognition.SetCloudImageTarget(this);
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
@@ -35,16 +33,24 @@ namespace BToolkit
             }
         }
 
+        void Update()
+        {
+            if (loading.activeInHierarchy)
+            {
+                loading.transform.Rotate(0, 0, -300 * Time.deltaTime);
+            }
+        }
+
         public void OnTrackableStateChanged(TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
         {
             if (newStatus == TrackableBehaviour.Status.DETECTED || newStatus == TrackableBehaviour.Status.TRACKED || newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
             {
-                Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
+                Debug.Log("<color=yellow>Trackable " + mTrackableBehaviour.TrackableName + " found</color>");
                 OnTrackingFound();
             }
             else if (previousStatus == TrackableBehaviour.Status.TRACKED && newStatus == TrackableBehaviour.Status.NO_POSE)
             {
-                Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+                Debug.Log("<color=yellow>Trackable " + mTrackableBehaviour.TrackableName + " lost</color>");
                 OnTrackingLost();
             }
             else
@@ -55,24 +61,41 @@ namespace BToolkit
 
         void OnTrackingFound()
         {
-            Debug.Log("<color=yellow>OnTrackingFound()</color>");
-            isFound = true;
-            CloudRecognition.instance.TrackingFound();
-            if (OnTrackingFoundLost != null)
-            {
-                OnTrackingFoundLost(true);
-            }
+            isFirstLost = false;
+            loading.SetActive(true);
         }
 
         void OnTrackingLost()
         {
-            Debug.Log("<color=yellow>OnTrackingLost()</color>");
-            isFound = false;
-            CloudRecognition.instance.TrackingLost();
-            if (OnTrackingFoundLost != null)
+            if (isFirstLost)
             {
-                OnTrackingFoundLost(false);
+                videoPlayerManager.Show(false);
             }
+            else
+            {
+                StorageManager.Instance.IsARHideWhenOffCard = false;
+                if (StorageManager.Instance.IsARHideWhenOffCard)
+                {
+                    videoPlayerManager.Show(false);
+                    cloudRecognition.RestartScan();
+                }
+                else
+                {
+                    VuforiaHelper.StopTracker();
+                    float videoW = videoPlayerManager.CurrPlayer.videoW;
+                    float videoH = videoPlayerManager.CurrPlayer.videoH;
+                    bool isAVProPlayer = videoPlayerManager.CurrPlayer.isAVProPlayer;
+                    videoPlayerManager.GetComponent<CloudOffCardCtrl>().ToFullScreen(videoW, videoH, isAVProPlayer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 云识别后调用
+        /// </summary>
+        public void PlayVideo(MoJingTargetInfo info)
+        {
+            videoPlayerManager.Play(this, info);
         }
     }
 }

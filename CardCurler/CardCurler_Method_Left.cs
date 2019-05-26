@@ -152,7 +152,7 @@ namespace BToolkit
                             GameObject.Destroy(cardCurler.shadow.gameObject);
                         }
                         currAnimState = AnimState.TurnOver;
-                        SoundPlayer.Play(0,cardCurler.turnOverSound);
+                        SoundPlayer.PlayAndDestroy(0,cardCurler.turnOverSound);
                     }
                     else
                     {

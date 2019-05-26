@@ -28,7 +28,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidUtils.CallAndroidStaticFunction<int>("cn.btoolkit.system.GetSystemInfo", "getBatteryPercent");
+                return AndroidHelper.CallAndroidStaticFunction<int>("cn.btoolkit.system.GetSystemInfo", "getBatteryPercent");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -45,7 +45,7 @@ namespace BToolkit
             InternetStatus status = InternetStatus.NoNet;
             if (Application.platform == RuntimePlatform.Android)
             {
-                string statusStr = AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getInternetType");
+                string statusStr = AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getInternetType");
                 switch (statusStr)
                 {
                     case "Wifi":
@@ -107,7 +107,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidUtils.CallAndroidStaticFunction<bool>("cn.btoolkit.system.GetSystemInfo", "isSimulator");
+                return AndroidHelper.CallAndroidStaticFunction<bool>("cn.btoolkit.system.GetSystemInfo", "isSimulator");
             }
             return false;
         }
@@ -152,7 +152,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                string deviceId = AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getDeviceId");
+                string deviceId = AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getDeviceId");
                 return GetMD5_32(deviceId + appPackgeName, true);//MD5加密以防设备识别码泄露
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)

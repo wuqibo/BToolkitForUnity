@@ -96,7 +96,7 @@ namespace BToolkit
         foreach (Object obj in SelectedAsset) {
             Debug.Log("Exporting AssetBunldes : " + obj.name);
         }
-        if (BuildPipeline.BuildAssetBundle(null, SelectedAsset, targetPath, BuildAssetBundleOptions.CollectDependencies, BuildTarget.iPhone)) {
+        if (BuildPipeline.BuildAssetBundle(null, SelectedAsset, targetPath, BuildAssetBundleOptions.CollectDependencies, BuildTarget.iOS)) {
             AssetDatabase.Refresh();
             Debug.Log("Has Exported In : " + targetPath);
         }
@@ -113,7 +113,7 @@ namespace BToolkit
             paths[i] = originalSceneNPath;
             i++;
         }
-        BuildPipeline.BuildPlayer(paths, targetPath, BuildTarget.iPhone, BuildOptions.BuildAdditionalStreamedScenes);
+        BuildPipeline.BuildPlayer(paths, targetPath, BuildTarget.iOS, BuildOptions.BuildAdditionalStreamedScenes);
         AssetDatabase.Refresh();
         Debug.Log("Has Exported In :" + targetPath);
     }
