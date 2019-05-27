@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Video;
 using Vuforia;
-using System.Collections;
 
 namespace BToolkit
 {
@@ -25,12 +24,22 @@ namespace BToolkit
         GameObject videoBg, videoBgQuad;
         bool videoPrepareCompleted;
         BVideoPlayerUICtrl uICtrl;
-        bool hadFoundOnce;
 
         Transform trackableParent;
         Vector3 trackablePos, trackableAngle, trackableScale;
         bool hadFadeToScreen;
         float bgAlpha;
+        float scaleRatio
+        {
+            get
+            {
+                if (Application.isEditor)
+                {
+                    return 2;
+                }
+                return 3.5f;
+            }
+        }
 
         void OnDestroy()
         {
@@ -143,41 +152,40 @@ namespace BToolkit
                 transform.localPosition = backgroundPlane.localPosition;
             }
             Vector3 toScale = Vector3.zero;
-            if (videoPlayer.texture.width / (float)videoPlayer.texture.height > Screen.width / (float)Screen.height)
+            //左右贴紧
+            if (Screen.width < Screen.height)
             {
-                //Debuger.LogError("左右贴紧");
-                //左右贴紧
-                if (Screen.width < Screen.height)
+                //竖屏
+                if (videoPlayer.texture.width / (float)videoPlayer.texture.height > Screen.width / (float)Screen.height)
                 {
-                    //竖屏
-                    float scaleX = 2 * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
+                    //左右贴紧
+                    float scaleX = scaleRatio * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
                     float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
                 else
                 {
-                    //横屏
-                    float scaleX = 2 * backgroundPlane.localScale.x;
-                    float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
+                    //上下贴紧
+                    float scaleY = scaleRatio * backgroundPlane.localScale.z;
+                    float scaleX = scaleY * videoPlayer.texture.width / (float)videoPlayer.texture.height;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
             }
             else
             {
-                //Debuger.LogError("上下贴紧");
-                //上下贴紧
-                if (Screen.width < Screen.height)
+                //横屏
+                if (videoPlayer.texture.width / (float)videoPlayer.texture.height > Screen.width / (float)Screen.height)
                 {
-                    //竖屏
-                    float scaleY = 2 * backgroundPlane.localScale.z;
-                    float scaleX = scaleY * videoPlayer.texture.width / (float)videoPlayer.texture.height;
+                    //左右贴紧
+                    float scaleX = scaleRatio * backgroundPlane.localScale.x;
+                    float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
                 else
                 {
-                    //横屏
+                    //上下贴紧
                     float screenH = backgroundPlane.localScale.x * Screen.height / (float)Screen.width;
-                    float scaleY = 2 * screenH;
+                    float scaleY = scaleRatio * screenH;
                     float scaleX = scaleY * videoPlayer.texture.width / (float)videoPlayer.texture.height;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
@@ -220,37 +228,39 @@ namespace BToolkit
             if (transform.localEulerAngles.z == 0)
             {
                 transform.localEulerAngles = new Vector3(0, 0, -90);
-                if (videoPlayer.texture.height / (float)videoPlayer.texture.width > Screen.width / (float)Screen.height)
+                if (Screen.width < Screen.height)
                 {
-                    //Debuger.LogError("左右贴紧");
-                    //左右贴紧（分横屏和竖屏处理）
-                    if (Screen.width < Screen.height)
+                    //竖屏
+                    if (videoPlayer.texture.height / (float)videoPlayer.texture.width > Screen.width / (float)Screen.height)
                     {
-                        float scaleY = 2 * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
+                        //左右贴紧
+                        float scaleY = scaleRatio * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
                         float scaleX = scaleY * videoPlayer.texture.width / (float)videoPlayer.texture.height;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
                     }
                     else
                     {
-                        float scaleY = 2 * backgroundPlane.localScale.x;
-                        float scaleX = scaleY * videoPlayer.texture.height / (float)videoPlayer.texture.width;
+                        //上下贴紧
+                        float scaleX = scaleRatio * backgroundPlane.localScale.z;
+                        float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
                     }
                 }
                 else
                 {
-                    //Debuger.LogError("上下贴紧");
-                    //上下贴紧（分横屏和竖屏处理）
-                    if (Screen.width < Screen.height)
+                    //横屏
+                    if (videoPlayer.texture.height / (float)videoPlayer.texture.width > Screen.width / (float)Screen.height)
                     {
-                        float scaleX = 2 * backgroundPlane.localScale.z;
-                        float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
+                        //左右贴紧
+                        float scaleY = scaleRatio * backgroundPlane.localScale.x;
+                        float scaleX = scaleY * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
                     }
                     else
                     {
+                        //上下贴紧
                         float screenH = backgroundPlane.localScale.x * Screen.height / (float)Screen.width;
-                        float scaleX = 2 * screenH;
+                        float scaleX = scaleRatio * screenH;
                         float scaleY = scaleX * videoPlayer.texture.height / (float)videoPlayer.texture.width;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
                     }
@@ -265,7 +275,6 @@ namespace BToolkit
 
         protected override void OnTrackingFound()
         {
-            hadFoundOnce = true;
             gameObject.SetActive(true);
             GetComponent<MeshRenderer>().enabled = false;
         }

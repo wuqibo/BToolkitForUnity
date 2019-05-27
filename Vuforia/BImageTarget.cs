@@ -6,7 +6,14 @@ namespace BToolkit
     public abstract class BImageTarget : MonoBehaviour, ITrackableEventHandler
     {
         public ImageTargetBehaviour imageTargetBehaviour;
+        /// <summary>
+        /// 当前正在跟踪
+        /// </summary>
         public bool isTracking { get; private set; }
+        /// <summary>
+        /// 已经识别过至少一次
+        /// </summary>
+        public bool hadFoundOnce { get; private set; }
 
         protected virtual void Start()
         {
@@ -40,6 +47,7 @@ namespace BToolkit
             {
                 isTracking = true;
                 OnTrackingFound();
+                hadFoundOnce = true;
             }
             else
             {

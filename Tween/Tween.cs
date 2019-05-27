@@ -417,11 +417,12 @@ namespace BToolkit
         }
 
         //数值变化Tween
-        public static void Value(float delay, float startValue, float toValue, float time, EaseType method, Action<float> updateEvent, Action<float> finishEvent = null)
+        public static ValueUpdate Value(float delay, float startValue, float toValue, float time, EaseType method, Action<float> updateEvent, Action<float> finishEvent = null)
         {
             GameObject go = new GameObject("ValueTween");
             ValueUpdate valueUpdate = go.AddComponent<ValueUpdate>();
             valueUpdate.Value(delay, startValue, toValue, time, method, updateEvent, finishEvent);
+            return valueUpdate;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -68,7 +68,7 @@ public class StorageManager
     {
         get
         {
-            return PlayerPrefs.GetInt("OffCard", 1) == 1;
+            return PlayerPrefs.GetInt("OffCard", 0) == 1;
         }
         set
         {
