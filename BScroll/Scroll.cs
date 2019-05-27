@@ -73,11 +73,11 @@ namespace BToolkit
             entry.callback.AddListener(callback);
             eventTrigger.triggers.Add(entry);
 #else
-        eventTrigger.delegates = new System.Collections.Generic.List<EventTrigger.Entry>();
+        eventTrigger.triggers = new System.Collections.Generic.List<EventTrigger.Entry>();
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = EventTriggerType.PointerDown;
         entry.callback.AddListener(callback);
-        eventTrigger.delegates.Add(entry);
+        eventTrigger.triggers.Add(entry);
 #endif
         }
 

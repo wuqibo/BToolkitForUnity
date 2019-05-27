@@ -10,7 +10,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.callnumber.CallNumber", "call", number);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.callnumber.CallNumber", "call", number);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

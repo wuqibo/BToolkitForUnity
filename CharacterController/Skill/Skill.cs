@@ -154,7 +154,7 @@ namespace BToolkit {
                 if(effect.particle && effect.particle.transform.parent) {
                     actor.StartCoroutine(PlayerTrail(effect.particle,effect.lifeTime));
                     if(effect.sounds.Count > 0) {
-                        SoundPlayer.Play(0,effect.sounds[Random.Range(0,effect.sounds.Count)]);
+                        SoundPlayer.PlayAndDestroy(0,effect.sounds[Random.Range(0,effect.sounds.Count)]);
                     }
                     OnClientPlayBodyEffect(effectIndex,shootDirection,targetNetIds,hurtData);
                 } else {

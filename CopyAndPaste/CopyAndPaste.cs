@@ -12,7 +12,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.copyandpaste.CopyAndPaste", "copy", text);
+                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.copyandpaste.CopyAndPaste", "copy", text);
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -32,7 +32,7 @@ namespace BToolkit
             string text = "";
             if (Application.platform == RuntimePlatform.Android)
             {
-                text = AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.copyandpaste.CopyAndPaste", "getPaste");
+                text = AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.copyandpaste.CopyAndPaste", "getPaste");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {

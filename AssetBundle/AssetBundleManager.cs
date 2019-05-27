@@ -41,7 +41,7 @@ namespace BToolkit
             {
                 UnityEngine.PlayerPrefs.SetInt(jsonFileURL + KeyExtraForVersion, 0);
                 UnityEngine.PlayerPrefs.SetString(jsonFileURL + KeyExtraForUrl, "");
-                Caching.CleanCache();
+                Caching.ClearCache();
             }
         }
 
@@ -82,7 +82,7 @@ namespace BToolkit
             {
                 UnityWebRequest jsonRequest = UnityWebRequest.Get(jsonFileURL);
                 yield return jsonRequest.Send();
-                if (!jsonRequest.isError)
+                if (!jsonRequest.isNetworkError)
                 {
                     if (string.IsNullOrEmpty(assetURL))
                     {
@@ -142,10 +142,10 @@ namespace BToolkit
             {
                 BUtils.Instance.StartCoroutine(ProgressUpdate());
                 Debug.Log("Download assets : url: " + assetURL + " version: " + localVersion);
-                assetRequest = UnityWebRequest.GetAssetBundle(assetURL, (uint)localVersion, 0);
+                assetRequest = UnityWebRequestAssetBundle.GetAssetBundle(assetURL, (uint)localVersion, 0);
                 downloadHandlerAssetBundle = (DownloadHandlerAssetBundle)assetRequest.downloadHandler;
                 yield return assetRequest.Send();
-                if (assetRequest.isError)
+                if (assetRequest.isNetworkError)
                 {
                     if (jsonResultType == ResuleType.NoNetwork)
                     {

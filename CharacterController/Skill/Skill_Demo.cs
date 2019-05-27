@@ -60,7 +60,7 @@ namespace BToolkit {
                     GameObject.Destroy(go,effect.lifeTime);
                 }
                 if(effect.sounds.Count > 0) {
-                    SoundPlayer.Play(0,effect.sounds[UnityEngine.Random.Range(0,effect.sounds.Count)]);
+                    SoundPlayer.PlayAndDestroy(0,effect.sounds[UnityEngine.Random.Range(0,effect.sounds.Count)]);
                 }
                 Bullet bullet = go.AddComponent<Bullet_Demo>();
                 bullet.SetInfo(actor,shootDirection,target,config.effects[2],null,18,15,hurtData);

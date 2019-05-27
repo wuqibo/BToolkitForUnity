@@ -109,7 +109,7 @@ namespace BToolkit
                             Debug.Log(">>>>>>>>>>>>>订单生成，开始支付");
                             if (Application.platform == RuntimePlatform.Android)
                             {
-                                AndroidUtils.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinPay", "pay", appId, partnerId, prepayId, packageValue, nonceStr, timeStamp, sign, gameObject.name, "WeiXinPayCallback");
+                                AndroidHelper.CallAndroidStaticFunction("cn.btoolkit.weixinapi.WeiXinPay", "pay", appId, partnerId, prepayId, packageValue, nonceStr, timeStamp, sign, gameObject.name, "WeiXinPayCallback");
                             }
                             else if (Application.platform == RuntimePlatform.IPhonePlayer)
                             {

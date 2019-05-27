@@ -88,12 +88,14 @@ public class FileDownloader : MonoBehaviour
             }
             if (HasLoaded)
             {
+                Debug.Log("<color=yellow>CurrLoadedCallback</color>");
                 FileDownloader.Instance.CurrLoadedCallback(type, LocalPath, LeftRadto, TopRadto, WidthRadto, HeightRadto, Scale, alphaType, true);
             }
             else
             {
                 if (type == Type.Video)
                 {
+                    Debug.Log("<color=yellow>CurrLoadedCallback</color>");
                     FileDownloader.Instance.CurrLoadedCallback(type, url, LeftRadto, TopRadto, WidthRadto, HeightRadto, Scale, alphaType, false);
                 }
                 FileDownloader.Instance.StartCoroutine(_Load());
@@ -113,6 +115,7 @@ public class FileDownloader : MonoBehaviour
                 else
                 {
                     File.WriteAllBytes(LocalPath, request.downloadHandler.data);
+                    Debug.Log("<color=yellow>CurrLoadedCallback</color>");
                     FileDownloader.Instance.CurrLoadedCallback(type, LocalPath, LeftRadto, TopRadto, WidthRadto, HeightRadto, Scale, alphaType, true);
                 }
             }
@@ -121,12 +124,14 @@ public class FileDownloader : MonoBehaviour
         {
             if (HasLoaded)
             {
+                Debug.Log("<color=yellow>CurrLoadedCallback</color>");
                 FileDownloader.Instance.CurrLoadedCallback(type, LocalPath, LeftRadto, TopRadto, WidthRadto, HeightRadto, Scale, alphaType, true);
             }
             else
             {
                 if (type == Type.Video)
                 {
+                    Debug.Log("<color=yellow>CurrLoadedCallback</color>");
                     FileDownloader.Instance.CurrLoadedCallback(type, url, LeftRadto, TopRadto, WidthRadto, HeightRadto, Scale, alphaType, false);
                 }
             }

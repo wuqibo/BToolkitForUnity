@@ -72,7 +72,7 @@ namespace BToolkit {
                     Destroy(go,config.hitEffect.lifeTime);
                 }
                 if(config.hitEffect.sounds.Count > 0) {
-                    SoundPlayer.Play(0,config.hitEffect.sounds[Random.Range(0,config.hitEffect.sounds.Count)]);
+                    SoundPlayer.PlayAndDestroy(0,config.hitEffect.sounds[Random.Range(0,config.hitEffect.sounds.Count)]);
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace BToolkit {
                 Destroy(go,config.endEffect.lifeTime);
             }
             if(config.endEffect.sounds.Count > 0) {
-                SoundPlayer.Play(0,config.endEffect.sounds[Random.Range(0,config.endEffect.sounds.Count)]);
+                SoundPlayer.PlayAndDestroy(0,config.endEffect.sounds[Random.Range(0,config.endEffect.sounds.Count)]);
             }
         }
     }

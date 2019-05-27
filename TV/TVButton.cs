@@ -45,7 +45,7 @@ namespace BToolkit
             }
             if(b)
             {
-                SoundPlayer.Play(0,selectSound,selectSoundVolume);
+                SoundPlayer.PlayAndDestroy(0,selectSound,selectSoundVolume);
             }
         }
 
@@ -91,7 +91,7 @@ namespace BToolkit
             {
                 Invoke("ExcuteClick",excuteDelay);
             }
-            SoundPlayer.Play(0,clickSound,clickSoundVolume);
+            SoundPlayer.PlayAndDestroy(0,clickSound,clickSoundVolume);
         }
 
         void ExcuteClick()

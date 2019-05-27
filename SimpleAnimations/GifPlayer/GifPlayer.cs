@@ -139,7 +139,7 @@ namespace BToolkit
             }
             else
             {
-                url = BUtils.streamingAssetsCustomPathForWebRequest + "/" + filePath;
+                url = BUtils.streamingAssetsPathForWebRequest + "/" + filePath;
             }
 #if UNITY_2018
             using (var www = new UnityWebRequest(url))

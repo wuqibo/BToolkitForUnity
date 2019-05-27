@@ -82,7 +82,7 @@ public class ScanUI : MonoBehaviour
         if (previousTarget != target)
         {
             previousTarget = target;
-            SoundPlayer.Play(0, recognizedSound);
+            SoundPlayer.PlayAndDestroy(0, recognizedSound);
         }
     }
 }
