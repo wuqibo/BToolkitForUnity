@@ -44,6 +44,7 @@ namespace BToolkit
                     {
                         modelController.ToTrackingPos();
                     }
+                    /*
                     if (SceneRecordUIManager.instance)
                     {
                         if (model)
@@ -52,6 +53,7 @@ namespace BToolkit
                         }
                         SceneRecordUIManager.instance.arCamera.gameObject.SetActive(false);
                     }
+                    */
                 });
             }
             if (btnTakePhoto)
@@ -97,6 +99,7 @@ namespace BToolkit
 
         void TakePhoto()
         {
+            /*
             Canvas canvas = FindObjectOfType<Canvas>();
             canvas.enabled = false;
             BUtils.ScreenShot((Texture2D texture) =>
@@ -104,6 +107,7 @@ namespace BToolkit
                 canvas.enabled = true;
                 PanelSharePhoto.Show(texture);
             });
+            */
         }
 
     }
