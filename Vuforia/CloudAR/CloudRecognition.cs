@@ -65,10 +65,7 @@ namespace BToolkit
         {
             MoJingAPI.Instance.LoadTargetInfo(targetId, (MoJingTargetInfo info) =>
             {
-                if ("video".Equals(info.showType))
-                {
-                    cloudImageTarget.PlayVideo(info);
-                }
+                cloudImageTarget.PlayTarget(info);
             });
         }
         #endregion

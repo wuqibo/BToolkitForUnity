@@ -6,7 +6,8 @@ namespace BToolkit
 {
     public class CloudImageTarget : MonoBehaviour, ITrackableEventHandler
     {
-        public CloudVideoPlayerManager videoPlayerManager;
+        public CloudShowTarget videoPlayerManager;
+        public CloudShowTarget modelViewer;
         public GameObject loading;
 
         CloudRecognition cloudRecognition;
@@ -70,22 +71,21 @@ namespace BToolkit
             if (isFirstLost)
             {
                 videoPlayerManager.Show(false);
+                modelViewer.Show(false);
             }
             else
             {
-                StorageManager.Instance.IsARHideWhenOffCard = false;
+                if (videoPlayerManager.gameObject.activeInHierarchy)
+                {
+                    videoPlayerManager.OnTrackingLost();
+                }
+                if (modelViewer.gameObject.activeInHierarchy)
+                {
+                    modelViewer.OnTrackingLost();
+                }
                 if (StorageManager.Instance.IsARHideWhenOffCard)
                 {
-                    videoPlayerManager.Show(false);
                     cloudRecognition.RestartScan();
-                }
-                else
-                {
-                    VuforiaHelper.StopTracker();
-                    float videoW = videoPlayerManager.CurrPlayer.videoW;
-                    float videoH = videoPlayerManager.CurrPlayer.videoH;
-                    bool isAVProPlayer = videoPlayerManager.CurrPlayer.isAVProPlayer;
-                    videoPlayerManager.GetComponent<CloudOffCardCtrl>().ToFullScreen(videoW, videoH, isAVProPlayer);
                 }
             }
         }
@@ -93,9 +93,19 @@ namespace BToolkit
         /// <summary>
         /// 云识别后调用
         /// </summary>
-        public void PlayVideo(MoJingTargetInfo info)
+        public void PlayTarget(MoJingTargetInfo info)
         {
-            videoPlayerManager.Play(this, info);
+            if ("video".Equals(info.showType))
+            {
+                modelViewer.Show(false);
+                videoPlayerManager.PlayTarget(this, info);
+            }
+            else
+            {
+                videoPlayerManager.Show(false);
+                modelViewer.PlayTarget(this, info);
+            }
         }
+        
     }
 }

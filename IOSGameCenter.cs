@@ -1,12 +1,15 @@
 ﻿using System;
 using UnityEngine;
+#if UNITY_IOS
 using UnityEngine.SocialPlatforms;
 using UnityEngine.SocialPlatforms.GameCenter;
+#endif
 
 namespace BToolkit
 {
     public class IOSGameCenter
     {
+#if UNITY_IOS
 
         static IOSGameCenter instance;
         public static IOSGameCenter Instance { get { return instance ?? (instance = new IOSGameCenter()); } }
@@ -14,7 +17,7 @@ namespace BToolkit
         bool hasTryAuthenticated;
         const string Tip = "GameCenter登陆已被取消过一次，苹果底层将不再弹出，请提示用户到手机设置里登陆GameCenter";
 
-        #region 排行榜
+#region 排行榜
         /// <summary>
         /// 提交排行数据
         /// </summary>
@@ -102,9 +105,9 @@ namespace BToolkit
                 Debug.Log(obj[i]);
             }
         }
-        #endregion
+#endregion
 
-        #region 成就
+#region 成就
         /// <summary>
         /// 提交成就数据
         /// </summary>
@@ -173,7 +176,8 @@ namespace BToolkit
             }
             return true;
         }
-        #endregion
+#endregion
 
+#endif
     }
 }

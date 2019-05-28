@@ -2,12 +2,11 @@
 
 namespace BToolkit
 {
-    public class CloudVideoPlayerManager : MonoBehaviour
+    public class CloudVideoPlayerManager : CloudShowTarget
     {
         public CloudVideoPlayer unityPlayer;
         public CloudVideoPlayer avProPlayer;
         public CloudVideoPlayer CurrPlayer { get; private set; }
-        CloudImageTarget cloudImageTarget;
 
         void Awake()
         {
@@ -15,17 +14,11 @@ namespace BToolkit
             avProPlayer.RegisterPlayedEvent(OnPrepared);
         }
 
-        public void Show(bool b)
+        public override void PlayTarget(CloudImageTarget cloudImageTarget, MoJingTargetInfo info)
         {
-            gameObject.SetActive(b);
-        }
-
-        public void Play(CloudImageTarget cloudImageTarget, MoJingTargetInfo info)
-        {
-            this.cloudImageTarget = cloudImageTarget;
-            Show(true);
+            base.PlayTarget(cloudImageTarget, info);
             SetTranform(info);
-            if ("webm".Equals(info.alphaType))
+            if ("webm".Equals(info.videoAlphaType))
             {
                 avProPlayer.gameObject.SetActive(false);
                 CurrPlayer = unityPlayer;
@@ -36,7 +29,9 @@ namespace BToolkit
                 CurrPlayer = avProPlayer;
             }
             CurrPlayer.gameObject.SetActive(true);
-            CurrPlayer.Play(info.showFileUrl);
+            string parsedPath = CloudFileDownloader.ParsePath(info.showFile);
+            CurrPlayer.Play(parsedPath);
+            CloudFileDownloader.Save(info.showFile);
         }
 
         void SetTranform(MoJingTargetInfo info)
@@ -52,7 +47,7 @@ namespace BToolkit
             }
 
             float scaleX = 1, scaleY = 1;
-            string[] videoSizeArr = info.imgSize.Split('X');
+            string[] videoSizeArr = info.targetImgSize.Split('X');
             if (videoSizeArr.Length == 2 && !string.IsNullOrEmpty(videoSizeArr[0]) && !string.IsNullOrEmpty(videoSizeArr[1]))
             {
                 float.TryParse(videoSizeArr[0], out scaleX);
@@ -80,6 +75,25 @@ namespace BToolkit
         void OnPrepared()
         {
             cloudImageTarget.loading.SetActive(false);
+        }
+
+        public override void OnTrackingLost()
+        {
+            base.OnTrackingLost();
+            if (StorageManager.Instance.IsARHideWhenOffCard)
+            {
+                Show(false);
+            }
+            else
+            {
+                VuforiaHelper.StopTracker();
+                float videoW = CurrPlayer.videoW;
+                float videoH = CurrPlayer.videoH;
+                bool isAVProPlayer = CurrPlayer.isAVProPlayer;
+                CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
+                showTarget.ToFullScreen(videoW, videoH, isAVProPlayer);
+                CloudUIShowCtrller.Show(showTarget);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_IPHONE || UNITY_IOS || UNITY_TVOS
+#if UNITY_IOS || UNITY_TVOS
 using UnityEngine.XR.iOS;
 #endif
 
@@ -71,7 +71,7 @@ namespace BToolkit
                 }
                 return;
             }
-#else
+#elif (UNITY_IOS || UNITY_TVOS)
 		var screenPosition = Camera.main.ScreenToViewportPoint(center);
 		ARPoint point = new ARPoint {
 			x = screenPosition.x,
@@ -114,7 +114,7 @@ namespace BToolkit
             }
         }
 
-#if UNITY_IPHONE || UNITY_IOS || UNITY_TVOS
+#if UNITY_IOS || UNITY_TVOS
     bool HitTestWithResultType(ARPoint point, ARHitTestResultType resultTypes) {
         List<ARHitTestResult> hitResults = UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(point, resultTypes);
         if (hitResults.Count > 0) {

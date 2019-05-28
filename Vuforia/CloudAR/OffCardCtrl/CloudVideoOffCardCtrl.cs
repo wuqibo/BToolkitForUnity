@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace BToolkit
 {
-    public class CloudOffCardCtrl : MonoBehaviour
+    public class CloudVideoOffCardCtrl : CloudOffCardCtrl
     {
         public Material arVideoBg;
         Transform defaultParent, arCamera, backgroundPlane;
-        bool hadToScreen;
+        Vector3 defaultPos, defaultAngle, defaultScale;
         GameObject videoBg, videoBgQuad;
         float bgAlpha;
         float scaleRatio
@@ -28,26 +28,19 @@ namespace BToolkit
                 bgAlpha += (0.81f - bgAlpha) * 0.02f;
                 arVideoBg.SetColor("_Color", new Color(0, 0, 0, bgAlpha));
             }
-            if (hadToScreen)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    ToTrackable();
-                    GetComponent<CloudVideoPlayerManager>().Show(false);
-                    VuforiaHelper.StartTracker();
-                    FindObjectOfType<CloudRecognition>().RestartScan();
-                }
-            }
         }
 
         /// <summary>
         /// ÇÐ»»µ½È«ÆÁ
         /// </summary>
-        public void ToFullScreen(float videoW, float videoH, bool isAVProPlayer)
+        public override void ToFullScreen(float videoW, float videoH, bool isAVProPlayer)
         {
             if (!defaultParent)
             {
                 defaultParent = transform.parent;
+                defaultPos = transform.localPosition;
+                defaultAngle = transform.localEulerAngles;
+                defaultScale = transform.localScale;
             }
             if (!arCamera)
             {
@@ -63,14 +56,14 @@ namespace BToolkit
         /// <summary>
         /// ÇÐ»»µ½AR¸ú×Ù
         /// </summary>
-        public void ToTrackable()
+        public override void ToTrackable()
         {
             if (hadToScreen)
             {
                 transform.SetParent(defaultParent);
-                transform.localPosition = Vector3.zero;
-                transform.localEulerAngles = new Vector3(90, 0, 0);
-                transform.localScale = Vector3.one;
+                transform.localPosition = defaultPos;
+                transform.localEulerAngles = defaultAngle;
+                transform.localScale = defaultScale;
                 hadToScreen = false;
                 if (videoBg)
                 {
@@ -216,6 +209,15 @@ namespace BToolkit
             {
                 transform.localEulerAngles = new Vector3(0, 0, 0);
                 TrackerToScreen(false, videoW, videoH, isAVProPlayer);
+            }
+        }
+
+        public override void CloseFromUI()
+        {
+            if (hadToScreen)
+            {
+                base.CloseFromUI();
+                GetComponent<CloudVideoPlayerManager>().Show(false);
             }
         }
     }
