@@ -17,9 +17,33 @@ namespace BToolkit
             {
                 Destroy(target);
             }
-            string parsedPath = CloudFileDownloader.ParsePath(info.showFile);
+            //安卓苹果地址拆分
+            string httpUrl = info.showFile;
+            if (httpUrl.Contains("|"))
+            {
+                string[] httpUrlArr = httpUrl.Split('/');
+                string httpUrlRoot = "";
+                for (int i = 0; i < httpUrlArr.Length - 1; i++)
+                {
+                    httpUrlRoot += httpUrlArr[i] + "/";
+                }
+                string[] fileNameArr = httpUrlArr[httpUrlArr.Length - 1].Split('|');
+                string fileNameAndroid = fileNameArr[0];
+                string fileNameIOS = fileNameArr[1];
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    httpUrl = httpUrlRoot + fileNameAndroid;
+                }
+                else
+                {
+                    httpUrl = httpUrlRoot + fileNameIOS;
+                }
+            }
+
+            string parsedPath = CloudFileDownloader.ParsePath(httpUrl);
+            Debug.Log("<color=yellow>下载Url:" + parsedPath + "</color>");
             StartCoroutine(LoadModel(parsedPath));
-            CloudFileDownloader.Save(info.showFile);
+            CloudFileDownloader.Save(httpUrl);
         }
         IEnumerator LoadModel(string url)
         {
@@ -58,10 +82,12 @@ namespace BToolkit
             }
             else
             {
-                VuforiaHelper.StopTracker();
-                CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
-                showTarget.ToFullScreen();
-                CloudUIShowCtrller.Show(showTarget);
+                if (gameObject.activeInHierarchy)
+                {
+                    CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
+                    showTarget.ToScreen();
+                    CloudUIShowCtrller.Show(showTarget);
+                }
             }
         }
 

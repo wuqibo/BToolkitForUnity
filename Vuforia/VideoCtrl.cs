@@ -53,7 +53,7 @@ namespace BToolkit
                 }
                 if (!StorageManager.Instance.IsARHideWhenOffCard)
                 {
-                    videos[0].player.ToFullScreen();
+                    videos[0].player.ToScreen();
                 }
             }
         }

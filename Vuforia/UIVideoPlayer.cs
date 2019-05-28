@@ -25,7 +25,6 @@ namespace BToolkit
         void OnDestroy()
         {
             unityPlayer.prepareCompleted -= OnVideoPlayerPrepareCompleted;
-            VuforiaHelper.StartTracker();
         }
 
         void Awake()
@@ -45,11 +44,6 @@ namespace BToolkit
                 });
             }
             unityPlayer.prepareCompleted += OnVideoPlayerPrepareCompleted;
-        }
-
-        void Start()
-        {
-            VuforiaHelper.StopTracker();
         }
 
         void Update()
