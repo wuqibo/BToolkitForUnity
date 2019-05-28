@@ -109,7 +109,7 @@ namespace BToolkit
             }
             else
             {
-                if (Input.touchCount > 0)
+                if (Input.touchCount == 1)
                 {
                     Touch touch = Input.GetTouch(0);
                     if (touch.phase == TouchPhase.Began)
