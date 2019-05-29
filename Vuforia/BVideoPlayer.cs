@@ -82,6 +82,7 @@ namespace BToolkit
         /// </summary>
         public void ToScreen()
         {
+            VuforiaHelper.StopTracker();
             if (!videoPrepareCompleted)
             {
                 Debuger.LogError(">>>>>>>>>>>视频初始化失败，无法全屏");
