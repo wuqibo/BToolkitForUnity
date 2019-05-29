@@ -80,14 +80,13 @@ namespace BToolkit
         /// <summary>
         /// 切换到全屏
         /// </summary>
-        public void ToFullScreen()
+        public void ToScreen()
         {
             if (!videoPrepareCompleted)
             {
                 Debuger.LogError(">>>>>>>>>>>视频初始化失败，无法全屏");
                 return;
             }
-            VuforiaHelper.StopTracker();
             if (!uICtrl && uICtrlPrefab)
             {
                 uICtrl = Instantiate(uICtrlPrefab);
@@ -110,7 +109,6 @@ namespace BToolkit
         /// </summary>
         public void ToTrackable()
         {
-            VuforiaHelper.StartTracker();
             if (uICtrl)
             {
                 Destroy(uICtrl.gameObject);

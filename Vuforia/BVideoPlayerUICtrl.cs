@@ -7,9 +7,23 @@ namespace BToolkit
         public BButton btnClose;
         public BButton btnDirection;
         public BVideoPlayer videoPlayer;
+        GameObject panelDefault;
+
+        void OnDisable()
+        {
+            if (panelDefault)
+            {
+                panelDefault.SetActive(true);
+            }
+        }
 
         void Awake()
         {
+            panelDefault = GameObject.Find("PanelDefault");
+            if (panelDefault)
+            {
+                panelDefault.SetActive(false);
+            }
             if (btnClose)
             {
                 btnClose.onTrigger.AddListener(() =>

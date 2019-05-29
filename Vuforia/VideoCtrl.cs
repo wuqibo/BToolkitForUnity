@@ -12,6 +12,7 @@ namespace BToolkit
             public string path;
         }
         public Video[] videos;
+        public static VideoCtrl proviousVideoCtrl { get; private set; }
 
         void Awake()
         {
@@ -26,14 +27,26 @@ namespace BToolkit
 
         protected override void OnTrackingFound()
         {
+            //关闭模型
             if (ModelController.proviousModelController)
             {
-                ModelController.proviousModelController.ToTrackingPos();
+                ModelController.proviousModelController.ToTracking();
                 if (ModelController.proviousModelController.model)
                 {
                     ModelController.proviousModelController.model.gameObject.SetActive(false);
                 }
             }
+            //关闭上一个视频
+            if (proviousVideoCtrl && proviousVideoCtrl != this)
+            {
+                for (int i = 0; i < proviousVideoCtrl.videos.Length; i++)
+                {
+                    proviousVideoCtrl.videos[i].player.ToTrackable();
+                    proviousVideoCtrl.videos[i].player.gameObject.SetActive(false);
+                }
+            }
+            proviousVideoCtrl = this;
+
             videos[0].player.ToTrackable();
             videos[0].player.Play();
             if (videos.Length > 1)
@@ -53,7 +66,7 @@ namespace BToolkit
                 }
                 if (!StorageManager.Instance.IsARHideWhenOffCard)
                 {
-                    videos[0].player.ToFullScreen();
+                    videos[0].player.ToScreen();
                 }
             }
         }

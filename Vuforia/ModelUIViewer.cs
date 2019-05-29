@@ -24,6 +24,14 @@ namespace BToolkit
             return instance;
         }
 
+        void OnDisable()
+        {
+            if (panelDefault)
+            {
+                panelDefault.SetActive(true);
+            }
+        }
+
         void Awake()
         {
             panelDefault = GameObject.Find("PanelDefault");
@@ -35,25 +43,19 @@ namespace BToolkit
             {
                 btnClose.onTrigger.AddListener(() =>
                 {
-                    if (panelDefault)
-                    {
-                        panelDefault.SetActive(true);
-                    }
                     Destroy(gameObject);
                     if (modelController)
                     {
-                        modelController.ToTrackingPos();
+                        modelController.ToTracking();
                     }
-                    /*
                     if (SceneRecordUIManager.instance)
                     {
                         if (model)
                         {
                             Destroy(model.gameObject);
                         }
-                        SceneRecordUIManager.instance.arCamera.gameObject.SetActive(false);
+                        SceneRecordUIManager.instance.arCamera.enabled = false;
                     }
-                    */
                 });
             }
             if (btnTakePhoto)
@@ -99,7 +101,6 @@ namespace BToolkit
 
         void TakePhoto()
         {
-            /*
             Canvas canvas = FindObjectOfType<Canvas>();
             canvas.enabled = false;
             BUtils.ScreenShot((Texture2D texture) =>
@@ -107,7 +108,6 @@ namespace BToolkit
                 canvas.enabled = true;
                 PanelSharePhoto.Show(texture);
             });
-            */
         }
 
     }

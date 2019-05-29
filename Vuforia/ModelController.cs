@@ -17,9 +17,19 @@ namespace BToolkit
 
         protected override void OnTrackingFound()
         {
+            //关闭视频
+            if (VideoCtrl.proviousVideoCtrl)
+            {
+                for (int i = 0; i < VideoCtrl.proviousVideoCtrl.videos.Length; i++)
+                {
+                    VideoCtrl.proviousVideoCtrl.videos[i].player.ToTrackable();
+                    VideoCtrl.proviousVideoCtrl.videos[i].player.gameObject.SetActive(false);
+                }
+            }
+            //关闭上一个模型
             if (proviousModelController && proviousModelController != this)
             {
-                proviousModelController.ToTrackingPos();
+                proviousModelController.ToTracking();
                 if (proviousModelController.model)
                 {
                     proviousModelController.model.gameObject.SetActive(false);
@@ -34,7 +44,7 @@ namespace BToolkit
                 model.arParent = transform;
             }
             model.gameObject.SetActive(true);
-            ToTrackingPos();
+            ToTracking();
             if (uiModelViewer)
             {
                 Destroy(uiModelViewer.gameObject);
@@ -101,7 +111,7 @@ namespace BToolkit
         /// <summary>
         /// 回到AR跟踪位置
         /// </summary>
-        public void ToTrackingPos()
+        public void ToTracking()
         {
             if (uiModelViewer)
             {
