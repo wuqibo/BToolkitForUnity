@@ -17,13 +17,6 @@ namespace BToolkit
             this.cloudImageTarget = cloudImageTarget;
         }
 
-        public virtual void OnTrackingFound()
-        {
-            GetComponent<CloudOffCardCtrl>().ToTrackable();
-        }
-
-        public virtual void OnTrackingLost() {
-            
-        }
+        public virtual void OnTrackingLost() { }
     }
 }

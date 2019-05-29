@@ -12,7 +12,7 @@ namespace BToolkit
 
         CloudRecognition cloudRecognition;
         TrackableBehaviour mTrackableBehaviour;
-        bool hadFoundOnce;
+        bool isFirstLost = true;
 
         void Awake()
         {
@@ -38,7 +38,7 @@ namespace BToolkit
         {
             if (loading.activeInHierarchy)
             {
-                loading.transform.Rotate(0, 0, 300 * Time.deltaTime);
+                loading.transform.Rotate(0, 0, -300 * Time.deltaTime);
             }
         }
 
@@ -62,24 +62,31 @@ namespace BToolkit
 
         void OnTrackingFound()
         {
-            hadFoundOnce = true;
-            videoPlayerManager.OnTrackingFound();
-            modelViewer.OnTrackingFound();
+            isFirstLost = false;
             loading.SetActive(true);
         }
 
         void OnTrackingLost()
         {
-            if (!hadFoundOnce)
+            if (isFirstLost)
             {
                 videoPlayerManager.Show(false);
                 modelViewer.Show(false);
             }
             else
             {
-                videoPlayerManager.OnTrackingLost();
-                modelViewer.OnTrackingLost();
-                cloudRecognition.RestartScan();
+                if (videoPlayerManager.gameObject.activeInHierarchy)
+                {
+                    videoPlayerManager.OnTrackingLost();
+                }
+                if (modelViewer.gameObject.activeInHierarchy)
+                {
+                    modelViewer.OnTrackingLost();
+                }
+                if (StorageManager.Instance.IsARHideWhenOffCard)
+                {
+                    cloudRecognition.RestartScan();
+                }
             }
         }
 

@@ -7,7 +7,6 @@ namespace BToolkit
         public CloudVideoPlayer unityPlayer;
         public CloudVideoPlayer avProPlayer;
         public CloudVideoPlayer CurrPlayer { get; private set; }
-        string currPlayingVideoUrl = "";
 
         void Awake()
         {
@@ -17,11 +16,6 @@ namespace BToolkit
 
         public override void PlayTarget(CloudImageTarget cloudImageTarget, MoJingTargetInfo info)
         {
-            if (gameObject.activeInHierarchy && info.showFile.Equals(currPlayingVideoUrl))
-            {
-                return;
-            }
-            currPlayingVideoUrl = info.showFile;
             base.PlayTarget(cloudImageTarget, info);
             SetTranform(info);
             if ("webm".Equals(info.videoAlphaType))
@@ -36,7 +30,6 @@ namespace BToolkit
             }
             CurrPlayer.gameObject.SetActive(true);
             string parsedPath = CloudFileDownloader.ParsePath(info.showFile);
-            Debug.Log("<color=yellow>下载Url:" + parsedPath + "</color>");
             CurrPlayer.Play(parsedPath);
             CloudFileDownloader.Save(info.showFile);
         }
@@ -93,15 +86,13 @@ namespace BToolkit
             }
             else
             {
-                if (gameObject.activeInHierarchy)
-                {
-                    float videoW = CurrPlayer.videoW;
-                    float videoH = CurrPlayer.videoH;
-                    bool isAVProPlayer = CurrPlayer.isAVProPlayer;
-                    CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
-                    showTarget.ToScreen(videoW, videoH, isAVProPlayer);
-                    CloudUIShowCtrller.Show(showTarget);
-                }
+                VuforiaHelper.StopTracker();
+                float videoW = CurrPlayer.videoW;
+                float videoH = CurrPlayer.videoH;
+                bool isAVProPlayer = CurrPlayer.isAVProPlayer;
+                CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
+                showTarget.ToFullScreen(videoW, videoH, isAVProPlayer);
+                CloudUIShowCtrller.Show(showTarget);
             }
         }
     }

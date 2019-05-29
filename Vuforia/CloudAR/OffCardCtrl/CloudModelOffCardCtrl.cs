@@ -21,7 +21,7 @@ namespace BToolkit
         /// <summary>
         /// ÇÐ»»µ½È«ÆÁ
         /// </summary>
-        public override void ToScreen(float videoW = 1, float videoH = 1, bool isAVProPlayer = false)
+        public override void ToFullScreen(float videoW = 1, float videoH = 1, bool isAVProPlayer = false)
         {
             if (!defaultParent)
             {
@@ -79,7 +79,6 @@ namespace BToolkit
                 transform.localEulerAngles = defaultAngle;
                 transform.localScale = defaultScale;
                 hadToScreen = false;
-                CloudUIShowCtrller.Destroy();
             }
         }
 

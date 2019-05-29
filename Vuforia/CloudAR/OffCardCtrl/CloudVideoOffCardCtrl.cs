@@ -33,7 +33,7 @@ namespace BToolkit
         /// <summary>
         /// ÇÐ»»µ½È«ÆÁ
         /// </summary>
-        public override void ToScreen(float videoW, float videoH, bool isAVProPlayer)
+        public override void ToFullScreen(float videoW, float videoH, bool isAVProPlayer)
         {
             if (!defaultParent)
             {
