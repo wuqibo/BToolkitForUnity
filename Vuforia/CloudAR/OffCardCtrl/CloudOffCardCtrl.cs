@@ -9,7 +9,7 @@ namespace BToolkit
         /// <summary>
         /// 切换到全屏(模型不用传任何参数)
         /// </summary>
-        public virtual void ToFullScreen(float videoW = 1, float videoH = 1, bool isAVProPlayer = false) { }
+        public virtual void ToScreen(float videoW = 1, float videoH = 1, bool isAVProPlayer = false) { }
 
         /// <summary>
         /// 切换到AR跟踪
@@ -22,8 +22,6 @@ namespace BToolkit
         public virtual void CloseFromUI()
         {
             ToTrackable();
-            VuforiaHelper.StartTracker();
-            FindObjectOfType<CloudRecognition>().RestartScan();
         }
     }
 }
