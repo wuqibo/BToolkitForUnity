@@ -1,4 +1,4 @@
-﻿Shader "BToolkit/GrayToAlpha"
+﻿Shader "BToolkit/AlphaByGrayTexture"
 {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
@@ -6,8 +6,10 @@
 		_AlphaTex ("AlphaTex", 2D) = "white" {}
 	}
 	SubShader {
-	    Tags { "RenderType"="Opaque" }
+	    Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         LOD 200
+		Cull Off
+
 
         CGPROGRAM
         #pragma surface surf Lambert alpha
