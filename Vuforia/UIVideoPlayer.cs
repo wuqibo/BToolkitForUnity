@@ -14,7 +14,7 @@ namespace BToolkit
 
         public static UIVideoPlayer Show(string videoUrl, long startFrame)
         {
-            UIVideoPlayer player = Instantiate(Resources.Load<UIVideoPlayer>("Prefabs/UI/UIVideoPlayer"));
+            UIVideoPlayer player = Instantiate(Resources.Load<UIVideoPlayer>("UIVideoPlayer"));
             player.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
             player.unityPlayer.GetComponent<RawImage>().enabled = false;
             player.hadShowImage = false;

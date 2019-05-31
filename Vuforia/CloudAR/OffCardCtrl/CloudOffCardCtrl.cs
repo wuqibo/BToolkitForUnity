@@ -17,9 +17,9 @@ namespace BToolkit
         public virtual void ToTrackable() { }
 
         /// <summary>
-        /// 从UI展示中关闭
+        /// 当UI控制关闭时
         /// </summary>
-        public virtual void CloseFromUI()
+        public virtual void OnUICtrllerDestroy()
         {
             ToTrackable();
         }

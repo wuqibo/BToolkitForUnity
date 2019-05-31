@@ -65,7 +65,7 @@ namespace BToolkit
                 else
                 {
                     ToScreen();
-                    uiModelViewer = ModelUIViewer.Show(null, this);
+                    uiModelViewer = ModelUIViewer.ShowWhenAROffCard(this);
                 }
             }
         }
@@ -82,8 +82,8 @@ namespace BToolkit
             if (model)
             {
                 model.transform.SetParent(arCamera, true);
-                Tween.Move(0, model.transform, Model.screenPos, 0.5f, false, Tween.EaseType.ExpoEaseOut);
-                model.transform.localEulerAngles = Model.screenAngle;
+                Tween.Move(0, model.transform, model.screenPos, 0.5f, false, Tween.EaseType.ExpoEaseOut);
+                model.transform.localEulerAngles = model.screenAngle;
                 //旋转
                 TouchRotate3DByOneFinger rotate = model.GetComponent<TouchRotate3DByOneFinger>();
                 if (!rotate)

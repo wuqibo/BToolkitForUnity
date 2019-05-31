@@ -8,6 +8,7 @@ namespace BToolkit
     {
         public CloudShowTarget videoPlayerManager;
         public CloudShowTarget modelViewer;
+        public CloudUIShowCtrller cloudUIShowCtrllerPrefab;
         public GameObject loading;
 
         CloudRecognition cloudRecognition;

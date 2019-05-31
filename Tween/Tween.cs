@@ -420,7 +420,11 @@ namespace BToolkit
         public static ValueUpdate Value(float delay, float startValue, float toValue, float time, EaseType method, Action<float> updateEvent, Action<float> finishEvent = null)
         {
             GameObject go = new GameObject("ValueTween");
-            ValueUpdate valueUpdate = go.AddComponent<ValueUpdate>();
+            ValueUpdate valueUpdate = go.GetComponent<ValueUpdate>();
+            if (!valueUpdate)
+            {
+                valueUpdate = go.AddComponent<ValueUpdate>();
+            }
             valueUpdate.Value(delay, startValue, toValue, time, method, updateEvent, finishEvent);
             return valueUpdate;
         }

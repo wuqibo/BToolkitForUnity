@@ -10,6 +10,11 @@ namespace BToolkit
         float delay = 0, t = 0, d = 0, b = 0, c = 0;
         float toValue;
 
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
         void Update()
         {
             if (delay > 0)

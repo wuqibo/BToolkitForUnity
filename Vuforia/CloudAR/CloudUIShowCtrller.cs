@@ -4,15 +4,16 @@ namespace BToolkit
 {
     public class CloudUIShowCtrller : MonoBehaviour
     {
+        public static CloudUIShowCtrller instance;
         public BButton btnClose;
         CloudOffCardCtrl showTarget;
-        public static CloudUIShowCtrller instance;
+        GameObject panelDefault;
 
-        public static void Show(CloudOffCardCtrl showTarget)
+        public static void Show(CloudImageTarget cloudImageTarget, CloudOffCardCtrl showTarget)
         {
             if (!instance)
             {
-                instance = Instantiate(Resources.Load<CloudUIShowCtrller>("CloudUIShowCtrller"));
+                instance = Instantiate(cloudImageTarget.cloudUIShowCtrllerPrefab);
             }
             instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
             instance.showTarget = showTarget;
@@ -22,19 +23,32 @@ namespace BToolkit
         {
             if (instance)
             {
-                Destroy(instance.gameObject); ;
+                Destroy(instance.gameObject);
+            }
+        }
+
+        void OnDestroy()
+        {
+            if (showTarget)
+            {
+                showTarget.OnUICtrllerDestroy();
+            }
+            if (panelDefault)
+            {
+                panelDefault.SetActive(true);
             }
         }
 
         void Awake()
         {
             btnClose.onTrigger.AddListener(()=> {
-                Destroy();
-                if (showTarget)
-                {
-                    showTarget.CloseFromUI();
-                }
+                Destroy(gameObject);
             });
+            panelDefault = GameObject.Find("PanelDefault");
+            if (panelDefault)
+            {
+                panelDefault.SetActive(false);
+            }
         }
 
     }

@@ -73,6 +73,12 @@ namespace BToolkit
             bundle.Unload(false);
         }
 
+        public override void OnTrackingFound()
+        {
+            base.OnTrackingFound();
+            CloudUIShowCtrller.Destroy();
+        }
+
         public override void OnTrackingLost()
         {
             base.OnTrackingLost();
@@ -86,7 +92,7 @@ namespace BToolkit
                 {
                     CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
                     showTarget.ToScreen();
-                    CloudUIShowCtrller.Show(showTarget);
+                    CloudUIShowCtrller.Show(cloudImageTarget, showTarget);
                 }
             }
         }

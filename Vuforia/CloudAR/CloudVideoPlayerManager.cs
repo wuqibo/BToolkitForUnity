@@ -84,6 +84,12 @@ namespace BToolkit
             cloudImageTarget.loading.SetActive(false);
         }
 
+        public override void OnTrackingFound()
+        {
+            base.OnTrackingFound();
+            CloudUIShowCtrller.Destroy();
+        }
+
         public override void OnTrackingLost()
         {
             base.OnTrackingLost();
@@ -100,7 +106,7 @@ namespace BToolkit
                     bool isAVProPlayer = CurrPlayer.isAVProPlayer;
                     CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
                     showTarget.ToScreen(videoW, videoH, isAVProPlayer);
-                    CloudUIShowCtrller.Show(showTarget);
+                    CloudUIShowCtrller.Show(cloudImageTarget, showTarget);
                 }
             }
         }

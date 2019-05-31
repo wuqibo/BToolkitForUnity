@@ -8,12 +8,10 @@ using System.Text;
 
 namespace BToolkit
 {
-    public class PhotoLoader
+    public class TextureLoader
     {
-        [HideInInspector]
-        public Sprite sprite;
-        [HideInInspector]
-        public Image image;
+        public Texture texture { get; private set; }
+        public RawImage image { get; private set; }
         UnityWebRequest requestLocal, requestServer;
         const string PhotoFolderName = "PhotoLoader";
         const string Suffix = ".jpg";
@@ -39,9 +37,9 @@ namespace BToolkit
             }
             if (image)
             {
-                if (image.sprite = sprite)
+                if (image.texture = texture)
                 {
-                    image.sprite = null;
+                    image.texture = null;
                 }
             }
             Resources.UnloadUnusedAssets();
@@ -52,7 +50,7 @@ namespace BToolkit
         /// limitWidth或limitHeight哪个为零则不参与修改;
         /// <param>增加saveName参数，以支持同一图片保存两个不同尺寸的需求，savleName为null时，自动将url的MD5做saveName</param>
         /// </summary>
-        public void LoadAndSetPhoto(Image image, string url, int limitWidth = 0, int limitHeight = 0, bool canSave = false, string saveName = null, FinishEvent OnFinishCallback = null)
+        public void LoadAndSetPhoto(RawImage image, string url, int limitWidth = 0, int limitHeight = 0, bool canSave = false, string saveName = null, FinishEvent OnFinishCallback = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -69,13 +67,13 @@ namespace BToolkit
                 image.StartCoroutine(LoadFromServer(image, url, limitWidth, limitHeight, canSave, savedFileName, OnFinishCallback));
             }
         }
-        IEnumerator LoadFromLocal(Image image, string fileName, FinishEvent OnFinishCallback)
+        IEnumerator LoadFromLocal(RawImage image, string fileName, FinishEvent OnFinishCallback)
         {
             this.image = image;
             string url = "file://" + Application.persistentDataPath + "/" + PhotoFolderName + "/" + fileName + Suffix;
             //Debug.Log("<<<<<<<<<<<<<<<<<<<<<<" + url);
             requestLocal = UnityWebRequestTexture.GetTexture(url);
-            yield return requestLocal.Send();
+            yield return requestLocal.SendWebRequest();
             if (requestLocal.isNetworkError)
             {
                 Debug.LogError(string.IsNullOrEmpty(url) ? "url为空" : requestLocal.error + ": " + url);
@@ -86,7 +84,7 @@ namespace BToolkit
                 yield break;
             }
             Texture2D texture = (requestLocal.downloadHandler as DownloadHandlerTexture).texture;
-            image.sprite = sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            image.texture = this.texture = texture;
             hasLoaded = true;
             if (OnFinishCallback != null)
             {
@@ -94,7 +92,7 @@ namespace BToolkit
             }
             texture = null;
         }
-        IEnumerator LoadFromServer(Image image, string url, int limitWidth, int limitHeight, bool canSave, string fileName, FinishEvent OnFinishCallback)
+        IEnumerator LoadFromServer(RawImage image, string url, int limitWidth, int limitHeight, bool canSave, string fileName, FinishEvent OnFinishCallback)
         {
             this.image = image;
             if (url.Contains("file:////"))
@@ -102,7 +100,7 @@ namespace BToolkit
                 url = url.Replace("file:////", "file:///");
             }
             requestServer = UnityWebRequestTexture.GetTexture(url);
-            yield return requestServer.Send();
+            yield return requestServer.SendWebRequest();
             if (requestServer.error != null)
             {
                 Debug.LogError(string.IsNullOrEmpty(url) ? "url为空" : requestServer.error + ": " + url);
@@ -154,7 +152,7 @@ namespace BToolkit
                     }
                     File.WriteAllBytes(Application.persistentDataPath + "/" + PhotoFolderName + "/" + fileName + Suffix, imgData);
                 }
-                image.sprite = sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                image.texture = this.texture = texture;
                 hasLoaded = true;
                 if (OnFinishCallback != null)
                 {

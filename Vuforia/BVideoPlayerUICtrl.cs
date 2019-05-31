@@ -6,8 +6,13 @@ namespace BToolkit
     {
         public BButton btnClose;
         public BButton btnDirection;
-        public BVideoPlayer videoPlayer;
+        public BVideoPlayer videoPlayer { get; private set; }
         GameObject panelDefault;
+
+        public void SetBVideoPlayer(BVideoPlayer videoPlayer)
+        {
+            this.videoPlayer = videoPlayer;
+        }
 
         void OnDisable()
         {

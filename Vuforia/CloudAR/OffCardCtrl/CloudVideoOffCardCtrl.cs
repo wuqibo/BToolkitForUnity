@@ -212,11 +212,11 @@ namespace BToolkit
             }
         }
 
-        public override void CloseFromUI()
+        public override void OnUICtrllerDestroy()
         {
             if (hadToScreen)
             {
-                base.CloseFromUI();
+                base.OnUICtrllerDestroy();
                 GetComponent<CloudVideoPlayerManager>().Show(false);
             }
         }

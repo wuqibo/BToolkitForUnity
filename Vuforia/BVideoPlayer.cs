@@ -92,7 +92,7 @@ namespace BToolkit
                 uICtrl = Instantiate(uICtrlPrefab);
                 uICtrl.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
             }
-            uICtrl.videoPlayer = this;
+            uICtrl.SetBVideoPlayer(this);
             if (!arCamera)
             {
                 arCamera = FindObjectOfType<VuforiaBehaviour>().transform;

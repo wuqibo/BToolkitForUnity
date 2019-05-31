@@ -11,16 +11,40 @@ namespace BToolkit
         Model model;
         ModelController modelController;
         GameObject panelDefault;
+        Camera recordShowCamera;
 
-        public static ModelUIViewer Show(Model model, ModelController modelController)
+        /// <summary>
+        /// AR脱卡时显示
+        /// </summary>
+        public static ModelUIViewer ShowWhenAROffCard(ModelController modelController)
         {
             if (!instance)
             {
-                instance = Instantiate(Resources.Load<ModelUIViewer>("Prefabs/UI/UIModelViewer"));
+                instance = NewInstance();
+            }
+            instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
+            instance.modelController = modelController;
+            return instance;
+        }
+
+        /// <summary>
+        /// 观看记录时显示
+        /// </summary>
+        public static ModelUIViewer ShowInRecord(Model model, Camera recordShowCamera)
+        {
+            if (!instance)
+            {
+                instance = NewInstance();
             }
             instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
             instance.model = model;
-            instance.modelController = modelController;
+            instance.recordShowCamera = recordShowCamera;
+            return instance;
+        }
+
+        static ModelUIViewer NewInstance()
+        {
+            ModelUIViewer instance = Instantiate(Resources.Load<ModelUIViewer>("UIModelViewer"));
             return instance;
         }
 
@@ -48,13 +72,13 @@ namespace BToolkit
                     {
                         modelController.ToTracking();
                     }
-                    if (SceneRecordUIManager.instance)
+                    if (model)
                     {
-                        if (model)
-                        {
-                            Destroy(model.gameObject);
-                        }
-                        SceneRecordUIManager.instance.arCamera.enabled = false;
+                        Destroy(model.gameObject);
+                    }
+                    if (recordShowCamera)
+                    {
+                        recordShowCamera.enabled = false;
                     }
                 });
             }

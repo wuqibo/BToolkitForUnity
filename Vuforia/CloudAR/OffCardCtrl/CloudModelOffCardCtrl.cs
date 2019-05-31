@@ -79,14 +79,13 @@ namespace BToolkit
                 transform.localEulerAngles = defaultAngle;
                 transform.localScale = defaultScale;
                 hadToScreen = false;
-                CloudUIShowCtrller.Destroy();
             }
         }
 
-        public override void CloseFromUI()
+        public override void OnUICtrllerDestroy()
         {
             if (hadToScreen) {
-                base.CloseFromUI();
+                base.OnUICtrllerDestroy();
                 GetComponent<CloudModelViewer>().Show(false);
             }
         }
