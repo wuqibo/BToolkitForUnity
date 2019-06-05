@@ -88,7 +88,7 @@ namespace BToolkit
                         request.SetRequestHeader(data.Key, data.Value);
                     }
                 }
-                yield return request.Send();
+                yield return request.SendWebRequest();
                 if (request.isNetworkError)
                 {
                     if (CurrHttpCallback != null)
@@ -148,7 +148,7 @@ namespace BToolkit
                         request.SetRequestHeader(data.Key, data.Value);
                     }
                 }
-                yield return request.Send();
+                yield return request.SendWebRequest();
                 if (request.isNetworkError)
                 {
                     if (CurrHttpCallback != null)

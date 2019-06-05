@@ -11,7 +11,7 @@ namespace BToolkit
         public RectTransform bar;
         public float bgActiveAlpha = 1f;
         public float barActiveAlpha = 1f;
-        public bool forKeyboard = true;
+        public bool canKeyboardCtrl = true;
         public delegate void JoystickDelegate(bool isActive, float radian);
         public static UGUIJoystick instance;
         static JoystickDelegate OnJoystickDragEvent;
@@ -109,7 +109,7 @@ namespace BToolkit
                     }
                 }
             }
-            if (forKeyboard)
+            if (canKeyboardCtrl)
             {
                 if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
                 {

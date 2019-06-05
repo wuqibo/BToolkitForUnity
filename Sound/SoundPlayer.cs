@@ -12,6 +12,7 @@ namespace BToolkit
         AudioSource audioSource;
         float destroyTimer;
         Action OnStopCallback;
+        public bool isPlaying { get { if (audioSource) return audioSource.isPlaying; return false; } }
         /// <summary>
         /// 读取或设置全场使用SoundPlayer播放的所有音频的开关
         /// </summary>
@@ -68,9 +69,9 @@ namespace BToolkit
             {
                 return null;
             }
-            SoundPlayer soundPlayer = CreatePlayer();
+            SoundPlayer soundPlayer = NewInstance();
             soundPlayer.destroyTimer = delay + clip.length;
-            soundPlayer.Play(delay, clip, volume, OnStopCallback);
+            SoundPlayer.PlayAndDestroy(delay, clip, volume, OnStopCallback);
             return soundPlayer;
         }
 
@@ -78,7 +79,7 @@ namespace BToolkit
         /// 创建一个声音播放器，播完不会自动销毁，需调用Destroy()方法销毁
         /// </summary>
         /// <returns></returns>
-        public static SoundPlayer CreatePlayer()
+        public static SoundPlayer NewInstance()
         {
             GameObject go = new GameObject("SoundPlayer");
             DontDestroyOnLoad(go);
@@ -114,6 +115,17 @@ namespace BToolkit
             audioSource.volume = volume;
             this.OnStopCallback = OnStopCallback;
             audioSource.PlayDelayed(delay);
+        }
+
+        /// <summary>
+        /// 停止播放
+        /// </summary>
+        public void Stop()
+        {
+            if (audioSource)
+            {
+                audioSource.Stop();
+            }
         }
 
         /// <summary>

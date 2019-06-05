@@ -25,15 +25,16 @@ namespace BToolkit
         static AudioClip btnCommonSound;
         //此两个属性用于存储多个监听Back键的按钮同时存在场景中时，按照创建的先后倒序执行
         BButton previousBButton;
-        static BButton lastSpawnBButton;
+        static BButton lastCreateBButton;
+        ButtonChange buttonChange;
 
         void OnDestroy()
         {
             if (listenKeyBack)
             {
-                if (lastSpawnBButton == this)
+                if (lastCreateBButton == this)
                 {
-                    lastSpawnBButton = previousBButton;
+                    lastCreateBButton = previousBButton;
                 }
             }
         }
@@ -48,10 +49,11 @@ namespace BToolkit
 
         void Awake()
         {
+            buttonChange = GetComponent<ButtonChange>();
             if (listenKeyBack)
             {
-                previousBButton = lastSpawnBButton;
-                lastSpawnBButton = this;
+                previousBButton = lastCreateBButton;
+                lastCreateBButton = this;
             }
         }
 
@@ -62,6 +64,13 @@ namespace BToolkit
             if (canTouchTimer > 0f)
             {
                 canTouchTimer -= Time.deltaTime;
+                if (canTouchTimer <= 0f)
+                {
+                    if (buttonChange)
+                    {
+                        buttonChange.enabled = true;
+                    }
+                }
             }
             if (doubleTimer > 0f)
             {
@@ -82,7 +91,7 @@ namespace BToolkit
                     {
                         return;
                     }
-                    if (lastSpawnBButton == this)
+                    if (lastCreateBButton == this)
                     {
                         onTrigger.Invoke();
                     }
@@ -100,6 +109,10 @@ namespace BToolkit
                     {
                         onTrigger.Invoke();
                         canTouchTimer = canTriggerInterval;
+                        if (buttonChange && canTouchTimer > 0)
+                        {
+                            buttonChange.enabled = false;
+                        }
                         if (sound)
                         {
                             SoundPlayer.PlayAndDestroy(0, sound);
@@ -130,6 +143,10 @@ namespace BToolkit
                             onTrigger.Invoke();
                             doubleTimer = 0f;
                             canTouchTimer = canTriggerInterval;
+                            if (buttonChange && canTouchTimer > 0)
+                            {
+                                buttonChange.enabled = false;
+                            }
                             if (sound)
                             {
                                 SoundPlayer.PlayAndDestroy(0, sound);
@@ -165,6 +182,10 @@ namespace BToolkit
                     {
                         onTrigger.Invoke();
                         canTouchTimer = canTriggerInterval;
+                        if (buttonChange && canTouchTimer > 0)
+                        {
+                            buttonChange.enabled = false;
+                        }
                     }
                 }
                 if (OnTouchClick != null)

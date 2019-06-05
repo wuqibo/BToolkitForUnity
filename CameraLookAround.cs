@@ -11,7 +11,7 @@ namespace BToolkit
         public float cameraHeight = 2;
         public float cameraHeightMin = 0.1f;
         public float cameraHeightMax = 7f;
-        public float viewPointHeight = 0.6f;
+        public float viewPointHeight = 0f;
 
         Vector3 previousPos, dragDelta;
 
