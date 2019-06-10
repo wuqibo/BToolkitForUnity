@@ -76,7 +76,7 @@ namespace BToolkit
             {
                 doubleTimer -= Time.deltaTime;
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2))
             {
                 if (OnTouchUp != null)
                 {
