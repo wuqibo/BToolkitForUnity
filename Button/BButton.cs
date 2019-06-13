@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace BToolkit
 {
     [AddComponentMenu("BToolkit/BButton")]
-    public class BButton : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
+    public class BButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
     {
         public enum TriggerMethod
         {
@@ -27,6 +27,7 @@ namespace BToolkit
         BButton previousBButton;
         static BButton lastCreateBButton;
         ButtonChange buttonChange;
+        int currPointerId = -1;
 
         void OnDestroy()
         {
@@ -75,13 +76,6 @@ namespace BToolkit
             if (doubleTimer > 0f)
             {
                 doubleTimer -= Time.deltaTime;
-            }
-            if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2))
-            {
-                if (OnTouchUp != null)
-                {
-                    OnTouchUp(index);
-                }
             }
             if (listenKeyBack)
             {
@@ -169,6 +163,24 @@ namespace BToolkit
                 {
                     OnTouchDown(index);
                 }
+                currPointerId = eventData.pointerId;
+            }
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            bool canExecUp = true;
+            if (!Application.isEditor && Application.platform != RuntimePlatform.WindowsPlayer)
+            {
+                canExecUp = (currPointerId == eventData.pointerId);
+            }
+            if (canExecUp)
+            {
+                if (OnTouchUp != null)
+                {
+                    OnTouchUp(index);
+                }
+                currPointerId = -1;
             }
         }
 

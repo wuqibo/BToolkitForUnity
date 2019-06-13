@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace BToolkit
 {
     public class UGUIJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
     {
-
+        [System.Serializable]
+        public class DragAction : UnityEvent<bool, float> { }
         public RectTransform bar;
         public float bgActiveAlpha = 1f;
         public float barActiveAlpha = 1f;
         public bool canKeyboardCtrl = true;
-        public delegate void JoystickDelegate(bool isActive, float radian);
+        public DragAction onDrag;
         public static UGUIJoystick instance;
-        static JoystickDelegate OnJoystickDragEvent;
         RectTransform trans;
         bool isLock, isActive;
         float maxDistance;
@@ -35,7 +35,7 @@ namespace BToolkit
         Image image, barImage;
         RawImage rawImage, barRawImage;
         float screenSizeRate, screenUIWidth;
-        int joyEndListen;
+        int joyEndListen, currPointerId = -1;
 
         void Awake()
         {
@@ -90,22 +90,26 @@ namespace BToolkit
             isActive = false;
             SetBorder(defaultPos, defaultAlpha);
             SetBar(Vector2.zero, barDefaultAlpha);
-            if (OnJoystickDragEvent != null)
+            try
             {
-                OnJoystickDragEvent(false, 0);
+                if (onDrag != null)
+                {
+                    onDrag.Invoke(false, 0);
+                }
             }
+            catch { }
         }
 
         void Update()
         {
             if (isActive)
             {
-                if (OnJoystickDragEvent != null)
+                if (onDrag != null)
                 {
                     if (bar.anchoredPosition.x != 0 || bar.anchoredPosition.y != 0)
                     {
                         float radian = Mathf.Atan2(bar.anchoredPosition.y, bar.anchoredPosition.x);
-                        OnJoystickDragEvent(true, radian);
+                        onDrag.Invoke(true, radian);
                     }
                 }
             }
@@ -120,10 +124,10 @@ namespace BToolkit
                         Vector2 vec = bar.anchoredPosition * maxDistance / dis;
                         bar.anchoredPosition = vec;
                     }
-                    if (OnJoystickDragEvent != null)
+                    if (onDrag != null)
                     {
                         float radian = Mathf.Atan2(bar.anchoredPosition.y, bar.anchoredPosition.x);
-                        OnJoystickDragEvent(true, radian);
+                        onDrag.Invoke(true, radian);
                     }
                     joyEndListen = 2;
                 }
@@ -144,6 +148,7 @@ namespace BToolkit
             {
                 return;
             }
+            currPointerId = eventData.pointerId;
             Vector2 touchPos = eventData.position * screenSizeRate;
             if (defaultPos.x < 0)
             {
@@ -176,16 +181,16 @@ namespace BToolkit
 
         void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
         {
-            Init();
-        }
-
-        public static void RegisterEvent(JoystickDelegate OnJoystickDrag)
-        {
-            OnJoystickDragEvent = OnJoystickDrag;
-        }
-        public static void UnregisterEvent()
-        {
-            RegisterEvent(null);
+            bool canExecUp = true;
+            if (!Application.isEditor && Application.platform != RuntimePlatform.WindowsPlayer)
+            {
+                canExecUp = (currPointerId == eventData.pointerId);
+            }
+            if (canExecUp)
+            {
+                Init();
+                currPointerId = -1;
+            }
         }
 
         void GetDefaultInfo()
