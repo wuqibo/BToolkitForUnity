@@ -42,15 +42,9 @@ namespace BToolkit
         {
             string path = AssetDatabase.GetAssetPath(obj);
             TextureImporter texture = AssetImporter.GetAtPath(path) as TextureImporter;
-#if UNITY_5_3
             texture.textureType = TextureImporterType.Sprite;
-            texture.mipmapEnabled = false;
-            texture.textureFormat = TextureImporterFormat.AutomaticTruecolor;
-#else
-            texture.textureType = TextureImporterType.Sprite;
-            texture.mipmapEnabled = false;
+            texture.spriteImportMode = SpriteImportMode.Single;
             texture.textureCompression = TextureImporterCompression.Uncompressed;
-#endif
             AssetDatabase.ImportAsset(path);
         }
     }

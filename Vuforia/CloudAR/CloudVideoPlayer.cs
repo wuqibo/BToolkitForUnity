@@ -17,14 +17,17 @@ namespace BToolkit
         /// 当前视频高
         /// </summary>
         public float videoH { get; protected set; }
+        MeshRenderer mr;
+        public MeshRenderer meshRenderer { get { return mr ?? (mr = GetComponent<MeshRenderer>()); } }
 
         protected Action PlayedAction;
-        protected bool canListenPlayed;
 
-        public void RegisterPlayedEvent(Action Callback) {
+        public void RegisterPlayedEvent(Action Callback)
+        {
             this.PlayedAction = Callback;
         }
 
         public virtual void Play(string videoUrl) { }
+        
     }
 }

@@ -15,7 +15,7 @@ namespace BToolkit
 
         void OnDestroy()
         {
-            if(CurrTopTouchShowBtnsCtrl == this)
+            if (CurrTopTouchShowBtnsCtrl == this)
             {
                 CurrTopTouchShowBtnsCtrl = previousTouchShowBtnsCtrl;
             }
@@ -26,13 +26,17 @@ namespace BToolkit
             alphas = new float[buttons.Length];
             for (int i = 0; i < alphas.Length; i++)
             {
-                if (buttons[i].GetComponent<Image>())
+                Transform btns = buttons[i];
+                if (btns)
                 {
-                    alphas[i] = buttons[i].GetComponent<Image>().color.a;
-                }
-                else
-                {
-                    alphas[i] = buttons[i].GetComponent<RawImage>().color.a;
+                    if (btns.GetComponent<Image>())
+                    {
+                        alphas[i] = btns.GetComponent<Image>().color.a;
+                    }
+                    else
+                    {
+                        alphas[i] = btns.GetComponent<RawImage>().color.a;
+                    }
                 }
             }
             previousTouchShowBtnsCtrl = CurrTopTouchShowBtnsCtrl;
@@ -45,10 +49,17 @@ namespace BToolkit
             isShow = false;
             for (int i = 0; i < buttons.Length; i++)
             {
-                Tween.Alpha(0, buttons[i], 0, 2, Tween.EaseType.ExpoEaseOut, (Transform target) =>
+                Transform btns = buttons[i];
+                if (btns)
                 {
-                    target.gameObject.SetActive(false);
-                });
+                    Tween.Alpha(0, btns, 0, 2, Tween.EaseType.ExpoEaseOut, (Transform target) =>
+                    {
+                        if (target)
+                        {
+                            target.gameObject.SetActive(false);
+                        }
+                    });
+                }
             }
         }
 
@@ -66,9 +77,12 @@ namespace BToolkit
                     for (int i = 0; i < buttons.Length; i++)
                     {
                         Transform btn = buttons[i];
-                        btn.gameObject.SetActive(true);
-                        Tween.StopAlpha(btn);
-                        Tween.Alpha(btn, alphas[i]);
+                        if (btn)
+                        {
+                            btn.gameObject.SetActive(true);
+                            Tween.StopAlpha(btn);
+                            Tween.Alpha(btn, alphas[i]);
+                        }
                     }
                     StartCoroutine(Start());
                 }

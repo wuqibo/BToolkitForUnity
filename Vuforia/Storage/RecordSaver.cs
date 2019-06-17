@@ -1,5 +1,4 @@
 ﻿using BToolkit;
-using UnityEngine;
 
 public class RecordSaver : BImageTarget {
 
@@ -11,7 +10,7 @@ public class RecordSaver : BImageTarget {
 
     protected override void OnTrackingFound()
     {
-        StorageManager.Instance.AddScanedRecord(this);
+        StorageManager.Instance.AddLocalARScanedRecord(this);
     }
 
     protected override void OnTrackingLost()

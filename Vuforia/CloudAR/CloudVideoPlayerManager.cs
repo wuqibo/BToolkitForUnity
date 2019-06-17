@@ -2,27 +2,29 @@
 
 namespace BToolkit
 {
-    public class CloudVideoPlayerManager : CloudShowTarget
+    public class CloudVideoPlayerManager : MonoBehaviour
     {
         public CloudVideoPlayer unityPlayer;
         public CloudVideoPlayer avProPlayer;
         public CloudVideoPlayer CurrPlayer { get; private set; }
+        OffCardController_Video offCardController;
         string currPlayingVideoUrl = "";
 
         void Awake()
         {
             unityPlayer.RegisterPlayedEvent(OnPrepared);
             avProPlayer.RegisterPlayedEvent(OnPrepared);
+            offCardController = GetComponent<OffCardController_Video>();
         }
 
-        public override void PlayTarget(CloudImageTarget cloudImageTarget, MoJingTargetInfo info)
+        public void PlayTarget(CloudTargetInfo info)
         {
             if (gameObject.activeInHierarchy && info.showFile.Equals(currPlayingVideoUrl))
             {
+                Debuger.Log("<color=yellow>PlayTarget：播放同一个地址且播放器在激活状态，不做处理直接返回</color>");
                 return;
             }
             currPlayingVideoUrl = info.showFile;
-            base.PlayTarget(cloudImageTarget, info);
             SetTranform(info);
             if ("webm".Equals(info.videoAlphaType))
             {
@@ -35,13 +37,14 @@ namespace BToolkit
                 CurrPlayer = avProPlayer;
             }
             CurrPlayer.gameObject.SetActive(true);
-            string parsedPath = CloudFileDownloader.ParsePath(info.showFile);
-            Debug.Log("<color=yellow>下载Url:" + parsedPath + "</color>");
+            Debuger.Log("<color=yellow>下载Url:" + info.showFile + "</color>");
+            string parsedPath = CloudFileDownloader.ParseURL(info.showFile);
+            Debuger.Log("<color=yellow>播放Url:" + parsedPath + "</color>");
             CurrPlayer.Play(parsedPath);
             CloudFileDownloader.Save(info.showFile);
         }
 
-        void SetTranform(MoJingTargetInfo info)
+        void SetTranform(CloudTargetInfo info)
         {
             string[] datasArr = info.showFileRect.Split('|');
             float leftRatio = 0, topRatio = 0, wRatio = 1, hRatio = 1;
@@ -81,32 +84,27 @@ namespace BToolkit
 
         void OnPrepared()
         {
-            cloudImageTarget.loading.SetActive(false);
+            VuforiaHelper.LoadingActiveAction(false);
         }
 
-        public override void OnTrackingFound()
+        public void OnTrackingFound()
         {
-            base.OnTrackingFound();
-            CloudUIShowCtrller.Destroy();
+            unityPlayer.meshRenderer.enabled = false;
+            avProPlayer.meshRenderer.enabled = false;
+            offCardController.ToTracking();
         }
 
-        public override void OnTrackingLost()
+        public void OnTrackingLost()
         {
-            base.OnTrackingLost();
             if (StorageManager.Instance.IsARHideWhenOffCard)
             {
-                Show(false);
+                gameObject.SetActive(false);
             }
             else
             {
                 if (gameObject.activeInHierarchy)
                 {
-                    float videoW = CurrPlayer.videoW;
-                    float videoH = CurrPlayer.videoH;
-                    bool isAVProPlayer = CurrPlayer.isAVProPlayer;
-                    CloudOffCardCtrl showTarget = GetComponent<CloudOffCardCtrl>();
-                    showTarget.ToScreen(videoW, videoH, isAVProPlayer);
-                    CloudUIShowCtrller.Show(cloudImageTarget, showTarget);
+                    offCardController.ToScreen(CurrPlayer.videoW, CurrPlayer.videoH, CurrPlayer.isAVProPlayer);
                 }
             }
         }

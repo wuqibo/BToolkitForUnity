@@ -2,50 +2,43 @@
 
 namespace BToolkit
 {
-    public class ModelUIViewer : MonoBehaviour
+    public class UIController_Model : MonoBehaviour
     {
-        static ModelUIViewer instance;
+        public static UIController_Model instance;
         public BButton btnClose;
+        public GameObject loading;
         public RectTransform finger;
         public BButton btnTakePhoto;
-        Model model;
-        ModelController modelController;
+        OffCardController_Model offCardController;
         GameObject panelDefault;
-        Camera recordShowCamera;
-
-        /// <summary>
-        /// AR脱卡时显示
-        /// </summary>
-        public static ModelUIViewer ShowWhenAROffCard(ModelController modelController)
-        {
-            if (!instance)
-            {
-                instance = NewInstance();
-            }
-            instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
-            instance.modelController = modelController;
-            return instance;
-        }
+        bool isOffCard;
 
         /// <summary>
         /// 观看记录时显示
         /// </summary>
-        public static ModelUIViewer ShowInRecord(Model model, Camera recordShowCamera)
+        public static void Show(OffCardController_Model offCardController, bool isOffCard)
         {
             if (!instance)
             {
-                instance = NewInstance();
+                instance = Instantiate(Resources.Load<UIController_Model>("UIController_Model"));
             }
             instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
-            instance.model = model;
-            instance.recordShowCamera = recordShowCamera;
-            return instance;
+            instance.offCardController = offCardController;
+            instance.isOffCard = isOffCard;
+            instance.loading.SetActive(VuforiaHelper.idLoadingActive);
         }
 
-        static ModelUIViewer NewInstance()
+        public static void Destroy()
         {
-            ModelUIViewer instance = Instantiate(Resources.Load<ModelUIViewer>("UIModelViewer"));
-            return instance;
+            if (instance)
+            {
+                Destroy(instance.gameObject);
+            }
+        }
+
+        void OnDestroy()
+        {
+            VuforiaHelper.LoadingActiveAction -= OnLoadingActiveChange;
         }
 
         void OnDisable()
@@ -58,6 +51,7 @@ namespace BToolkit
 
         void Awake()
         {
+            VuforiaHelper.LoadingActiveAction += OnLoadingActiveChange;
             panelDefault = GameObject.Find("PanelDefault");
             if (panelDefault)
             {
@@ -68,29 +62,47 @@ namespace BToolkit
                 btnClose.onTrigger.AddListener(() =>
                 {
                     Destroy(gameObject);
-                    if (modelController)
+                    if (isOffCard)
                     {
-                        modelController.ToTracking();
+                        offCardController.ToTracking();
+                        offCardController.gameObject.SetActive(false);
                     }
-                    if (model)
+                    else
                     {
-                        Destroy(model.gameObject);
-                    }
-                    if (recordShowCamera)
-                    {
-                        recordShowCamera.enabled = false;
+                        Destroy(offCardController.gameObject);
                     }
                 });
             }
             if (btnTakePhoto)
             {
                 btnTakePhoto.onTrigger.AddListener(TakePhoto);
+                btnTakePhoto.gameObject.SetActive(WeiXin.IsAppInstalled());
             }
         }
 
         void Start()
         {
             FingerGuid();
+        }
+
+        void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (finger)
+                {
+                    Destroy(finger.gameObject);
+                }
+            }
+            if (loading.activeInHierarchy)
+            {
+                loading.transform.Rotate(0, 0, -300 * Time.deltaTime);
+            }
+        }
+
+        void OnLoadingActiveChange(bool b)
+        {
+            loading.SetActive(b);
         }
 
         void FingerGuid()
@@ -109,17 +121,6 @@ namespace BToolkit
                         });
                     }
                 });
-            }
-        }
-
-        void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (finger)
-                {
-                    Destroy(finger.gameObject);
-                }
             }
         }
 

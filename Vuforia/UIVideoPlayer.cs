@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿#define AVProPlayer
+
+#if AVProPlayer
+using RenderHeads.Media.AVProVideo;
+#endif
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -7,24 +12,43 @@ namespace BToolkit
     public class UIVideoPlayer : MonoBehaviour
     {
         public VideoPlayer unityPlayer;
+#if AVProPlayer
+        public MediaPlayer avProPlayer;
+#endif
         public BButton btnClose;
         public BButton btnDirection;
         public GameObject loading;
+        public static UIVideoPlayer instance;
+        RectTransform currVideoPlayerTrans;
         bool hadShowImage;
+        float videoW, videoH;
 
-        public static UIVideoPlayer Show(string videoUrl, long startFrame)
+        public static void Show(string videoUrl, bool isAVProPlayer)
         {
-            UIVideoPlayer player = Instantiate(Resources.Load<UIVideoPlayer>("UIVideoPlayer"));
-            player.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
-            player.unityPlayer.GetComponent<RawImage>().enabled = false;
-            player.hadShowImage = false;
-            player.Play(videoUrl, startFrame);
-            return player;
+            if (!instance)
+            {
+                instance = Instantiate(Resources.Load<UIVideoPlayer>("UIVideoPlayer"));
+            }
+            instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
+            instance.unityPlayer.GetComponent<RawImage>().enabled = false;
+            instance.hadShowImage = false;
+            instance.unityPlayer.gameObject.SetActive(!isAVProPlayer);
+#if AVProPlayer
+            instance.avProPlayer.GetComponent<DisplayUGUI>().enabled = false;
+            instance.avProPlayer.gameObject.SetActive(isAVProPlayer);
+            instance.currVideoPlayerTrans = isAVProPlayer ? instance.avProPlayer.transform as RectTransform : instance.unityPlayer.transform as RectTransform;
+#else
+            instance.currVideoPlayerTrans = instance.unityPlayer.transform as RectTransform;
+#endif
+            instance.Play(videoUrl);
         }
 
         void OnDestroy()
         {
             unityPlayer.prepareCompleted -= OnVideoPlayerPrepareCompleted;
+#if AVProPlayer
+            avProPlayer.Events.RemoveListener(OnAVProPlayerEvent);
+#endif
         }
 
         void Awake()
@@ -44,50 +68,88 @@ namespace BToolkit
                 });
             }
             unityPlayer.prepareCompleted += OnVideoPlayerPrepareCompleted;
+#if AVProPlayer
+            avProPlayer.Events.AddListener(OnAVProPlayerEvent);
+#endif
         }
 
         void Update()
         {
             if (!hadShowImage)
             {
-                if (unityPlayer.frame > 5)
+                if (unityPlayer.gameObject.activeSelf)
                 {
-                    unityPlayer.GetComponent<RawImage>().enabled = true;
+                    if (unityPlayer.frame > 5)
+                    {
+                        unityPlayer.GetComponent<RawImage>().enabled = true;
+                        hadShowImage = true;
+                    }
                 }
+#if AVProPlayer
+                else if (avProPlayer.gameObject.activeSelf)
+                {
+                    if (avProPlayer.Control != null && avProPlayer.Control.GetCurrentTimeMs() > 5)
+                    {
+                        avProPlayer.GetComponent<DisplayUGUI>().enabled = true;
+                        hadShowImage = true;
+                    }
+                }
+#endif
+            }
+            if (loading && loading.activeSelf)
+            {
+                loading.transform.Rotate(0, 0, -300 * Time.deltaTime);
             }
         }
 
         private void OnVideoPlayerPrepareCompleted(VideoPlayer source)
         {
-            SetPlayerTransSize();
+            SetPlayerTransSize(unityPlayer.texture.width, unityPlayer.texture.height);
             if (loading)
             {
                 Destroy(loading);
             }
         }
 
-        private void Play(string videoUrl, long startFrame)
+#if AVProPlayer
+        private void OnAVProPlayerEvent(MediaPlayer player, MediaPlayerEvent.EventType eventType, ErrorCode code)
         {
-            unityPlayer.url = videoUrl;
-            if (startFrame > 0)
+            if (eventType == MediaPlayerEvent.EventType.Started)
             {
-                unityPlayer.frame = startFrame;
+                SetPlayerTransSize(player.Info.GetVideoWidth(), player.Info.GetVideoHeight() * 0.5f);
+                if (loading)
+                {
+                    Destroy(loading);
+                }
             }
-            if (!unityPlayer.isPlaying)
+        }
+#endif
+
+        private void Play(string videoUrl)
+        {
+            if (loading)
             {
+                loading.SetActive(true);
+            }
+            Debuger.Log("<color=yellow>播放Url: " + videoUrl + "</color>");
+
+            if (unityPlayer.gameObject.activeSelf)
+            {
+                unityPlayer.url = videoUrl;
                 unityPlayer.Play();
+            }
+            else
+            {
+#if AVProPlayer
+                avProPlayer.OpenVideoFromFile(MediaPlayer.FileLocation.AbsolutePathOrURL, videoUrl);
+#endif
             }
         }
 
-        void SetPlayerTransSize()
+        void ChangeBtnsPos()
         {
-            if (unityPlayer.transform.localEulerAngles.z == 0)
+            if (currVideoPlayerTrans.localEulerAngles.z == 0)
             {
-                //视频
-                RectTransform playerTrans = unityPlayer.transform as RectTransform;
-                float screenUIWidth = 1080;
-                float videoHeight = screenUIWidth * unityPlayer.texture.height / (float)unityPlayer.texture.width;
-                playerTrans.sizeDelta = new Vector2(screenUIWidth, videoHeight);
                 //按钮
                 if (btnClose)
                 {
@@ -108,11 +170,6 @@ namespace BToolkit
             }
             else
             {
-                //视频
-                RectTransform playerTrans = unityPlayer.transform as RectTransform;
-                float screenUIWidth = 1080;
-                float videoWidth = screenUIWidth * unityPlayer.texture.width / (float)unityPlayer.texture.height;
-                playerTrans.sizeDelta = new Vector2(videoWidth, screenUIWidth);
                 //按钮
                 if (btnClose)
                 {
@@ -133,10 +190,31 @@ namespace BToolkit
             }
         }
 
+        void SetPlayerTransSize(float videoW, float videoH)
+        {
+            this.videoW = videoW;
+            this.videoH = videoH;
+            if (currVideoPlayerTrans.localEulerAngles.z == 0)
+            {
+                //视频
+                float screenUIWidth = 1080;
+                float videoHeight = screenUIWidth * videoH / videoW;
+                currVideoPlayerTrans.sizeDelta = new Vector2(screenUIWidth, videoHeight);
+            }
+            else
+            {
+                //视频
+                float screenUIWidth = 1080;
+                float videoWidth = screenUIWidth * videoW / videoH;
+                currVideoPlayerTrans.sizeDelta = new Vector2(videoWidth, screenUIWidth);
+            }
+            ChangeBtnsPos();
+        }
+
         void ChangeDirection()
         {
-            unityPlayer.transform.localEulerAngles = new Vector3(0, 0, unityPlayer.transform.localEulerAngles.z == 0 ? -90 : 0);
-            SetPlayerTransSize();
+            currVideoPlayerTrans.localEulerAngles = new Vector3(0, 0, currVideoPlayerTrans.localEulerAngles.z == 0 ? -90 : 0);
+            SetPlayerTransSize(this.videoW, this.videoH);
         }
 
     }

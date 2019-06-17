@@ -3,7 +3,7 @@ using UnityEngine.Video;
 
 namespace BToolkit
 {
-    public class VideoCtrl : BImageTarget
+    public class ImageTarget_Video : BImageTarget
     {
         [System.Serializable]
         public class Video
@@ -12,7 +12,7 @@ namespace BToolkit
             public string path;
         }
         public Video[] videos;
-        public static VideoCtrl proviousVideoCtrl { get; private set; }
+        public static ImageTarget_Video proviousVideoCtrl { get; private set; }
 
         void Awake()
         {
@@ -28,12 +28,12 @@ namespace BToolkit
         protected override void OnTrackingFound()
         {
             //关闭模型
-            if (ModelController.proviousModelController)
+            if (ImageTarget_Model.proviousModelController)
             {
-                ModelController.proviousModelController.ToTracking();
-                if (ModelController.proviousModelController.model)
+                if (ImageTarget_Model.proviousModelController.model)
                 {
-                    ModelController.proviousModelController.model.gameObject.SetActive(false);
+                    ImageTarget_Model.proviousModelController.model.ToTracking();
+                    ImageTarget_Model.proviousModelController.model.gameObject.SetActive(false);
                 }
             }
             //关闭上一个视频
@@ -41,13 +41,18 @@ namespace BToolkit
             {
                 for (int i = 0; i < proviousVideoCtrl.videos.Length; i++)
                 {
-                    proviousVideoCtrl.videos[i].player.ToTrackable();
+                    proviousVideoCtrl.videos[i].player.offCardController.ToTracking();
                     proviousVideoCtrl.videos[i].player.gameObject.SetActive(false);
                 }
             }
             proviousVideoCtrl = this;
 
-            videos[0].player.ToTrackable();
+            for (int i = 0; i < videos.Length; i++)
+            {
+                videos[i].player.OnTrackingFound();
+            }
+
+            videos[0].player.offCardController.ToTracking();
             videos[0].player.Play();
             if (videos.Length > 1)
             {
@@ -58,6 +63,10 @@ namespace BToolkit
 
         protected override void OnTrackingLost()
         {
+            for (int i = 0; i < videos.Length; i++)
+            {
+                videos[i].player.OnTrackingLost();
+            }
             if (hadFoundOnce)
             {
                 if (videos.Length > 1)
@@ -66,7 +75,7 @@ namespace BToolkit
                 }
                 if (!StorageManager.Instance.IsARHideWhenOffCard)
                 {
-                    videos[0].player.ToScreen();
+                    videos[0].player.offCardController.ToScreen(videos[0].player.videoPlayer.texture.width, videos[0].player.videoPlayer.texture.height, false);
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Vuforia;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace BToolkit
 {
@@ -23,6 +24,8 @@ namespace BToolkit
         }
         Camera stereoCameraRight;
         ScreenOrientation defaultScreenOrientation;
+        public static bool idLoadingActive;
+        public static Action<bool> LoadingActiveAction;
 
         void Awake()
         {

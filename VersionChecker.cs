@@ -28,6 +28,9 @@ namespace BToolkit
             {
                 JsonData jsonData = JsonMapper.ToObject(webRequest.downloadHandler.text);
                 string version = (string)jsonData["versionName"];
+
+                Debuger.Log("版本比较："+GetAppInfo.GetAppVersionName() + " = " + version + "url:" + jsonUrl);
+
                 if (!GetAppInfo.GetAppVersionName().Equals(version))
                 {
                     string url = (string)jsonData["url"];

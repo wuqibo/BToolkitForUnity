@@ -76,6 +76,10 @@ namespace BToolkit
                     {
                         target.color = Color.white;
                         target.sprite = onSprite;
+                        if (!target.sprite)
+                        {
+                            target.color = new Color(0, 0, 0, 0);
+                        }
                     }
                 }
                 else
@@ -88,6 +92,10 @@ namespace BToolkit
                     {
                         target.color = Color.white;
                         target.sprite = offSprite;
+                        if (!target.sprite)
+                        {
+                            target.color = new Color(0, 0, 0, 0);
+                        }
                     }
                 }
             }

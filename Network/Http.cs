@@ -89,7 +89,7 @@ namespace BToolkit
                     }
                 }
                 yield return request.SendWebRequest();
-                if (request.isNetworkError)
+                if (request.error != null)
                 {
                     if (CurrHttpCallback != null)
                     {
@@ -149,7 +149,7 @@ namespace BToolkit
                     }
                 }
                 yield return request.SendWebRequest();
-                if (request.isNetworkError)
+                if (request.error != null)
                 {
                     if (CurrHttpCallback != null)
                     {

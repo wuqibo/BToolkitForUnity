@@ -2,16 +2,37 @@
 
 namespace BToolkit
 {
-    public class BVideoPlayerUICtrl : MonoBehaviour
+    public class UIController_Video : MonoBehaviour
     {
+        public static UIController_Video instance;
         public BButton btnClose;
         public BButton btnDirection;
-        public BVideoPlayer videoPlayer { get; private set; }
+        public GameObject loading;
+        OffCardController_Video offCardController;
         GameObject panelDefault;
 
-        public void SetBVideoPlayer(BVideoPlayer videoPlayer)
+        public static void Show(OffCardController_Video offCardController)
         {
-            this.videoPlayer = videoPlayer;
+            if (!instance)
+            {
+                instance = Instantiate(Resources.Load<UIController_Video>("UIController_Video"));
+            }
+            instance.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
+            instance.offCardController = offCardController;
+            instance.loading.SetActive(VuforiaHelper.idLoadingActive);
+        }
+
+        public static void Destroy()
+        {
+            if (instance)
+            {
+                Destroy(instance.gameObject);
+            }
+        }
+
+        void OnDestroy()
+        {
+            VuforiaHelper.LoadingActiveAction -= OnLoadingActiveChange;
         }
 
         void OnDisable()
@@ -24,6 +45,7 @@ namespace BToolkit
 
         void Awake()
         {
+            VuforiaHelper.LoadingActiveAction += OnLoadingActiveChange;
             panelDefault = GameObject.Find("PanelDefault");
             if (panelDefault)
             {
@@ -34,10 +56,10 @@ namespace BToolkit
                 btnClose.onTrigger.AddListener(() =>
                 {
                     Destroy(gameObject);
-                    if (videoPlayer)
+                    if (instance.offCardController)
                     {
-                        videoPlayer.ToTrackable();
-                        videoPlayer.gameObject.SetActive(false);
+                        instance.offCardController.ToTracking();
+                        instance.offCardController.gameObject.SetActive(false);
                     }
                 });
             }
@@ -45,20 +67,33 @@ namespace BToolkit
             {
                 btnDirection.onTrigger.AddListener(() =>
                 {
-                    if (videoPlayer)
+                    if (instance.offCardController)
                     {
-                        videoPlayer.SwitchDirection();
-                        SetPlayerTransSize();
+                        instance.offCardController.SwitchDirection();
+                        ChangeBtnsPos();
                     }
                 });
             }
         }
 
-        void SetPlayerTransSize()
+        void Update()
         {
-            if (videoPlayer)
+            if (loading.activeInHierarchy)
             {
-                if (videoPlayer.transform.localEulerAngles.z == 0)
+                loading.transform.Rotate(0, 0, -300 * Time.deltaTime);
+            }
+        }
+
+        void OnLoadingActiveChange(bool b)
+        {
+            loading.SetActive(b);
+        }
+
+        void ChangeBtnsPos()
+        {
+            if (instance.offCardController)
+            {
+                if (instance.offCardController.transform.localEulerAngles.z == 0)
                 {
                     //按钮
                     if (btnClose)
@@ -100,5 +135,6 @@ namespace BToolkit
                 }
             }
         }
+
     }
 }

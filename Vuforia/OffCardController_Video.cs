@@ -1,134 +1,135 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 namespace BToolkit
 {
-    public class CloudVideoOffCardCtrl : CloudOffCardCtrl
+    public class OffCardController_Video : MonoBehaviour
     {
-        public Material arVideoBg;
-        Transform defaultParent, arCamera, backgroundPlane;
-        Vector3 defaultPos, defaultAngle, defaultScale;
-        GameObject videoBg, videoBgQuad;
-        float bgAlpha;
-        float scaleRatio
-        {
-            get
-            {
-                if (Application.isEditor)
-                {
-                    return 2;
-                }
-                return 3.5f;
-            }
-        }
+        public Material ARVideoBg;
 
-        void Update()
-        {
-            if (videoBgQuad && bgAlpha < 0.8f)
-            {
-                bgAlpha += (0.81f - bgAlpha) * 0.02f;
-                arVideoBg.SetColor("_Color", new Color(0, 0, 0, bgAlpha));
-            }
-        }
+        Transform trackableParent;
+        Vector3 trackablePos, trackableAngle, trackableScale;
+        Transform backgroundPlane;
+        GameObject videoBg, videoBgQuad;
+        ValueUpdate valueUpdate;
+        float videoW, videoH;
+        float scaleRatio { get { if (Application.isEditor) { return 2; } return 3.5f; } }
+        bool hadToScreenOnce, isAVProPlayer;
 
         /// <summary>
-        /// «–ªªµΩ»´∆¡
+        /// ÂàáÊç¢Âà∞ÂÖ®Â±è
         /// </summary>
-        public override void ToScreen(float videoW, float videoH, bool isAVProPlayer)
+        public void ToScreen(float videoW, float videoH, bool isAVProPlayer)
         {
-            if (!defaultParent)
-            {
-                defaultParent = transform.parent;
-                defaultPos = transform.localPosition;
-                defaultAngle = transform.localEulerAngles;
-                defaultScale = transform.localScale;
-            }
-            if (!arCamera)
-            {
-                arCamera = GameObject.Find("ARCamera").transform;
-            }
+            this.videoW = videoW;
+            this.videoH = videoH;
+            this.isAVProPlayer = isAVProPlayer;
             if (!backgroundPlane)
             {
-                backgroundPlane = arCamera.Find("BackgroundPlane");
+                backgroundPlane = GameObject.Find("BackgroundPlane").transform;
+                trackableParent = transform.parent;
+                trackablePos = transform.localPosition;
+                trackableAngle = transform.localEulerAngles;
+                trackableScale = transform.localScale;
             }
-            TrackerToScreen(true, videoW, videoH, isAVProPlayer);
+            ARVideoBg.SetColor("_Color", new Color(0, 0, 0, 0));
+            valueUpdate = Tween.Value(0, 0, 0.8f, 0.5f, Tween.EaseType.ExpoEaseOut, (float v) =>
+            {
+                ARVideoBg.SetColor("_Color", new Color(0, 0, 0, v));
+            });
+            DoToScreen(true, isAVProPlayer);
+            //ÊâìÂºÄUIÊéßÂà∂
+            UIController_Video.Show(this);
+            hadToScreenOnce = true;
         }
 
         /// <summary>
-        /// «–ªªµΩAR∏˙◊Ÿ
+        /// ÂàáÊç¢Âà∞ARË∑üË∏™
         /// </summary>
-        public override void ToTrackable()
+        public void ToTracking()
         {
-            if (hadToScreen)
+            if (hadToScreenOnce)
             {
-                transform.SetParent(defaultParent);
-                transform.localPosition = defaultPos;
-                transform.localEulerAngles = defaultAngle;
-                transform.localScale = defaultScale;
-                hadToScreen = false;
-                if (videoBg)
+                if (backgroundPlane)
                 {
-                    Destroy(videoBg);
+                    transform.SetParent(trackableParent);
+                    transform.localPosition = trackablePos;
+                    transform.localEulerAngles = trackableAngle;
+                    transform.localScale = trackableScale;
+
+                    if (videoBg)
+                    {
+                        Destroy(videoBg);
+                    }
+                    if (videoBgQuad)
+                    {
+                        Destroy(videoBgQuad);
+                    }
+                    if (valueUpdate)
+                    {
+                        valueUpdate.Destroy();
+                    }
                 }
-                bgAlpha = 0;
-                arVideoBg.SetColor("_Color", new Color(0, 0, 0, bgAlpha));
+                //ÂÖ≥Èó≠UIÊéßÂà∂
+                UIController_Video.Destroy();
             }
         }
 
-        void TrackerToScreen(bool useAnim, float videoW, float videoH, bool isAVProPlayer)
+        // MeshÂøÖÈ°ªÊåÇËΩΩÂà∞ÂΩìÂâçËäÇÁÇπÔºåËã•Áî®Â≠êÁâ©‰ΩìÂÅöMeshÔºåÈ°ªÁ°Æ‰øùÂíåÂΩìÂâçÂØπË±°Áõ∏ÂêåÁöÑTransformÂèÇÊï∞
+        void DoToScreen(bool useAnim, bool isAVProPlayer)
         {
-            hadToScreen = true;
-            transform.SetParent(arCamera, true);
+            transform.SetParent(GameObject.Find("ARCamera").transform, true);
+            transform.localEulerAngles = Vector3.zero;
             float time = 0.5f;
             if (useAnim)
             {
-                Tween.Move(0, transform, backgroundPlane.localPosition, time, false, Tween.EaseType.ExpoEaseOut);
+                Tween.Move(0, transform, backgroundPlane.localPosition, time, false, Tween.EaseType.ExpoEaseInOut);
             }
             else
             {
                 transform.localPosition = backgroundPlane.localPosition;
             }
-            transform.localEulerAngles = Vector3.zero;
             Vector3 toScale = Vector3.zero;
+            //Â∑¶Âè≥Ë¥¥Á¥ß
             if (Screen.width < Screen.height)
             {
-                // ˙∆¡
-                if (videoW / videoH > Screen.width / (float)Screen.height)
+                //Á´ñÂ±è
+                if (videoW / (float)videoH > Screen.width / (float)Screen.height)
                 {
-                    //◊Û”“Ã˘ΩÙ
+                    //Â∑¶Âè≥Ë¥¥Á¥ß
                     float scaleX = scaleRatio * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
                     float scaleY = scaleX * videoH / (float)videoW;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
                 else
                 {
-                    //…œœ¬Ã˘ΩÙ
+                    //‰∏ä‰∏ãË¥¥Á¥ß
                     float scaleY = scaleRatio * backgroundPlane.localScale.z;
-                    float scaleX = scaleY * videoW / videoH;
+                    float scaleX = scaleY * videoW / (float)videoH;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
             }
             else
             {
-                //∫·∆¡
-                if (videoW / videoH > Screen.width / (float)Screen.height)
+                //Ê®™Â±è
+                if (videoW / (float)videoH > Screen.width / (float)Screen.height)
                 {
-                    //◊Û”“Ã˘ΩÙ
+                    //Â∑¶Âè≥Ë¥¥Á¥ß
                     float scaleX = scaleRatio * backgroundPlane.localScale.x;
                     float scaleY = scaleX * videoH / (float)videoW;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
                 else
                 {
-                    //…œœ¬Ã˘ΩÙ
+                    //‰∏ä‰∏ãË¥¥Á¥ß
                     float screenH = backgroundPlane.localScale.x * Screen.height / (float)Screen.width;
                     float scaleY = scaleRatio * screenH;
-                    float scaleX = scaleY * videoW / videoH;
+                    float scaleX = scaleY * videoW / (float)videoH;
                     toScale = new Vector3(scaleX, scaleY, 1);
                 }
             }
             if (useAnim)
             {
-                Tween.Scale(0, transform, toScale, time, Tween.EaseType.ExpoEaseOut);
+                Tween.Scale(0, transform, toScale, time, Tween.EaseType.ExpoEaseInOut);
             }
             else
             {
@@ -145,9 +146,9 @@ namespace BToolkit
             if (!videoBg)
             {
                 videoBg = new GameObject("BlackBg");
-                videoBg.transform.SetParent(arCamera);
+                videoBg.transform.SetParent(GameObject.Find("ARCamera").transform);
                 videoBgQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                videoBgQuad.GetComponent<MeshRenderer>().material = arVideoBg;
+                videoBgQuad.GetComponent<MeshRenderer>().material = ARVideoBg;
                 videoBgQuad.transform.SetParent(videoBg.transform);
                 Destroy(videoBgQuad.GetComponent<MeshCollider>());
             }
@@ -160,26 +161,26 @@ namespace BToolkit
         }
 
         /// <summary>
-        /// «–ªª∫·∆¡ ˙∆¡∑ΩœÚ
+        /// ÂàáÊç¢Ê®™Â±èÁ´ñÂ±èÊñπÂêë
         /// </summary>
-        public void SwitchDirection(float videoW, float videoH, bool isAVProPlayer)
+        public void SwitchDirection()
         {
             if (transform.localEulerAngles.z == 0)
             {
                 transform.localEulerAngles = new Vector3(0, 0, -90);
                 if (Screen.width < Screen.height)
                 {
-                    // ˙∆¡
+                    //Á´ñÂ±è
                     if (videoH / (float)videoW > Screen.width / (float)Screen.height)
                     {
-                        //◊Û”“Ã˘ΩÙ
+                        //Â∑¶Âè≥Ë¥¥Á¥ß
                         float scaleY = scaleRatio * backgroundPlane.localScale.z * Screen.width / (float)Screen.height;
-                        float scaleX = scaleY * videoW / videoH;
+                        float scaleX = scaleY * videoW / (float)videoH;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
                     }
                     else
                     {
-                        //…œœ¬Ã˘ΩÙ
+                        //‰∏ä‰∏ãË¥¥Á¥ß
                         float scaleX = scaleRatio * backgroundPlane.localScale.z;
                         float scaleY = scaleX * videoH / (float)videoW;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
@@ -187,17 +188,17 @@ namespace BToolkit
                 }
                 else
                 {
-                    //∫·∆¡
+                    //Ê®™Â±è
                     if (videoH / (float)videoW > Screen.width / (float)Screen.height)
                     {
-                        //◊Û”“Ã˘ΩÙ
+                        //Â∑¶Âè≥Ë¥¥Á¥ß
                         float scaleY = scaleRatio * backgroundPlane.localScale.x;
                         float scaleX = scaleY * videoH / (float)videoW;
                         transform.localScale = new Vector3(scaleX, scaleY, 1);
                     }
                     else
                     {
-                        //…œœ¬Ã˘ΩÙ
+                        //‰∏ä‰∏ãË¥¥Á¥ß
                         float screenH = backgroundPlane.localScale.x * Screen.height / (float)Screen.width;
                         float scaleX = scaleRatio * screenH;
                         float scaleY = scaleX * videoH / (float)videoW;
@@ -208,16 +209,7 @@ namespace BToolkit
             else
             {
                 transform.localEulerAngles = new Vector3(0, 0, 0);
-                TrackerToScreen(false, videoW, videoH, isAVProPlayer);
-            }
-        }
-
-        public override void OnUICtrllerDestroy()
-        {
-            if (hadToScreen)
-            {
-                base.OnUICtrllerDestroy();
-                GetComponent<CloudVideoPlayerManager>().Show(false);
+                DoToScreen(false, isAVProPlayer);
             }
         }
     }

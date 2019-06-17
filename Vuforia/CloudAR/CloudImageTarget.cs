@@ -6,18 +6,25 @@ namespace BToolkit
 {
     public class CloudImageTarget : MonoBehaviour, ITrackableEventHandler
     {
-        public CloudShowTarget videoPlayerManager;
-        public CloudShowTarget modelViewer;
-        public CloudUIShowCtrller cloudUIShowCtrllerPrefab;
+        public static CloudImageTarget instance;
+        public CloudVideoPlayerManager videoPlayerManager;
+        public CloudModelViewer modelViewer;
         public GameObject loading;
 
         CloudRecognition cloudRecognition;
         TrackableBehaviour mTrackableBehaviour;
         bool hadFoundOnce;
 
+        void OnDestroy()
+        {
+            VuforiaHelper.LoadingActiveAction -= SetLoadingActive;
+        }
+
         void Awake()
         {
-            loading.SetActive(false);
+            instance = this;
+            VuforiaHelper.LoadingActiveAction += SetLoadingActive;
+            VuforiaHelper.LoadingActiveAction(false);
         }
 
         void Start()
@@ -35,12 +42,19 @@ namespace BToolkit
             }
         }
 
+
         void Update()
         {
             if (loading.activeInHierarchy)
             {
                 loading.transform.Rotate(0, 0, 300 * Time.deltaTime);
             }
+        }
+
+        void SetLoadingActive(bool b)
+        {
+            VuforiaHelper.idLoadingActive = b;
+            loading.SetActive(b);
         }
 
         public void OnTrackableStateChanged(TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
@@ -66,15 +80,15 @@ namespace BToolkit
             hadFoundOnce = true;
             videoPlayerManager.OnTrackingFound();
             modelViewer.OnTrackingFound();
-            loading.SetActive(true);
+            VuforiaHelper.LoadingActiveAction(true);
         }
 
         void OnTrackingLost()
         {
             if (!hadFoundOnce)
             {
-                videoPlayerManager.Show(false);
-                modelViewer.Show(false);
+                videoPlayerManager.gameObject.SetActive(false);
+                modelViewer.gameObject.SetActive(false);
             }
             else
             {
@@ -87,17 +101,19 @@ namespace BToolkit
         /// <summary>
         /// 云识别后调用
         /// </summary>
-        public void PlayTarget(MoJingTargetInfo info)
+        public void PlayTarget(CloudTargetInfo info)
         {
             if ("video".Equals(info.showType))
             {
-                modelViewer.Show(false);
-                videoPlayerManager.PlayTarget(this, info);
+                modelViewer.gameObject.SetActive(false);
+                videoPlayerManager.gameObject.SetActive(true);
+                videoPlayerManager.PlayTarget(info);
             }
             else
             {
-                videoPlayerManager.Show(false);
-                modelViewer.PlayTarget(this, info);
+                videoPlayerManager.gameObject.SetActive(false);
+                modelViewer.gameObject.SetActive(true);
+                modelViewer.PlayTarget(info);
             }
         }
         

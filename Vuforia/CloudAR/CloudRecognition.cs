@@ -17,6 +17,7 @@ namespace BToolkit
             {
                 m_CloudRecoBehaviour.RegisterEventHandler(this);
             }
+            RestartScan();
         }
 
         #region Vuforia调用
@@ -63,10 +64,11 @@ namespace BToolkit
         #region 内部调用
         void LoadAndCreateContent(string targetId)
         {
-            MoJingAPI.Instance.LoadTargetInfo(targetId, (MoJingTargetInfo info) =>
+            CloudServerAPI.Instance.LoadTargetInfo(targetId, (CloudTargetInfo info) =>
             {
                 cloudImageTarget.PlayTarget(info);
             });
+            StorageManager.Instance.AddCloudARScanedRecord(targetId);
         }
         #endregion
 

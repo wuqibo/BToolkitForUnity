@@ -237,6 +237,42 @@ namespace BToolkit
             }
         }
 
+        //开始缩放UI到指定尺寸
+        public static void UISize(Transform trans, Vector2 toSize)
+        {
+            UISize(0, trans, toSize, 0, EaseType.Linear, null, null);
+        }
+        public static void UISize(float delay, Transform trans, Vector2 toSize, float time, EaseType method)
+        {
+            UISize(delay, trans, toSize, time, method, null, null);
+        }
+        public static void UISize(float delay, Transform trans, Vector2 toSize, float time, EaseType method, Action endEvent)
+        {
+            UISize(delay, trans, toSize, time, method, endEvent, null);
+        }
+        public static void UISize(float delay, Transform trans, Vector2 toSize, float time, EaseType method, TweenEvent endEvent)
+        {
+            UISize(delay, trans, toSize, time, method, null, endEvent);
+        }
+        public static void UISize(float delay, Transform trans, Vector2 toSize, float time, EaseType method, Action endEvent, TweenEvent endEventWithParam)
+        {
+            UISizeUpdate size = trans.GetComponent<UISizeUpdate>();
+            if (!size)
+            {
+                size = trans.gameObject.AddComponent<UISizeUpdate>();
+            }
+            size.UISize(delay, toSize, time, method, endEvent, endEventWithParam);
+        }
+
+        public static void StopUISize(Transform trans)
+        {
+            UISizeUpdate size = trans.GetComponent<UISizeUpdate>();
+            if (size)
+            {
+                GameObject.DestroyImmediate(size);
+            }
+        }
+
         //开始旋转物体
         public static void Rotate(Transform trans, Vector3 toAngle, bool useWorldAngle)
         {
