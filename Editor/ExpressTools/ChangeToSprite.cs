@@ -44,6 +44,8 @@ namespace BToolkit
             TextureImporter texture = AssetImporter.GetAtPath(path) as TextureImporter;
             texture.textureType = TextureImporterType.Sprite;
             texture.spriteImportMode = SpriteImportMode.Single;
+            texture.alphaSource = TextureImporterAlphaSource.FromInput;
+            texture.alphaIsTransparency = true;
             texture.textureCompression = TextureImporterCompression.Uncompressed;
             AssetDatabase.ImportAsset(path);
         }
