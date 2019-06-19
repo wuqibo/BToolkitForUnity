@@ -151,9 +151,9 @@ namespace BToolkit
         /// <summary>
         /// Base64 to Texture2D
         /// </summary>
-        public static Texture2D BytesToTexture(byte[] bytes, int width, int height)
+        public static Texture2D BytesToTexture(byte[] bytes)
         {
-            Texture2D tex = new Texture2D(width, height, TextureFormat.ARGB32, false);
+            Texture2D tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);
             try
             {
                 tex.LoadImage(bytes);
@@ -168,9 +168,9 @@ namespace BToolkit
         /// <summary>
         /// Base64 to Texture2D
         /// </summary>
-        public static Texture2D Base64ToTexture(string base64, int width, int height)
+        public static Texture2D Base64ToTexture(string base64)
         {
-            Texture2D tex = new Texture2D(width, height, TextureFormat.ARGB32, false);
+            Texture2D tex = new Texture2D(0, 0, TextureFormat.ARGB32, false);
             try
             {
                 byte[] bytes = System.Convert.FromBase64String(base64);
