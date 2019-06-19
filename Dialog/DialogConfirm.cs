@@ -9,10 +9,10 @@ namespace BToolkit
 
         public RectTransform dialog;
         public Text text;
-        public Button btnYes, btnNo;
+        public BButton btnYes, btnNo;
         Action ConfirmEvent, CancelEvent;
         public static bool isShowing { private set; get; }
-        const string prefabPath = "Prefabs/UI/DialogConfirm";
+        const string prefabPath = "DialogConfirm";
 
         public static DialogConfirm Show(string content,Action OnConfirm,RectTransform prefab = null)
         {
@@ -37,10 +37,10 @@ namespace BToolkit
             dialogConfirm.ConfirmEvent = OnConfirm;
             dialogConfirm.CancelEvent = OnCancel;
             Tween.Alpha(trans,0,false);
-            Tween.Alpha(0,trans,0.5f,0.3f,Tween.EaseType.SineEaseOut,false);
+            Tween.Alpha(0,trans,0.5f,0.2f,Tween.EaseType.SineEaseOut,false);
             Vector2 pos = (dialogConfirm.dialog as RectTransform).anchoredPosition;
             Tween.Scale(dialogConfirm.dialog, Vector3.zero);
-            Tween.Scale(0, dialogConfirm.dialog, Vector3.one, 0.3f, Tween.EaseType.BackEaseOut);
+            Tween.Scale(0, dialogConfirm.dialog, Vector3.one, 0.2f, Tween.EaseType.BackEaseOut);
             isShowing = true;
             return dialogConfirm;
         }
@@ -54,11 +54,11 @@ namespace BToolkit
 
         protected virtual void Start()
         {
-            btnYes.onClick.AddListener(() =>
+            btnYes.onTrigger.AddListener(() =>
             {
                 OnYesCli();
             });
-            btnNo.onClick.AddListener(() =>
+            btnNo.onTrigger.AddListener(() =>
             {
                 OnNoCli();
             });

@@ -83,10 +83,10 @@ namespace BToolkit
             }
             dialogAlert.texContent.text = content;
             Tween.Alpha(trans, 0, false);
-            Tween.Alpha(0, trans, 0.5f, 0.3f, Tween.EaseType.SineEaseOut, false);
+            Tween.Alpha(0, trans, 0.5f, 0.2f, Tween.EaseType.SineEaseOut, false);
             Vector2 pos = (dialogAlert.dialog as RectTransform).anchoredPosition;
             Tween.Scale(dialogAlert.dialog, Vector3.zero);
-            Tween.Scale(0, dialogAlert.dialog, Vector3.one, 0.3f, Tween.EaseType.BackEaseOut);
+            Tween.Scale(0, dialogAlert.dialog, Vector3.one, 0.2f, Tween.EaseType.BackEaseOut);
             if (time > 0f)
             {
                 dialogAlert.Invoke("Out", time);
