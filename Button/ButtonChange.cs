@@ -8,7 +8,7 @@ namespace BToolkit
     {
         public Image target;
         public bool scale = true, color, texture;
-        public float pressScale = 0.97f;
+        public float pressScale = 0.95f;
         public Color changeColor = new Color(0.97f, 0.97f, 0.97f, 1);
         public Sprite changeSprite;
 

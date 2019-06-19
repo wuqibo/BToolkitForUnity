@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 using UnityEngine;
 
 namespace BToolkit
 {
-    public class TextureUtils
+    public class TextureHelper
     {
         /// <summary>
         /// 裁切多余部分变成正方形
@@ -126,6 +127,25 @@ namespace BToolkit
             }
             texture.Apply();
             return texture;
+        }
+
+        /// <summary>
+        /// OpenFileDialog To Base64（需要System.Windows.Forms）
+        /// </summary>
+        public static string GetBase64FromOpenFile(OpenFileDialog openFileDialog)
+        {
+            Stream ms = openFileDialog.OpenFile();
+            try
+            {
+                byte[] bytes = new byte[ms.Length];
+                ms.Position = 0;
+                ms.Read(bytes, 0, Convert.ToInt32(ms.Length));
+                return Convert.ToBase64String(bytes);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
