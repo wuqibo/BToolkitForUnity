@@ -28,7 +28,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidHelper.CallAndroidStaticFunction<int>("cn.btoolkit.system.GetSystemInfo", "getBatteryPercent");
+                return AndroidUtils.CallAndroidStaticFunction<int>("cn.btoolkit.system.GetSystemInfo", "getBatteryPercent");
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -45,7 +45,7 @@ namespace BToolkit
             InternetStatus status = InternetStatus.NoNet;
             if (Application.platform == RuntimePlatform.Android)
             {
-                string statusStr = AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getInternetType");
+                string statusStr = AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getInternetType");
                 switch (statusStr)
                 {
                     case "Wifi":
@@ -107,7 +107,7 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                return AndroidHelper.CallAndroidStaticFunction<bool>("cn.btoolkit.system.GetSystemInfo", "isSimulator");
+                return AndroidUtils.CallAndroidStaticFunction<bool>("cn.btoolkit.system.GetSystemInfo", "isSimulator");
             }
             return false;
         }
@@ -152,12 +152,21 @@ namespace BToolkit
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                string deviceId = AndroidHelper.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getDeviceId");
-                return GetMD5_32(deviceId + appPackgeName, true);//MD5加密以防设备识别码泄露
+                string deviceId = AndroidUtils.CallAndroidStaticFunction<string>("cn.btoolkit.system.GetSystemInfo", "getDeviceId");
+                if (string.IsNullOrEmpty(deviceId))
+                {
+                    deviceId = SystemInfo.deviceUniqueIdentifier;
+                }
+                return deviceId;
             }
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                return GetMD5_32(_GetDeviceId(appPackgeName), true);//MD5加密以防设备识别码泄露
+                string deviceId = _GetDeviceId(appPackgeName);
+                if (string.IsNullOrEmpty(deviceId))
+                {
+                    deviceId = SystemInfo.deviceUniqueIdentifier;
+                }
+                return deviceId;
             }
             return SystemInfo.deviceUniqueIdentifier;//使用此值会随着应用卸载重装而改变
         }

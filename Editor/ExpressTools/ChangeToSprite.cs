@@ -46,6 +46,7 @@ namespace BToolkit
             texture.spriteImportMode = SpriteImportMode.Single;
             texture.alphaSource = TextureImporterAlphaSource.FromInput;
             texture.alphaIsTransparency = true;
+            texture.mipmapEnabled = false;
             texture.textureCompression = TextureImporterCompression.Uncompressed;
             AssetDatabase.ImportAsset(path);
         }
