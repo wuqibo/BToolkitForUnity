@@ -5,7 +5,8 @@ namespace BToolkit
 {
     public class ValueUpdate : MonoBehaviour
     {
-        public Action<float> UpdateEvent, FinishEvent;
+        public Action<float> UpdateEvent;
+        public Action FinishEvent;
         Tween Tween;
         float delay = 0, t = 0, d = 0, b = 0, c = 0;
         float toValue;
@@ -36,7 +37,7 @@ namespace BToolkit
                 SetValue(0, 0, toValue);
                 if (FinishEvent != null)
                 {
-                    FinishEvent(toValue);
+                    FinishEvent();
                 }
                 Destroy(gameObject);
             }
@@ -54,7 +55,7 @@ namespace BToolkit
             }
         }
 
-        public void Value(float delay, float startValue, float toValue, float time, Tween.EaseType method, Action<float> updateEvent, Action<float> finishEvent)
+        public void Value(float delay, float startValue, float toValue, float time, Tween.EaseType method, Action<float> updateEvent, Action finishEvent)
         {
             this.delay = delay;
             this.toValue = toValue;
