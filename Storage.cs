@@ -29,7 +29,7 @@ namespace BToolkit
             if (File.Exists(fullPath))
             {
                 string readedStr = "";
-                using (StreamReader streamReader = File.OpenText(fullPath))
+                using (StreamReader streamReader = new StreamReader(fullPath, Encoding.Default))
                 {
                     readedStr = streamReader.ReadToEnd();
                 }

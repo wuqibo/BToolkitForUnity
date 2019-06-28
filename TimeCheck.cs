@@ -5,7 +5,7 @@ namespace BToolkit
 {
     public class TimeCheck : MonoBehaviour
     {
-        public enum Time { Before, Pass }
+        public enum Time { BeforeTheTime, PassTheTime }
         public Time destroyTime;
         private static DateTime targetDateTime = new DateTime(2019, 5, 25);
 
@@ -25,7 +25,7 @@ namespace BToolkit
 
         void Awake()
         {
-            if (destroyTime == Time.Before)
+            if (destroyTime == Time.BeforeTheTime)
             {
                 if (!HasPassedTime)
                 {

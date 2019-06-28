@@ -1,47 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.Collections.Generic;
 
 namespace BToolkit
 {
     public class CsvData
     {
-
-        public int index;
-        Dictionary<string, string[]> dictionary;
-
-        public Dictionary<string, string[]> Dictionary { get { return dictionary; } }
-
+        public Dictionary<string, string[]> dictionary = new Dictionary<string, string[]>();
         string[][] array;
-        string[] lineArray;
-        string resourcePath;
 
-        public CsvData(string resourcePath) : this(resourcePath, 0)
+        public CsvData(string inputString)
         {
-        }
-
-        public CsvData(string resourcePath, int index)
-        {
-            this.resourcePath = resourcePath;
-            this.index = index;
-            TextAsset binAsset = Resources.Load(resourcePath, typeof(TextAsset)) as TextAsset;
-            if (binAsset == null)
-            {
-                Debug.LogError(resourcePath + " 不存在");
-            }
-            setConstructor(binAsset.text);
-        }
-
-        public CsvData(string strTotal, bool forStrTotal)
-        {
-            setConstructor(strTotal);
-        }
-
-        private void setConstructor(string strTotal)
-        {
-            lineArray = strTotal.Trim().Split("\r"[0]);
+            string[] lineArray = inputString.Trim().Split("\r"[0]);
             array = new string[lineArray.Length][];
             for (int i = 0; i < lineArray.Length; i++)
             {
@@ -67,45 +35,31 @@ namespace BToolkit
             }
         }
 
-        public string GetDataByIndex(int iRow, int iCol)
+        public string GetData(string firstColValue, int colIndex)
         {
-            if (array.Length <= 0 || iRow >= array.Length)
+            if (!dictionary.ContainsKey(firstColValue) || dictionary[firstColValue] == null)
             {
-                return Path + " iRow超出范围";
+                Debuger.LogError("=============FirstColValue不存在");
+                return null;
             }
-            if (iCol >= array[0].Length)
+            if (colIndex >= dictionary[firstColValue].Length)
             {
-                return Path + " iCol超出范围";
+                Debuger.LogError("=============Col超出范围");
+                return null;
             }
-            return array[iRow][iCol].Trim();
+            string[] rowArr = dictionary[firstColValue];
+            return rowArr[colIndex].Trim();
         }
 
-        public string GetDataByID(string colFirstStr, int iCol)
+        public string GetData(int rowIndex, int colIndex)
         {
-            if (colFirstStr == null)
+            if (array.Length == 0 || array[rowIndex].Length == 0)
             {
-                return Path + "colFirstStr为null";
+                Debuger.LogError("=============没有数据源");
+                return null;
             }
-            colFirstStr = colFirstStr.Trim();
-            if (array.Length <= 0)
-            {
-                return Path + "没有数据源";
-            }
-            if (!dictionary.ContainsKey(colFirstStr))
-            {
-                return Path + " Key: " + colFirstStr + "不存在";
-            }
-            if (iCol >= dictionary[colFirstStr].Length)
-            {
-                return Path + " iCol超出范围";
-            }
-            string[] rowArr = dictionary[colFirstStr];
-            return rowArr[iCol].Trim();
+            return array[rowIndex][colIndex].Trim();
         }
-
-        public int RowLeng { get { return lineArray.Length; } }
-
-        public string Path { get { return resourcePath; } }
 
     }
 }
