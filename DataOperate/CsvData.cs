@@ -25,12 +25,13 @@ namespace BToolkit
             for (int i = 0; i < lineArray.Length; i++)
             {
                 string key = array[i][0];
-                if (!string.IsNullOrEmpty(key))
+                if (string.IsNullOrEmpty(key))
                 {
-                    if (!dictionary.ContainsKey(key.Trim()))
-                    {
-                        dictionary.Add(key.Trim(), array[i]);
-                    }
+                    key = "tem_key_" + i;
+                }
+                if (!dictionary.ContainsKey(key.Trim()))
+                {
+                    dictionary.Add(key.Trim(), array[i]);
                 }
             }
         }
