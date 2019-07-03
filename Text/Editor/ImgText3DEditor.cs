@@ -17,11 +17,15 @@ namespace BToolkit
 
         public override void OnInspectorGUI()
         {
+            if (Application.isPlaying)
+            {
+                text3D.text = EditorGUILayout.TextField("Text", text3D.text);
+                EditorGUILayout.Space();
+            }
             text3D.space = EditorGUILayout.FloatField("Space", text3D.space);
             text3D.center = EditorGUILayout.Toggle("Center", text3D.center);
             text3D.colorProperty = EditorGUILayout.TextField("Color Property", text3D.colorProperty);
             text3D.texProperty = EditorGUILayout.TextField("Tex Property", text3D.texProperty);
-            text3D.texScale = EditorGUILayout.FloatField("Tex Scale", text3D.texScale);
             int length = text3D.zeroToNine.Length;
             for (int i = 0; i < length; i++)
             {
@@ -34,7 +38,15 @@ namespace BToolkit
                 }
                 if (config.active)
                 {
+                    config.meshscale = EditorGUILayout.FloatField("    MeshScale", config.meshscale);
+                    config.texscale = EditorGUILayout.FloatField("    TexScale", config.texscale);
                     config.offset = EditorGUILayout.FloatField("    Offset", config.offset);
+                    if (!Application.isPlaying)
+                    {
+                        Vector3 scale = text3D.transform.localScale;
+                        scale.x = config.meshscale * scale.y;
+                        text3D.transform.localScale = scale;
+                    }
                 }
             }
             int extraCount = text3D.extras.Count;
@@ -42,7 +54,14 @@ namespace BToolkit
             {
                 ImgText3D.Extra extra = text3D.extras[i];
                 bool originActive = extra.config.active;
+                EditorGUILayout.BeginHorizontal();
                 extra.config.active = EditorGUILayout.Foldout(extra.config.active, "Extra " + extra.text);
+                if (GUILayout.Button("Remove Extra"))
+                {
+                    text3D.extras.RemoveAt(i);
+                    extraCount = text3D.extras.Count;
+                }
+                EditorGUILayout.EndHorizontal();
                 if (!originActive && extra.config.active)
                 {
                     activeIndex = length + i;
@@ -50,7 +69,15 @@ namespace BToolkit
                 if (extra.config.active)
                 {
                     extra.text = EditorGUILayout.TextField("    Text", extra.text);
+                    extra.config.meshscale = EditorGUILayout.FloatField("    MeshScale", extra.config.meshscale);
+                    extra.config.texscale = EditorGUILayout.FloatField("    TexScale", extra.config.texscale);
                     extra.config.offset = EditorGUILayout.FloatField("    Offset", extra.config.offset);
+                    if (!Application.isPlaying)
+                    {
+                        Vector3 scale = text3D.transform.localScale;
+                        scale.x = extra.config.meshscale * scale.y;
+                        text3D.transform.localScale = scale;
+                    }
                 }
             }
             if (GUILayout.Button("Add Extra"))
@@ -84,7 +111,7 @@ namespace BToolkit
             }
             if (material)
             {
-                material.SetTextureScale(text3D.texProperty, new Vector2(text3D.texScale * 0.1f, 1));
+                material.SetTextureScale(text3D.texProperty, new Vector2(currConfig.texscale * 0.1f, 1));
                 material.SetTextureOffset(text3D.texProperty, new Vector2(currConfig.offset * 0.1f, 0));
             }
             else
