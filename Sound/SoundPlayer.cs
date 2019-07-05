@@ -71,7 +71,7 @@ namespace BToolkit
             }
             SoundPlayer soundPlayer = NewInstance();
             soundPlayer.destroyTimer = delay + clip.length;
-            SoundPlayer.PlayAndDestroy(delay, clip, volume, OnStopCallback);
+            soundPlayer.Play(delay, clip, volume, OnStopCallback);
             return soundPlayer;
         }
 

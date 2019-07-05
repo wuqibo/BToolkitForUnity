@@ -18,14 +18,14 @@ namespace BToolkit
         /// </summary>
         public static bool IsMusicOn
         {
-            get { return PlayerPrefs.GetInt(SAVE_KEY,1) == 1; }
+            get { return PlayerPrefs.GetInt(SAVE_KEY, 1) == 1; }
             set
             {
-                PlayerPrefs.SetInt(SAVE_KEY,value ? 1 : 0);
-                if(player)
+                PlayerPrefs.SetInt(SAVE_KEY, value ? 1 : 0);
+                if (player)
                 {
                     player.enabled = value;
-                    if(isPlayingWhenMusicOff)
+                    if (isPlayingWhenMusicOff)
                     {
                         player.Play();
                     }
@@ -41,16 +41,16 @@ namespace BToolkit
             set
             {
                 volume = value;
-                if(player)
+                if (player)
                 {
                     player.volume = value;
                 }
             }
         }
 
-        public static void Play(float delay,AudioClip[] clips,bool randomBegin,bool randomNext,float nextDelay)
+        public static void Play(float delay, AudioClip[] clips, bool randomBegin, bool randomNext, float nextDelay = 1f)
         {
-            if(currClips != null)
+            if (currClips != null)
             {
                 currClips = new AudioClip[1];
             }
@@ -58,45 +58,48 @@ namespace BToolkit
             currRandomBegin = randomBegin;
             currRandomNext = randomNext;
             currNextDelay = nextDelay;
-            currClipIndex = currRandomBegin ? Random.Range(0,currClips.Length) : 0;
-            DoPlay(delay,currClips[currClipIndex],true,false);
+            currClipIndex = currRandomBegin ? Random.Range(0, currClips.Length) : 0;
+            DoPlay(delay, currClips[currClipIndex], true, false);
         }
 
-        public static void Play(float delay,AudioClip clip,bool resume,bool loop)
+        public static void Play(float delay, AudioClip clip, bool resume = true, bool loop = true)
         {
             currClips = null;
-            DoPlay(delay,clip,resume,loop);
+            DoPlay(delay, clip, resume, loop);
         }
 
-        static void DoPlay(float delay,AudioClip clip,bool resume,bool loop)
+        static void DoPlay(float delay, AudioClip clip, bool resume, bool loop)
         {
-            if(player)
+            if (resume)
             {
-                GameObject.Destroy(player.gameObject);
+                if (player)
+                {
+                    GameObject.Destroy(player.gameObject);
+                    player = null;
+                }
             }
-            GameObject playerGo = new GameObject("MusicPlayer");
-            MonoBehaviour.DontDestroyOnLoad(playerGo);
-            player = playerGo.AddComponent<AudioSource>();
-            player.playOnAwake = false;
-            if(player.clip != clip)
+            if (!player)
+            {
+                GameObject playerGo = new GameObject("MusicPlayer");
+                MonoBehaviour.DontDestroyOnLoad(playerGo);
+                player = playerGo.AddComponent<AudioSource>();
+                player.playOnAwake = false;
+            }
+            if (player.clip != clip)
             {
                 player.Stop();
                 player.clip = clip;
-                if(currClips != null && clip != null)
+                if (currClips != null && clip != null)
                 {
                     string timerId = "MusicPlayer_Timer";
                     BTimer.DestroyByTimerId(timerId);
-                    BTimer.Invoke(clip.length + currNextDelay,PlayNextMusic,timerId);
+                    BTimer.Invoke(clip.length + currNextDelay, PlayNextMusic, timerId);
                 }
             }
             player.loop = loop;
-            if(IsMusicOn)
+            if (IsMusicOn)
             {
-                if(resume)
-                {
-                    player.Stop();
-                }
-                if(player.clip != null && !player.isPlaying)
+                if (player.clip != null && !player.isPlaying)
                 {
                     player.PlayDelayed(delay);
                 }
@@ -106,7 +109,7 @@ namespace BToolkit
 
         public static void Stop()
         {
-            if(player)
+            if (player)
             {
                 player.Stop();
             }
@@ -115,7 +118,7 @@ namespace BToolkit
 
         public static void Pause()
         {
-            if(player && player.clip != null)
+            if (player && player.clip != null)
             {
                 player.Pause();
             }
@@ -124,7 +127,7 @@ namespace BToolkit
 
         public static void Resume()
         {
-            if(player && player.clip != null)
+            if (player && player.clip != null)
             {
                 player.Play();
             }
@@ -133,14 +136,14 @@ namespace BToolkit
 
         static void PlayNextMusic()
         {
-            if(currClips != null)
+            if (currClips != null)
             {
-                currClipIndex = currRandomNext ? Random.Range(0,currClips.Length) : currClipIndex + 1;
-                if(currClipIndex > currClips.Length - 1)
+                currClipIndex = currRandomNext ? Random.Range(0, currClips.Length) : currClipIndex + 1;
+                if (currClipIndex > currClips.Length - 1)
                 {
                     currClipIndex = 0;
                 }
-                DoPlay(0,currClips[currClipIndex],true,false);
+                DoPlay(0, currClips[currClipIndex], true, false);
             }
         }
     }
