@@ -82,7 +82,6 @@ namespace BToolkit
         public static SoundPlayer NewInstance()
         {
             GameObject go = new GameObject("SoundPlayer");
-            DontDestroyOnLoad(go);
             SoundPlayer soundPlayer = go.AddComponent<SoundPlayer>();
             soundPlayer.audioSource = go.AddComponent<AudioSource>();
             return soundPlayer;
