@@ -8,6 +8,7 @@ namespace BToolkit
         static AudioSource player = null;
         static AudioClip[] currClips;
         static bool isPlayingWhenMusicOff;
+        static float stopAtTime;
         static float volume = 1;
         static int currClipIndex;
         static bool currRandomBegin, currRandomNext;
@@ -24,10 +25,19 @@ namespace BToolkit
                 PlayerPrefs.SetInt(SAVE_KEY, value ? 1 : 0);
                 if (player)
                 {
-                    player.enabled = value;
-                    if (isPlayingWhenMusicOff)
+                    if (!value)
                     {
-                        player.Play();
+                        stopAtTime = player.time;
+                        player.enabled = value;//先获取时间再停
+                    }
+                    else
+                    {
+                        player.enabled = value;//先激活再从指定时间播放
+                        if (isPlayingWhenMusicOff)
+                        {
+                            player.time = stopAtTime;
+                            player.Play();
+                        }
                     }
                 }
             }
