@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "BToolkit/WoolGlass" {
+Shader "BToolkit/FrostedGlass" {
 	Properties{
 		_Color("Main Color", Color) = (1,1,1,1)
 		_BumpAmt("Distortion", Range(0,128)) = 10
