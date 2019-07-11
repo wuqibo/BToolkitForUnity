@@ -39,22 +39,24 @@ namespace BToolkit
         {
             if (IsEnable())
             {
-                if (scale)
-                {
-                    if (defaultScale == Vector3.zero)
+				if(target){
+                    if (scale)
                     {
-                        defaultScale = transform.localScale;
+                        if (defaultScale == Vector3.zero)
+                        {
+                            defaultScale = target.transform.localScale;
+                        }
+                        target.transform.localScale = defaultScale * pressScale;
                     }
-                    transform.localScale = defaultScale * pressScale;
-                }
-                if (texture && target)
-                {
-                    target.sprite = changeSprite;
-                }
-                if (color && target)
-                {
-                    target.color = changeColor;
-                }
+                    if (texture)
+                    {
+                        target.sprite = changeSprite;
+                    }
+                    if (color)
+                    {
+                        target.color = changeColor;
+                    }
+				}
             }
         }
 
@@ -62,18 +64,20 @@ namespace BToolkit
         {
             if (IsEnable())
             {
-                if (scale)
-                {
-                    transform.localScale = defaultScale;
-                }
-                if (texture && target)
-                {
-                    target.sprite = spriteDefault;
-                }
-                if (color && target)
-                {
-                    target.color = colorDefault;
-                }
+				if(target){
+					if (scale)
+					{
+						target.transform.localScale = defaultScale;
+					}
+					if (texture)
+					{
+						target.sprite = spriteDefault;
+					}
+					if (color)
+					{
+						target.color = colorDefault;
+					}
+				}
             }
         }
 
