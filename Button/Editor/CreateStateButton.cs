@@ -33,6 +33,16 @@ namespace BToolkit
             }
             go.AddComponent<StateButton>();
             go.AddComponent<ButtonChange>();
+            if (!go.transform.Find("OnState"))
+            {
+                GameObject onStateGo = new GameObject("OnState", typeof(RectTransform));
+                onStateGo.transform.SetParent(go.transform, false);
+            }
+            if (!go.transform.Find("OffState"))
+            {
+                GameObject onStateGo = new GameObject("OffState", typeof(RectTransform));
+                onStateGo.transform.SetParent(go.transform, false);
+            }
         }
     }
 }

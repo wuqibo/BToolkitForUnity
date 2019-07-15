@@ -12,8 +12,7 @@ namespace BToolkit
         public int index;
         public bool autoChange = true;
         public bool useAlpha = false;
-        public Image target;
-        public Sprite onSprite, offSprite;
+        public GameObject onState, offState;
         public AudioClip sound;
         public RectTransform rectTransform { get { return transform as RectTransform; } }
         [System.Serializable]
@@ -27,17 +26,13 @@ namespace BToolkit
             set
             {
                 isOn = value;
-                SetSprite();
+                RefreshState();
             }
         }
 
         void Awake()
         {
-            if (!target)
-            {
-                target = GetComponent<Image>();
-            }
-            SetSprite();
+            RefreshState();
         }
 
         //为了能显示enable的勾
@@ -52,9 +47,9 @@ namespace BToolkit
                 if (autoChange)
                 {
                     isOn = !isOn;
-                    SetSprite();
+                    RefreshState();
                 }
-                SoundPlayer.PlayAndDestroy(0, sound);
+                SoundPlayer.Play(0, sound);
                 if (onValueChanged != null)
                 {
                     onValueChanged.Invoke(isOn);
@@ -62,43 +57,10 @@ namespace BToolkit
             }
         }
 
-        void SetSprite()
+        void RefreshState()
         {
-            if (target)
-            {
-                if (isOn)
-                {
-                    if (useAlpha)
-                    {
-                        target.color = Color.white;
-                    }
-                    else
-                    {
-                        target.color = Color.white;
-                        target.sprite = onSprite;
-                        if (!target.sprite)
-                        {
-                            target.color = new Color(0, 0, 0, 0);
-                        }
-                    }
-                }
-                else
-                {
-                    if (useAlpha)
-                    {
-                        target.color = new Color(0, 0, 0, 0);
-                    }
-                    else
-                    {
-                        target.color = Color.white;
-                        target.sprite = offSprite;
-                        if (!target.sprite)
-                        {
-                            target.color = new Color(0, 0, 0, 0);
-                        }
-                    }
-                }
-            }
+            onState.SetActive(isOn);
+            offState.SetActive(!isOn);
         }
     }
 }
