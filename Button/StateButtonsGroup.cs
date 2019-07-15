@@ -4,8 +4,8 @@ using UnityEngine.Events;
 
 namespace BToolkit
 {
-    [AddComponentMenu("BToolkit/StateButtonsListener")]
-    public class StateButtonsListener : MonoBehaviour
+    [AddComponentMenu("BToolkit/StateButtonsGroup")]
+    public class StateButtonsGroup : MonoBehaviour
     {
         class ButtonHolder
         {
