@@ -49,7 +49,7 @@ namespace BToolkit
                     isOn = !isOn;
                     RefreshState();
                 }
-                SoundPlayer.Play(0, sound);
+                SoundPlayer.PlayAndDestroy(0, sound);
                 if (onValueChanged != null)
                 {
                     onValueChanged.Invoke(isOn);

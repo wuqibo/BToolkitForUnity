@@ -47,6 +47,7 @@ namespace BToolkit
             texture.alphaSource = TextureImporterAlphaSource.FromInput;
             texture.alphaIsTransparency = true;
             texture.mipmapEnabled = false;
+			texture.wrapMode = TextureWrapMode.Clamp;
             texture.textureCompression = TextureImporterCompression.Uncompressed;
             AssetDatabase.ImportAsset(path);
         }

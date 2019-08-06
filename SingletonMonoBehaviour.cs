@@ -27,6 +27,11 @@ namespace BToolkit
         {
             instance = GetComponent<T>();
         }
+		
+		/// <summary>
+        /// 当前有实例存在
+        /// </summary>
+        public static bool HaveInstance { get { return instance; } }
 
         /// <summary>
         /// 主动销毁
