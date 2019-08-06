@@ -42,14 +42,17 @@ namespace BToolkit
         {
             string path = AssetDatabase.GetAssetPath(obj);
             TextureImporter texture = AssetImporter.GetAtPath(path) as TextureImporter;
-            texture.textureType = TextureImporterType.Sprite;
-            texture.spriteImportMode = SpriteImportMode.Single;
-            texture.alphaSource = TextureImporterAlphaSource.FromInput;
-            texture.alphaIsTransparency = true;
-            texture.mipmapEnabled = false;
-			texture.wrapMode = TextureWrapMode.Clamp;
-            texture.textureCompression = TextureImporterCompression.Uncompressed;
-            AssetDatabase.ImportAsset(path);
+            if (texture)
+            {
+                texture.textureType = TextureImporterType.Sprite;
+                texture.spriteImportMode = SpriteImportMode.Single;
+                texture.alphaSource = TextureImporterAlphaSource.FromInput;
+                texture.alphaIsTransparency = true;
+                texture.mipmapEnabled = false;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.textureCompression = TextureImporterCompression.Uncompressed;
+                AssetDatabase.ImportAsset(path);
+            }
         }
     }
 }
