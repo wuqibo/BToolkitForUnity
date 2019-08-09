@@ -59,8 +59,14 @@ namespace BToolkit
 
         void RefreshState()
         {
-            onState.SetActive(isOn);
-            offState.SetActive(!isOn);
+            if (onState)
+            {
+                onState.SetActive(isOn);
+            }
+            if (offState)
+            {
+                offState.SetActive(!isOn);
+            }
         }
     }
 }
