@@ -17,7 +17,7 @@ namespace BToolkit
         public bool listenKeyBack;
         public AudioClip sound;
         public bool useCommonSound = true;
-        public UnityEvent onTrigger;
+        public UnityEvent onClick;
         public UnityAction<int> OnTouchDown, OnTouchClick, OnTouchUp;
         public RectTransform rectTransform { get { return transform as RectTransform; } }
         float doubleTimer;
@@ -87,7 +87,7 @@ namespace BToolkit
                     }
                     if (lastCreateBButton == this)
                     {
-                        onTrigger.Invoke();
+                        onClick.Invoke();
                     }
                 }
             }
@@ -101,7 +101,7 @@ namespace BToolkit
                 {
                     if (canTouchTimer <= 0f)
                     {
-                        onTrigger.Invoke();
+                        onClick.Invoke();
                         canTouchTimer = canTriggerInterval;
                         if (buttonChange && canTouchTimer > 0)
                         {
@@ -134,7 +134,7 @@ namespace BToolkit
                     {
                         if (canTouchTimer <= 0f)
                         {
-                            onTrigger.Invoke();
+                            onClick.Invoke();
                             doubleTimer = 0f;
                             canTouchTimer = canTriggerInterval;
                             if (buttonChange && canTouchTimer > 0)
@@ -192,7 +192,7 @@ namespace BToolkit
                 {
                     if (canTouchTimer <= 0f)
                     {
-                        onTrigger.Invoke();
+                        onClick.Invoke();
                         canTouchTimer = canTriggerInterval;
                         if (buttonChange && canTouchTimer > 0)
                         {
