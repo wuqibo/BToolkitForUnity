@@ -34,5 +34,13 @@ namespace BToolkit
         {
             return timeNew.Subtract(timePast).Days;
         }
+		
+		/// <summary>
+        /// 比较两个时间的大小
+        /// </summary>
+        public static bool CompareTime(DateTime bigerTime, DateTime smallerTime)
+        {
+            return bigerTime.Ticks - smallerTime.Ticks > 0;
+        }
     }
 }
