@@ -1,7 +1,7 @@
 字符串解析到Json对象
 JObject json = JObject.Parse("{\"count\":0}");
 
-Json对象获取数组形式存在的value
+Json对象获取数以组形式存在的value
 JArray json = json["key"] as JArray;
 
 Json对象遍历非数组形式的value
