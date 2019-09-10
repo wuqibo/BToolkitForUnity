@@ -11,6 +11,7 @@ namespace BToolkit
         public static void NewTask(float delay, float interval, int times, Action work)
         {
             GameObject go = new GameObject("Task_" + UnityEngine.Random.Range(0, 100));
+			DontDestroyOnLoad(go);
             Task task = go.AddComponent<Task>();
             task.StartCoroutine(task.StartWork(delay, interval, times, work));
         }
