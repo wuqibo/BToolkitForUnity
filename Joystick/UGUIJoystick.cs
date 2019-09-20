@@ -15,6 +15,7 @@ namespace BToolkit
         public bool canKeyboardCtrl = true;
         public DragAction onDrag;
         public static UGUIJoystick instance;
+		public bool isDraging { get { return currState == State.Stay; } }
         RectTransform trans;
         bool isLock, isActive;
         float maxDistance;
