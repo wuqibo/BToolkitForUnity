@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace BToolkit
 {
@@ -10,8 +10,6 @@ namespace BToolkit
     public class StateButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public int index;
-        public bool autoChange = true;
-        public bool useAlpha = false;
         public GameObject onState, offState;
         public AudioClip sound;
         public RectTransform rectTransform { get { return transform as RectTransform; } }
@@ -44,11 +42,8 @@ namespace BToolkit
         {
             if (this.enabled)
             {
-                if (autoChange)
-                {
-                    isOn = !isOn;
-                    RefreshState();
-                }
+                isOn = !isOn;
+                RefreshState();
                 SoundPlayer.PlayAndDestroy(0, sound);
                 if (onValueChanged != null)
                 {
