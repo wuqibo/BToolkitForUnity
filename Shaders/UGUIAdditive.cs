@@ -7,16 +7,14 @@ namespace BToolkit
     {
         void Start()
         {
-            /*
-            if(MainCtrl.MainControl.instance)
+            if(SpecialMaterials.instance)
             {
                 Image image = GetComponent<Image>();
                 if(image)
                 {
-                    image.material = MainCtrl.MainControl.instance.uguiAdditive;
+                    image.material = SpecialMaterials.instance.uguiAdditive;
                 }
             }
-            */
         }
     }
 }
