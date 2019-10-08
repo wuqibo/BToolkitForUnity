@@ -57,7 +57,10 @@ namespace BToolkit
 
         void Start()
         {
-            finger.localEulerAngles = new Vector3(0, 0, 0);
+            if (finger)
+            {
+                finger.localEulerAngles = new Vector3(0, 0, 0);
+            }
         }
 
         public void CreateCells(int[] goldValues)
@@ -164,30 +167,33 @@ namespace BToolkit
 
         void UpdateZhizhenAngle(float zhuanpanAngle)
         {
-            zhuanpanAngle += fingerOffset;
-            float zhuanpanPositiveAngle = 360 - PositiveAngle(zhuanpanAngle * cellCount);
-            float fingerAngle = fingerAngleKB.k * zhuanpanPositiveAngle + fingerAngleKB.b;
-            if (zhuanpanPositiveAngle < 360 * dropRadio)
+            if (finger)
             {
-                finger.localEulerAngles = new Vector3(0, 0, fingerAngle);
-            }
-            else
-            {
-                finger.localEulerAngles = Vector3.zero;
-            }
-            if (fingerAngle < fingerPreviousAngle)
-            {
-                if (!hasPlaySound)
+                zhuanpanAngle += fingerOffset;
+                float zhuanpanPositiveAngle = 360 - PositiveAngle(zhuanpanAngle * cellCount);
+                float fingerAngle = fingerAngleKB.k * zhuanpanPositiveAngle + fingerAngleKB.b;
+                if (zhuanpanPositiveAngle < 360 * dropRadio)
                 {
-                    SoundPlayer.PlayAndDestroy(0, sound);
-                    hasPlaySound = true;
+                    finger.localEulerAngles = new Vector3(0, 0, fingerAngle);
                 }
+                else
+                {
+                    finger.localEulerAngles = Vector3.zero;
+                }
+                if (fingerAngle < fingerPreviousAngle)
+                {
+                    if (!hasPlaySound)
+                    {
+                        SoundPlayer.PlayAndDestroy(0, sound);
+                        hasPlaySound = true;
+                    }
+                }
+                else
+                {
+                    hasPlaySound = false;
+                }
+                fingerPreviousAngle = fingerAngle;
             }
-            else
-            {
-                hasPlaySound = false;
-            }
-            fingerPreviousAngle = fingerAngle;
         }
 
         float CurrPointAngle(float angle)
