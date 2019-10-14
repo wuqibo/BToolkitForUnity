@@ -20,11 +20,67 @@ namespace BToolkit
         class OneGraphic
         {
             public float alphaRatio;
+            public Obj obj;
+            public OneGraphic(Obj obj)
+            {
+                this.obj = obj;
+            }
+        }
+        class Obj
+        {
             public Graphic graphic;
+            public SpriteRenderer sprite;
+            public Color color
+            {
+                get
+                {
+                    if (graphic)
+                    {
+                        return graphic.color;
+                    }
+                    if (sprite)
+                    {
+                        return sprite.color;
+                    }
+                    return Color.white;
+                }
+                set
+                {
+                    if (graphic)
+                    {
+                        graphic.color = value;
+                    }
+                    if (sprite)
+                    {
+                        sprite.color = value;
+                    }
+                }
+            }
+            public Transform transform
+            {
+                get
+                {
+                    if (graphic)
+                    {
+                        return graphic.transform;
+                    }
+                    if (sprite)
+                    {
+                        return sprite.transform;
+                    }
+                    return null;
+                }
+            }
+            public Obj(Graphic graphic, SpriteRenderer sprite)
+            {
+                this.graphic = graphic;
+                this.sprite = sprite;
+            }
         }
         public Action EndEvent;
         public TweenEvent EndEventWithParam;
         Tween Tween;
+        List<OneGraphic> graphicesList = new List<OneGraphic>();
         OneGraphic[] graphices = new OneGraphic[0];
         float t = 0, d = 0, b = 0, c = 0;
         float toAlpha;
@@ -40,17 +96,46 @@ namespace BToolkit
 
         void Awake()
         {
-            Graphic[] _graphices = GetComponentsInChildren<Graphic>();
-            graphices = new OneGraphic[_graphices.Length];
+            GetObjAndChildren(transform);
+            graphices = graphicesList.ToArray();
             for (int i = 0; i < graphices.Length; i++)
             {
-                Graphic _graphic = _graphices[i];
-                graphices[i] = new OneGraphic() { graphic = _graphic };
                 if (i > 0)
                 {
-                    graphices[i].alphaRatio = _graphic.color.a / graphices[0].graphic.color.a;
+                    OneGraphic oneGraphic = graphices[i];
+                    oneGraphic.alphaRatio = oneGraphic.obj.color.a / graphices[0].obj.color.a;
                 }
             }
+        }
+
+        void GetObjAndChildren(Transform trans)
+        {
+            Obj obj = GetObj(trans);
+            if (obj != null)
+            {
+                graphicesList.Add(new OneGraphic(obj));
+            }
+            foreach (Transform t in trans)
+            {
+                GetObjAndChildren(t);
+            }
+        }
+        Obj GetObj(Transform trans)
+        {
+            Graphic graphic = trans.GetComponent<Graphic>();
+            if (graphic)
+            {
+                return new Obj(graphic, null);
+            }
+            else
+            {
+                SpriteRenderer sprite = trans.GetComponent<SpriteRenderer>();
+                if (sprite)
+                {
+                    return new Obj(null, sprite);
+                }
+            }
+            return null;
         }
 
         void Update()
@@ -102,18 +187,18 @@ namespace BToolkit
             for (int i = 0; i < graphices.Length; i++)
             {
                 OneGraphic oneGraphic = graphices[i];
-                if(oneGraphic==null || oneGraphic.graphic == null)
+                if (oneGraphic == null || oneGraphic.obj == null)
                 {
                     continue;
                 }
                 if (!withChildren)
                 {
-                    if (oneGraphic.graphic.transform != transform)
+                    if (oneGraphic.obj.transform != transform)
                     {
                         break;
                     }
                 }
-                Color color = oneGraphic.graphic.color;
+                Color color = oneGraphic.obj.color;
                 if (i == 0)
                 {
                     if (a == -1f)
@@ -127,9 +212,9 @@ namespace BToolkit
                 }
                 else
                 {
-                    color.a = graphices[0].graphic.color.a * oneGraphic.alphaRatio;
+                    color.a = graphices[0].obj.color.a * oneGraphic.alphaRatio;
                 }
-                oneGraphic.graphic.color = color;
+                oneGraphic.obj.color = color;
             }
         }
 
@@ -168,7 +253,7 @@ namespace BToolkit
             t = 0f;
             if (graphices.Length > 0)
             {
-                b = graphices[0].graphic.color.a;
+                b = graphices[0].obj.color.a;
             }
             if (_params.time <= 0f)
             {
@@ -241,6 +326,6 @@ namespace BToolkit
                 }
             }
         }
-       
+
     }
 }
