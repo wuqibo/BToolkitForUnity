@@ -2,10 +2,11 @@
 
 namespace BToolkit.ActorCtrl
 {
-    [RequireComponent(typeof(SphereCollider))]
+    [RequireComponent(typeof(CapsuleCollider))]
     public abstract class Bullet : MonoBehaviour
     {
         public float flySpeed = 25;
+        public AudioClip shootSound;
         public AudioClip hitSound;
 
         protected Actor attacker;
@@ -14,14 +15,13 @@ namespace BToolkit.ActorCtrl
         protected float atkRange;
         protected HurtData hurtData;
         protected Vector3 createPos, actorAngle;
-        protected SphereCollider sphereCollider;
+        protected CapsuleCollider capsuleCollider;
 
         protected virtual void Awake()
         {
-            sphereCollider = GetComponent<SphereCollider>();
-            sphereCollider.isTrigger = true;
-            sphereCollider.center = Vector3.zero;
-            sphereCollider.radius = 0.5f;
+            capsuleCollider = GetComponent<CapsuleCollider>();
+            capsuleCollider.isTrigger = true;
+            SoundPlayer.PlayAndDestroy(0, shootSound);
         }
 
         public virtual void SetInfo(Actor attacker, Vector3 actorAngle, Actor[] targets, float atkRange, HurtData hurtData)
