@@ -29,12 +29,13 @@ namespace BToolkit
         /// <summary>
         /// 获取贝塞尔曲线上所有的点
         /// </summary>
-        public static Vector3[] GetBezierPoints(Vector3 p1,Vector3 p2,Vector3 p3,int detailCount)
+        public static Vector3[] GetBezierPoints(Vector3 p1,Vector3 p2,Vector3 p3,int pointsAmount)
         {
-            Vector3[] newVector2 = new Vector3[detailCount + 1];
-            float tStep = 1 / ((float)detailCount);
+            int amount = pointsAmount - 1;
+            Vector3[] newVector2 = new Vector3[pointsAmount];
+            float tStep = 1 / ((float)amount);
             float t = 0f;
-            for(int ik = 0;ik <= detailCount;ik++)
+            for(int ik = 0;ik <= amount; ik++)
             {
                 float x = CalculateQuadSpline(p1.x,p2.x,p3.x,t);
                 float y = CalculateQuadSpline(p1.y,p2.y,p3.y,t);
@@ -42,20 +43,26 @@ namespace BToolkit
                 newVector2[ik] = new Vector3(x,y,z);
                 t = t + tStep;
             }
+            newVector2[amount] = p3;
             return newVector2;
         }
-        public static Vector2[] GetBezierPoints(Vector2 p1,Vector2 p2,Vector2 p3,int detailCount)
+        /// <summary>
+        /// 获取贝塞尔曲线上所有的点
+        /// </summary>
+        public static Vector2[] GetBezierPoints(Vector2 p1,Vector2 p2,Vector2 p3,int pointsAmount)
         {
-            Vector2[] newVector2 = new Vector2[detailCount + 1];
-            float tStep = 1 / ((float)detailCount);
+            int amount = pointsAmount - 1;
+            Vector2[] newVector2 = new Vector2[pointsAmount];
+            float tStep = 1 / ((float)amount);
             float t = 0f;
-            for(int ik = 0;ik <= detailCount;ik++)
+            for(int ik = 0;ik <= amount; ik++)
             {
                 float x = CalculateQuadSpline(p1.x,p2.x,p3.x,t);
                 float y = CalculateQuadSpline(p1.y,p2.y,p3.y,t);
                 newVector2[ik] = new Vector2(x,y);
                 t = t + tStep;
             }
+            newVector2[amount] = p3;
             return newVector2;
         }
         static float CalculateQuadSpline(float z0,float z1,float z2,float t)
